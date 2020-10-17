@@ -1,4 +1,5 @@
 import { useEffect } from "react"
+import Navbar from "../components/organisms/Navbar";
 
 export default function Home() {
   const t = 'ok'
@@ -9,8 +10,10 @@ export default function Home() {
 
 
   return (
-    <div>
-      <h1>Hello Sagittarius</h1>
-    </div>
+    <>
+      <Navbar />
+      <h1>Varios exames para agendar?<br />
+        Deixa com a Heali!</h1>
+    </>
   )
 }
