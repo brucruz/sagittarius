@@ -14,8 +14,10 @@ export const Content = styled.div`
 `;
 
 export const Logo = styled.h1`
+  font-style: normal;
   font-weight: 900;
   color: #4D49C4;
+  letter-spacing: 0.07em;
 `;
 
 export const Line = styled.div`
