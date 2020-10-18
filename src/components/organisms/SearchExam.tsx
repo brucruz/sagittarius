@@ -1,3 +1,5 @@
+import ButtonNext from "../atom/ButtonNext";
+
 export default function() {
   return (
     <main>
@@ -9,7 +11,7 @@ export default function() {
         <h3>Busque, compare laboratórios e agende</h3>
       </div>
 
-      <button>COMEÇAR</button>
+      <ButtonNext text="Começar"/>
     </main>
   )
 }
