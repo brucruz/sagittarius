@@ -1,12 +1,14 @@
+import Accordion from "@/components/molecule/Accordion";
 import SearchExam from "@/components/organisms/SearchExam";
 import Section from "@/components/organisms/Section";
-import HowItWorks from "@/contents/pages/Home/HowItWorks";
-import OurServices from "@/contents/pages/Home/OurServices";
-import { PaymentOption, PaymentOptions, SectionAbout, SectionPayment } from "@/styles/pages/Home";
+import { faqQuestions } from "@/contents/pages/Home/faq";
+import howItWorks from "@/contents/pages/Home/howItWorks";
+import ourServices from "@/contents/pages/Home/ourServices";
+import { PaymentOption, PaymentOptions, SectionAbout, SectionFAQ, SectionPayment } from "@/styles/pages/Home";
 import { useEffect } from "react"
 import Navbar from "../components/organisms/Navbar";
 
-export default function Home() {
+const Home = () => {
   const t = 'ok'
 
   useEffect(() => {
@@ -33,9 +35,9 @@ export default function Home() {
         </article>
       </SectionAbout>
 
-      <Section title='Como Funciona' articles={HowItWorks}/>
+      <Section title='Como Funciona' articles={howItWorks}/>
 
-      <Section title='Nossos Serviços' articles={OurServices}/>
+      <Section title='Nossos Serviços' articles={ourServices}/>
 
       <SectionPayment>
         <h2>Formas de Pagamento</h2>
@@ -61,7 +63,21 @@ export default function Home() {
         </PaymentOptions>
       </SectionPayment>
 
+      <SectionFAQ>
+        <h2>Perguntas Frequentes</h2>
 
+        {faqQuestions?.map(question => {
+        return (
+          <Accordion
+            key={`question-${question.id}`}
+            text={question}
+            index={question.id}
+          />
+        );
+      })}
+      </SectionFAQ>
     </>
   )
 }
+
+export default Home;

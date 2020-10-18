@@ -4,6 +4,7 @@ import { Container, SectionItem, SectionItemImg, SectionItemText } from "@/style
 interface SectionProps {
   title: string;
   articles: {
+    id: number;
     image: any;
     title: string;
     text: string;
@@ -19,7 +20,7 @@ const Section = ({
       <h2>{title}</h2>
 
       {articles.map(article => (
-        <SectionItem>
+        <SectionItem key={article.id}>
           <SectionItemImg>
             <img src={article.image} alt=""/>
           </SectionItemImg>

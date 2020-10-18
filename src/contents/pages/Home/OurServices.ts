@@ -1,23 +1,26 @@
-import LocationImage from '@/assets/pages/Home/location-image.svg';
-import ExamsImage from '@/assets/pages/Home/exams-image.svg';
-import LabsImage from '@/assets/pages/Home/labs-image.svg';
+import locationImage from '@/assets/pages/Home/location-image.svg';
+import examsImage from '@/assets/pages/Home/exams-image.svg';
+import labsImage from '@/assets/pages/Home/labs-image.svg';
 
-const OurServices = [
+const ourServices = [
   {
-    image: LocationImage,
+    id: 1,
+    image: locationImage,
     title: 'Pesquisa por localização',
     text: 'Nós encontramos o laboratório com o melhor custo-benefício próximo ao endereço que você escolher.',
   },
   {
-    image: ExamsImage,
+    id: 2,
+    image: examsImage,
     title: 'Milhares de exames',
     text: 'Organizamos as informações de milhares de preços dos exames que você precisar.',
   },
   {
-    image: LabsImage,
+    id: 3,
+    image: labsImage,
     title: 'Maiores laboratórios',
     text: 'Contamos com as informações de mais de 100 laboratórios diferentes na Grande São Paulo.',
   },
 ]
 
-export default OurServices;
+export default ourServices;
