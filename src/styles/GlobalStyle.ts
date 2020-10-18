@@ -26,8 +26,35 @@ export default createGlobalStyle`
   }
 
   h1 {
-    font-weight: 800;
+    font-weight: 700;
+    font-size: 32px;
+    line-height: 32px;
+    letter-spacing: 0.192941px;
+
     color: #2F2C77;
+  }
+
+  h2 {
+    font-style: normal;
+    font-weight: 800;
+    font-size: 24px;
+    line-height: 34px;
+    /* identical to box height, or 142% */
+
+    letter-spacing: 0.192941px;
+
+    /* Azul Heali */
+
+    color: #2F2C77;
+  }
+
+  h3 {
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 32px;
+    letter-spacing: 0.192941px;
+
+    color: #232B3B;
   }
 
   button {
