@@ -16,7 +16,7 @@ export const SectionItem = styled.article`
   align-items: center;
 
   & + article {
-    margin-bottom: 32px;
+    margin-top: 32px;
   }
 `;
 

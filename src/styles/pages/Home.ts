@@ -1,3 +1,4 @@
+import device from "@/utils/devices";
 import styled from "styled-components";
 
 export const SectionAbout = styled.section``;
@@ -20,11 +21,15 @@ export const SectionPayment = styled.section`
 export const PaymentOptions = styled.section`
   display: flex;
   flex-wrap: wrap;
-  /* justify-content: space-between; */
+
+  @media ${device.tablet} {
+    justify-content: space-between;
+  }
 `;
 
 export const PaymentOption = styled.article`
-  width: 150px;
+  min-width: 165px;
+  width: 100%;
   height: 118px;
 
   background: rgba(196, 196, 196, 0.3);
@@ -33,6 +38,31 @@ export const PaymentOption = styled.article`
   position: relative;
 
   margin-bottom: 16px;
+
+  @media ${device.mobileL} {
+    width: calc(100% / 2 - 16px);
+
+    &:first-child {
+      margin-right: 16px;
+    }
+
+    &:nth-child(3) {
+      margin-right: 16px;
+    }
+  }
+
+  @media ${device.tablet} {
+    width: calc(100% / 4 - 32px);
+
+    &:first-child {
+      margin-right: 0px;
+    }
+
+    &:nth-child(3) {
+      margin-right: 0px;
+    }
+  }
+
 
   p {
     font-weight: bold;
@@ -52,13 +82,6 @@ export const PaymentOption = styled.article`
     margin-bottom: 0;
   }
 
-  &:first-child {
-    margin-right: 16px;
-  }
-
-  &:nth-child(3) {
-    margin-right: 16px;
-  }
 `;
 
 export const SectionFAQ = styled.section`
