@@ -1,17 +1,24 @@
 import ButtonNext from "../atom/ButtonNext";
+import banner from '@/assets/components/organisms/SearchExam/banner.svg';
+import { Banner, Container, InitialState, InitialStateContent, ValueProposition } from "@/styles/components/organisms/SearchExam";
 
 export default function() {
   return (
-    <main>
-      <div>Aqui vai um banner</div>
+    <Container>
+      <InitialState>
+        <Banner src={banner} alt="banner"/>
 
-      <div>
-        <h1>Varios exames para agendar?<br />
-        Deixa com a Heali!</h1>
-        <h3>Busque, compare laboratórios e agende</h3>
-      </div>
+        <InitialStateContent>
+          <ValueProposition>
+            <h1>Vários exames para agendar?<br />
+            Deixa com a Heali!</h1>
+            <h3>Busque, compare laboratórios e agende</h3>
+          </ValueProposition>
 
-      <ButtonNext text="Começar"/>
-    </main>
+          <ButtonNext text="Começar"/>
+        </InitialStateContent>
+      </InitialState>
+
+    </Container>
   )
 }

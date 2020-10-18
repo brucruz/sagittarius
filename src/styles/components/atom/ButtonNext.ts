@@ -12,6 +12,7 @@ export const Container = styled.button`
   padding-right: 12px;
 
   width: 100%;
+  z-index: 2;
 
   border-radius: 6px;
   border: 0;

@@ -1,6 +1,11 @@
 import styled from "styled-components";
 
-export const Container = styled.header``;
+export const Container = styled.header`
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background-color: #fff;
+`;
 
 export const Content = styled.div`
     margin-top: 10px;
