@@ -52,3 +52,19 @@ export const ValueProposition = styled.section`
   }
 
 `;
+
+export const ExamState = styled.section`
+  margin-left: 25px;
+  margin-right: 25px;
+
+  padding-top: 2px;
+`;
+
+export const AddressState = styled.section`
+margin-left: 25px;
+margin-right: 25px;
+
+padding-top: 2px;
+`;
+
+

@@ -1,10 +1,23 @@
 import device from "@/utils/devices";
 import styled from "styled-components";
 
-export const SectionAbout = styled.section``;
+export const SectionAbout = styled.section`
+  margin-top: 91px;
+  margin-left: 25px;
+  margin-right: 25px;
+
+  article {
+    p {
+        margin-top: 24px;
+      &+p {
+        margin-top: 16px;
+      }
+    }
+  }
+`;
 
 export const SectionPayment = styled.section`
-  margin-top: 60px;
+  margin-top: 74px;
   margin-bottom: 60px;
   margin-left: 25px;
   margin-right: 25px;
