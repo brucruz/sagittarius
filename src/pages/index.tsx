@@ -1,4 +1,5 @@
 import Accordion from "@/components/molecule/Accordion";
+import Footer from "@/components/organisms/Footer";
 import SearchExam from "@/components/organisms/SearchExam";
 import Section from "@/components/organisms/Section";
 import { faqQuestions } from "@/contents/pages/Home/faq";
@@ -76,6 +77,8 @@ const Home = () => {
         );
       })}
       </SectionFAQ>
+
+      <Footer />
     </>
   )
 }
