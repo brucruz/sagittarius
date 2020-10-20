@@ -1,3 +1,4 @@
+import useSWR from 'swr';
 import Accordion from "@/components/molecule/Accordion";
 import Footer from "@/components/organisms/Footer";
 import SearchExam from "@/components/organisms/SearchExam";
@@ -9,14 +10,15 @@ import MapsScript from "@/services/components/MapsScript";
 import { PaymentOption, PaymentOptions, SectionAbout, SectionFAQ, SectionPayment } from "@/styles/pages/Home";
 import { useEffect } from "react"
 import Navbar from "../components/organisms/Navbar";
+import { useFetch } from '../services/hooks/useFetch';
 
 const Home = () => {
   const t = 'ok'
 
-  useEffect(() => {
-    console.log(t);
-  }, [])
-
+  const { data } = useFetch('/patients', {
+    params: { test: 'aaaa' },
+    headers: { Authorization: `Bearer: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2MDMyMTEzMDcsImV4cCI6MTYwNTgwMzMwNywic3ViIjoiYWFkZTUyNjItMjk3ZS00ZjM1LWE4NGYtYTQyNmFhMTU5Y2Q0In0.dkNRAG8TW8kYbxKpsN6gO0uUzqOnDsgN4WMdLbtcPmY` },
+  });
 
   return (
     <>
