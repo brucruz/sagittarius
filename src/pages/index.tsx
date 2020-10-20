@@ -6,6 +6,7 @@ import Section from "@/components/organisms/Section";
 import { faqQuestions } from "@/contents/pages/Home/faq";
 import howItWorks from "@/contents/pages/Home/howItWorks";
 import ourServices from "@/contents/pages/Home/ourServices";
+import MapsScript from "@/services/components/MapsScript";
 import { PaymentOption, PaymentOptions, SectionAbout, SectionFAQ, SectionPayment } from "@/styles/pages/Home";
 import { useEffect } from "react"
 import Navbar from "../components/organisms/Navbar";
@@ -81,6 +82,8 @@ const Home = () => {
       </SectionFAQ>
 
       <Footer />
+
+      <MapsScript />
     </>
   )
 }
