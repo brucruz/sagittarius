@@ -9,7 +9,7 @@ export default function flow() {
           subTitle: 'Digite e adicione os exames que quer agendar .'
         }
       } 
-      backButtonCallback={() => {}}>
+      backLinkUrl={'/'}>
       <h1>hehe</h1>
     </UserProgressTemplate>
   );

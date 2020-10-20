@@ -9,15 +9,16 @@ interface PageTemplate {
     title?: string,
     subTitle?: string,
   };
-  backButtonCallback: () => void;
+  backLinkUrl: string;
+  children: React.ReactNode
 }
 
-const PageTemplate: React.FC<PageTemplate> = ({ children, titleMain, backButtonCallback }) => {
+const PageTemplate = ({ children, titleMain, backLinkUrl }: PageTemplate) => {
   return (
     <>
       <Navbar />
         <Container>
-          <PageHeader type='button' backButtonStateCallback={backButtonCallback}/>
+          <PageHeader type='link' backLinkUrl={backLinkUrl}/>
 
           {titleMain && <TitleMain title={titleMain.title} subtitle={titleMain.subTitle}/> }
 
