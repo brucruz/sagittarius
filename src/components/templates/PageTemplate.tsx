@@ -4,16 +4,15 @@ import PageHeader from '../molecule/PageHeader';
 import TitleMain from '../molecule/TitleMain';
 import { Container } from '../../styles/components/templates/PageTemplate';
 
-interface PageTemplate {
+interface PageTemplateProps extends HTMLDivElement {
   titleMain?: {
     title?: string,
     subTitle?: string,
   };
   backLinkUrl: string;
-  children: React.ReactNode
 }
 
-const PageTemplate = ({ children, titleMain, backLinkUrl }: PageTemplate) => {
+const PageTemplate = ({ children, titleMain, backLinkUrl }: PageTemplateProps) => {
   return (
     <>
       <Navbar />
