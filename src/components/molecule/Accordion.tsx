@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
 import htmlParser from 'html-react-parser';
 // import mixpanel from 'mixpanel-browser';
 import { AccordionButton, AccordionPanel } from '@/styles/components/molecules/Accordion';
@@ -13,7 +13,7 @@ interface AccordionProps {
   index: number;
 }
 
-const Accordion: React.FC<AccordionProps> = ({ text, index }) => {
+const Accordion = ({ text, index }: AccordionProps) => {
   const [isActive, setIsActive] = useState(false);
 
   // const { user } = useAuth();

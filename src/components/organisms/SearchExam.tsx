@@ -39,7 +39,7 @@ const exams: Exam[] = [
 ]
 
 const SearchExam = () => {
-  const [searchDisplay, setSearchDisplay] = useState<SearchDisplay>('address');
+  const [searchDisplay, setSearchDisplay] = useState<SearchDisplay>('initial');
   const [examTypedValue, setExamTypedValue] = useState('');
 
   const {
