@@ -32,15 +32,37 @@ const exams: Exam[] = [
   {
     id: '003',
     title: 'Ecocardiograma com Doppler Colorido',
-    slug: 'ecocardiograma-com-doppler-olorido',
+    slug: 'ecocardiograma-com-doppler-colorido',
+    created_date: 'now',
+    updated_date: 'now',
+  },
+  {
+    id: '004',
+    title: 'Bilirrubinas',
+    slug: 'bilirrubinas',
+    created_date: 'now',
+    updated_date: 'now',
+  },
+  {
+    id: '005',
+    title: 'Ultrassom da Tireóide',
+    slug: 'ultrassom-da-tireoide',
+    created_date: 'now',
+    updated_date: 'now',
+  },
+  {
+    id: '006',
+    title: 'Ultrassonografia do Membro Inferior Esquerdo com Doppler Colorido',
+    slug: 'ultrassonografia-do-membro-inferior-esquerdo-com-doppler-colorido',
     created_date: 'now',
     updated_date: 'now',
   },
 ]
 
 const SearchExam = () => {
-  const [searchDisplay, setSearchDisplay] = useState<SearchDisplay>('address');
+  const [searchDisplay, setSearchDisplay] = useState<SearchDisplay>('exam');
   const [examTypedValue, setExamTypedValue] = useState('');
+  const [selectedExams, setSelectedExams] = useState<Exam[]>([]);
 
   const {
     ready,
@@ -79,6 +101,12 @@ const SearchExam = () => {
     setExamTypedValue(exam);
   }, []);
 
+  const handleExamSelection = useCallback((exam: Exam): void => {
+    setSelectedExams(exams => [...exams, exam]);
+  }, []);
+
+  console.log('selected exams Search', selectedExams);
+
   return (
     <Container>
       <HeaderSpaceContent />
@@ -112,7 +140,7 @@ const SearchExam = () => {
             suggestions={{
               type: 'exams',
               data: exams,
-              // getSelectedExam={}
+              getSelectedExam: handleExamSelection,
             }}
             getInputValue={handleGetExamInnerValue}
           />
@@ -139,6 +167,7 @@ const SearchExam = () => {
             getInputValue={handleGetAddressInnerValue}
             onBlur={clearSuggestions}
             value={addressValue}
+            selectedExams={selectedExams}
           />
 
           <ButtonNext text="Continuar"/>
