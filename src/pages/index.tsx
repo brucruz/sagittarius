@@ -8,6 +8,7 @@ import ourServices from "@/contents/pages/Home/ourServices";
 import MapsScript from "@/services/components/MapsScript";
 import { PaymentOption, PaymentOptions, SectionAbout, SectionFAQ, SectionPayment } from "@/styles/pages/Home";
 import { useEffect } from "react"
+import WhatsappWidget from '@/components/atom/WhatsappWidget';
 import Navbar from "../components/organisms/Navbar";
 
 const Home = () => {
@@ -80,7 +81,7 @@ const Home = () => {
       </SectionFAQ>
 
       <Footer />
-
+      <WhatsappWidget />
       <MapsScript />
     </>
   )
