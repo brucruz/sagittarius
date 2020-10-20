@@ -1,6 +1,4 @@
 import { SWRConfig } from 'swr';
-import api from '../services/api';
-import axios from 'axios';
 import GlobalStyle from "../styles/GlobalStyle";
 
 
