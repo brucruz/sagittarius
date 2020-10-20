@@ -1,9 +1,9 @@
 import Exam from '@/@types/Exam';
 import { InputContainer, UserInput, InputIcon, InputTextArea, SuggestionArea } from '@/styles/components/atom/Input';
-import { InputHTMLAttributes, useCallback, useEffect, useRef, useState } from 'react';
+import { InputHTMLAttributes, useCallback, useRef, useState } from 'react';
 
 import { MdAdd } from 'react-icons/md';
-import usePlacesAutocomplete, { getGeocode, getLatLng, Suggestion } from 'use-places-autocomplete';
+import { getGeocode, getLatLng, Suggestion } from 'use-places-autocomplete';
 
 type SuggestionProps = {
   type: 'exams',
@@ -38,23 +38,6 @@ const Input = ({
   const [isFilled, setIsFilled] = useState(false);
   const [hasSuggestions, setHasSuggestions] = useState(false);
 
-  const {
-    ready,
-    value: addressValue,
-    suggestions: { status, data },
-    setValue,
-    clearSuggestions,
-  } = usePlacesAutocomplete({
-    requestOptions: {
-      bounds: {
-        north: -23.38,
-        east: -46.37,
-        south: -23.85,
-        west: -46.94,
-      },
-    },
-  });
-
   const handleInputFocus = useCallback(() => {
     inputRef.current?.focus();
 
@@ -63,13 +46,13 @@ const Input = ({
     suggestions && setHasSuggestions(true);
   }, []);
 
-  const handleInputBlur = useCallback(() => {
-    setIsFocused(false);
+  // const handleInputBlur = useCallback(() => {
+  //   setIsFocused(false);
 
-    setIsFilled(!!inputRef.current?.value);
+  //   setIsFilled(!!inputRef.current?.value);
 
-    setHasSuggestions(false);
-  }, [inputRef]);
+  //   setHasSuggestions(false);
+  // }, [inputRef]);
 
   const handleInputChange = useCallback(() => {
     setIsFilled(!!inputRef.current?.value);

@@ -41,7 +41,6 @@ const exams: Exam[] = [
 const SearchExam = () => {
   const [searchDisplay, setSearchDisplay] = useState<SearchDisplay>('address');
   const [examTypedValue, setExamTypedValue] = useState('');
-  // const [examSelectedValue, setExam]
 
   const {
     ready,
@@ -59,8 +58,6 @@ const SearchExam = () => {
       },
     },
   });
-
-  console.log('suggestions', addressSuggestions);
 
   const handleBeginButtonClick = useCallback(() => {
     setSearchDisplay('exam');
@@ -81,10 +78,6 @@ const SearchExam = () => {
   const handleGetExamInnerValue = useCallback((exam: string) => {
     setExamTypedValue(exam);
   }, []);
-
-
-
-  console.log('value', addressValue);
 
   return (
     <Container>
