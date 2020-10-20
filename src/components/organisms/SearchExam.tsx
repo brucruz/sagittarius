@@ -10,6 +10,7 @@ import { HeaderSpaceContent } from "@/styles/components/atom/HeaderSpace";
 import PageHeader from "../molecule/PageHeader";
 import Input from "../atom/Input";
 import Exam from "@/@types/Exam";
+import usePlacesAutocomplete from "use-places-autocomplete";
 
 type SearchDisplay = 'initial' | 'exam' | 'address';
 
@@ -38,7 +39,28 @@ const exams: Exam[] = [
 ]
 
 const SearchExam = () => {
-  const [searchDisplay, setSearchDisplay] = useState<SearchDisplay>('exam');
+  const [searchDisplay, setSearchDisplay] = useState<SearchDisplay>('address');
+  const [examTypedValue, setExamTypedValue] = useState('');
+  // const [examSelectedValue, setExam]
+
+  const {
+    ready,
+    value: addressValue,
+    suggestions: { status, data: addressSuggestions },
+    setValue,
+    clearSuggestions,
+  } = usePlacesAutocomplete({
+    requestOptions: {
+      bounds: {
+        north: -23.38,
+        east: -46.37,
+        south: -23.85,
+        west: -46.94,
+      },
+    },
+  });
+
+  console.log('suggestions', addressSuggestions);
 
   const handleBeginButtonClick = useCallback(() => {
     setSearchDisplay('exam');
@@ -52,7 +74,17 @@ const SearchExam = () => {
     setSearchDisplay(state);
   }, []);
 
-  console.log(searchDisplay);
+  const handleGetAddressInnerValue = useCallback((address: string) => {
+    setValue(address);
+  }, []);
+
+  const handleGetExamInnerValue = useCallback((exam: string) => {
+    setExamTypedValue(exam);
+  }, []);
+
+
+
+  console.log('value', addressValue);
 
   return (
     <Container>
@@ -87,7 +119,9 @@ const SearchExam = () => {
             suggestions={{
               type: 'exams',
               data: exams,
+              // getSelectedExam={}
             }}
+            getInputValue={handleGetExamInnerValue}
           />
 
           <ButtonNext text="Continuar" onClick={handleExamSubmit}/>
@@ -100,7 +134,19 @@ const SearchExam = () => {
 
           <TitleMain title="Onde quer fazer os exames?" subtitle="Digite o endereço, bairro ou cidade de onde quer fazer o exame."/>
 
-          <Input name='location' label='Sua Localização' icon={MdPlace}/>
+          <Input
+            name='location'
+            label='Sua Localização'
+            icon={MdPlace}
+            suggestions={{
+              type: 'address',
+              data: addressSuggestions,
+              getSelectedAddress: setValue,
+            }}
+            getInputValue={handleGetAddressInnerValue}
+            onBlur={clearSuggestions}
+            value={addressValue}
+          />
 
           <ButtonNext text="Continuar"/>
         </AddressState>

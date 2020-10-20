@@ -3,20 +3,24 @@ import { InputContainer, UserInput, InputIcon, InputTextArea, SuggestionArea } f
 import { InputHTMLAttributes, useCallback, useEffect, useRef, useState } from 'react';
 
 import { MdAdd } from 'react-icons/md';
+import usePlacesAutocomplete, { getGeocode, getLatLng, Suggestion } from 'use-places-autocomplete';
 
 type SuggestionProps = {
   type: 'exams',
   data: Exam[],
+  getSelectedExam?(exam: Exam): void,
 } |
 {
   type: 'address',
-  data: object[],
+  data: Suggestion[],
+  getSelectedAddress: (val: string, shouldFetchData?: boolean) => void,
 }
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   name: string;
   label: string;
   icon?: any;
   suggestions?: SuggestionProps;
+  getInputValue?(value: string): void;
 }
 
 const Input = ({
@@ -25,6 +29,8 @@ const Input = ({
   icon: Icon,
   disabled,
   suggestions,
+  getInputValue,
+  value,
   ...rest
 }: InputProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -32,9 +38,24 @@ const Input = ({
   const [isFilled, setIsFilled] = useState(false);
   const [hasSuggestions, setHasSuggestions] = useState(false);
 
+  const {
+    ready,
+    value: addressValue,
+    suggestions: { status, data },
+    setValue,
+    clearSuggestions,
+  } = usePlacesAutocomplete({
+    requestOptions: {
+      bounds: {
+        north: -23.38,
+        east: -46.37,
+        south: -23.85,
+        west: -46.94,
+      },
+    },
+  });
+
   const handleInputFocus = useCallback(() => {
-
-
     inputRef.current?.focus();
 
     setIsFocused(true);
@@ -53,12 +74,47 @@ const Input = ({
   const handleInputChange = useCallback(() => {
     setIsFilled(!!inputRef.current?.value);
 
+    getInputValue(inputRef.current?.value);
+
     suggestions && setHasSuggestions(true);
   } , []);
+
+  const handlePlaceSelect = (address: string) => () => {
+    // When user selects a place, we can replace the keyword without request data from API
+    // by setting the second parameter as "false"
+    // setHasAddress(true);
+    suggestions.type === 'address' && suggestions.getSelectedAddress(address, false);
+
+    setHasSuggestions(false);
+
+    // Get latitude and longitude via utility functions
+    getGeocode({
+      address,
+    })
+      .then(placeResults => getLatLng(placeResults[0]))
+      .then(({ lat, lng }) => {
+        console.log('📍 Coordinates: ', { lat, lng });
+
+        // addAddress({
+        //   address: description,
+        //   latitude: lat,
+        //   longitude: lng,
+        // });
+
+        // user && mixpanel.identify(user.id);
+        // mixpanel.track('Add Address To Search', {
+        //   Address: description,
+        // });
+      })
+      .catch(error => {
+        console.log('😱 Error: ', error);
+      });
+  };
 
   return (
     <InputContainer
       onFocus={handleInputFocus}
+      // onBlur={handleInputBlur}
     >
       <UserInput
         // isErrored={!!error}
@@ -74,18 +130,33 @@ const Input = ({
         <InputTextArea>
           <label htmlFor={name}>{label}</label>
 
-          <input type="text" id={name} onFocus={handleInputFocus} onBlur={handleInputBlur} onChange={handleInputChange} ref={inputRef}/>
+          <input type="text" id={name} onChange={handleInputChange} ref={inputRef} value={value}/>
         </InputTextArea>
       </UserInput>
 
       {hasSuggestions && suggestions.type === 'exams' && (
         <SuggestionArea>
           {suggestions.data.map(exam => (
-            <article key={exam.id}>
+            <article key={exam.id} onClick={() => suggestions.getSelectedExam(exam)}>
               <p>{exam.title}</p>
               <MdAdd />
             </article>
           ))}
+        </SuggestionArea>
+      )}
+
+      {hasSuggestions && suggestions.type === 'address' && (
+        <SuggestionArea>
+          {suggestions.data.map(suggestion => {
+            const { place_id, structured_formatting: { main_text, secondary_text } } = suggestion;
+            const addressText = `${main_text} ${secondary_text}`;
+            return (
+              <article key={place_id} onClick={handlePlaceSelect(addressText)}>
+                <p>{addressText}</p>
+                <MdAdd />
+              </article>
+            );
+          })}
         </SuggestionArea>
       )}
     </InputContainer>
