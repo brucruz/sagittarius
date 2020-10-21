@@ -9,24 +9,29 @@ const Footer = () => {
   return (
     <Container>
       <FooterHeader>
-        <h4>Nos siga nas redes sociais</h4>
+        <div>
+          <h4>Nos siga nas redes sociais</h4>
 
-        <SocialButtons>
-          <Link href="https://www.facebook.com/heali.br">
-            <img src={facebook} alt="facebook"/>
-          </Link>
+          <SocialButtons>
+            <Link href="https://www.facebook.com/heali.br">
+              <img src={facebook} alt="facebook"/>
+            </Link>
 
-          <Link href="https://www.instagram.com/heali.br">
-            <img src={instagram} alt="instagram"/>
-          </Link>
-        </SocialButtons>
+            <Link href="https://www.instagram.com/heali.br">
+              <img src={instagram} alt="instagram"/>
+            </Link>
+          </SocialButtons>
+        </div>
+
+        <span className="heali-span">heali</span>
+
       </FooterHeader>
 
       <FooterDivisionLine />
 
       <FooterFooter>
         <p>
-        2020 - © Copyright Heali.me<br />
+        2020 - © Copyright Heali.me <span className="span-dash">&nbsp;-&nbsp;</span>
         CNPJ: 35.087.847/0001-30
         </p>
       </FooterFooter>
