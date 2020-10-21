@@ -13,18 +13,17 @@ const patientsMock = [
   },
   {
     id: 1,
-    label: 'Eu mesmo, Gustavo',
+    label: 'The big boss, Bruno',
   },
   {
     id: 2,
-    label: 'Eu mesmo, Gustavo',
+    label: 'The designer guy, Mau',
   },
 ]
 
 export default function Patients() {
 
-  const [selectedPatient, setSelectedPatient] = useState('');
-  const formRef = useRef();
+  const [selectedPatient, setSelectedPatient] = useState(undefined);
 
   return (
     <PageTemplate 
