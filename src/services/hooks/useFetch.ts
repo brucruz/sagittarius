@@ -3,7 +3,7 @@ import useSWR from 'swr';
 import { AxiosRequestConfig } from 'axios';
 
 export const useFetch = (url: string, options: AxiosRequestConfig) => {
-  const { data, error, mutate } = useSWR(url, (url: string) => api.get(url, options));
+  const { data: response, error, mutate } = useSWR(url, async (url: string) => await api.get(url, options));
 
-  return { data, error, mutate };
+  return { response, error, mutate };
 }

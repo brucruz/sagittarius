@@ -7,7 +7,7 @@ export default function MyApp({ Component, pageProps }) {
   return (
     <>
       <SWRConfig value={{
-        refreshInterval: 10000,
+        // refreshInterval: 10000,
       }}>
         <GlobalStyle />
         <Component {...pageProps} />

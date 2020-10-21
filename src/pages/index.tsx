@@ -1,4 +1,3 @@
-import useSWR from 'swr';
 import Accordion from "@/components/molecule/Accordion";
 import Footer from "@/components/organisms/Footer";
 import SearchExam from "@/components/organisms/SearchExam";
@@ -8,18 +7,16 @@ import howItWorks from "@/contents/pages/Home/howItWorks";
 import ourServices from "@/contents/pages/Home/ourServices";
 import MapsScript from "@/services/components/MapsScript";
 import { PaymentOption, PaymentOptions, SectionAbout, SectionFAQ, SectionPayment } from "@/styles/pages/Home";
-import { useEffect } from "react"
 import WhatsappWidget from '@/components/atom/WhatsappWidget';
 import Navbar from "../components/organisms/Navbar";
-import { useFetch } from '../services/hooks/useFetch';
+import { useFetch } from "@/services/hooks/useFetch";
 
 const Home = () => {
-  const t = 'ok'
-
-  const { data } = useFetch('/patients', {
-    params: { test: 'aaaa' },
-    headers: { Authorization: `Bearer: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2MDMyMTEzMDcsImV4cCI6MTYwNTgwMzMwNywic3ViIjoiYWFkZTUyNjItMjk3ZS00ZjM1LWE4NGYtYTQyNmFhMTU5Y2Q0In0.dkNRAG8TW8kYbxKpsN6gO0uUzqOnDsgN4WMdLbtcPmY` },
+  const { response } = useFetch('/exams/list', {
+    params: { exam_ids: '9078f0bb-a946-4521-a4be-68b8e5502af7' },
   });
+
+  console.log(response.data);
 
   return (
     <>
