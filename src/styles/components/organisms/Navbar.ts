@@ -7,15 +7,14 @@ export const Container = styled.header`
     background-color: #fff;
 `;
 
-export const Content = styled.div`
-    margin-top: 10px;
-    margin-bottom: 10px;
-    margin-left: 24px;
-    margin-right: 24px;
-
+export const Content = styled.section`
     display: flex;
     align-items: center;
     justify-content: space-between;
+`;
+
+export const SidebarAndLogo = styled.section`
+  display: flex;
 `;
 
 export const Logo = styled.h1`
@@ -23,6 +22,10 @@ export const Logo = styled.h1`
   font-weight: 900;
   color: #4D49C4;
   letter-spacing: 0.07em;
+
+  margin-top: 9px;
+  margin-bottom: 8px;
+  margin-left: 16px;
 `;
 
 export const Line = styled.div`
