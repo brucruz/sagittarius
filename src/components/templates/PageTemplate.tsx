@@ -3,8 +3,9 @@ import Footer from '../organisms/Footer';
 import PageHeader from '../molecule/PageHeader';
 import TitleMain from '../molecule/TitleMain';
 import { Container } from '../../styles/components/templates/PageTemplate';
+import { HTMLAttributes } from 'react';
 
-interface PageTemplateProps extends HTMLDivElement {
+interface PageTemplateProps extends HTMLAttributes<HTMLDivElement>{
   titleMain?: {
     title?: string,
     subTitle?: string,
