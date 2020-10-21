@@ -23,6 +23,9 @@ export const Logo = styled.h1`
   color: #4D49C4;
   letter-spacing: 0.07em;
 
+  font-size: 22px;
+  line-height: 30px;
+
   margin-top: 9px;
   margin-bottom: 8px;
   margin-left: 16px;

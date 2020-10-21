@@ -1,5 +1,7 @@
+
 import { Container, Content, Logo, Line, SidebarAndLogo } from "../../styles/components/organisms/Navbar";
 import SidebarMenu from "../molecule/SidebarMenu";
+import UserMenu from "../molecule/UserMenu";
 
 export default function Navbar() {
   return (
@@ -10,8 +12,9 @@ export default function Navbar() {
 
           <Logo>Heali</Logo>
         </SidebarAndLogo>
-      </Content>
 
+        <UserMenu />
+      </Content>
       <Line />
     </Container>
   )

@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { MdMenu } from 'react-icons/md';
 
 const SidebarMenu = () => {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <Container>
