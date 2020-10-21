@@ -9,14 +9,14 @@ import MapsScript from "@/services/components/MapsScript";
 import { PaymentOption, PaymentOptions, SectionAbout, SectionFAQ, SectionPayment } from "@/styles/pages/Home";
 import WhatsappWidget from '@/components/atom/WhatsappWidget';
 import Navbar from "../components/organisms/Navbar";
-import { useFetch } from "@/services/hooks/useFetch";
+import useFetch from "@/services/hooks/useFetch";
 
 const Home = () => {
-  const { response } = useFetch('/exams/list', {
+  const { data } = useFetch('/exams/list', {
     params: { exam_ids: '9078f0bb-a946-4521-a4be-68b8e5502af7' },
   });
 
-  console.log(response.data);
+  console.log(data);
 
   return (
     <>
