@@ -1,9 +1,9 @@
 import { createContext, useContext, useState, useCallback } from 'react';
 
-import api from '@/services/api';
 import formatValue from '@/utils/formatValue';
 import formatDistance from '@/utils/formatDistance';
 import LabResultFromAPI from '@/@types/LabResultFromAPI';
+import useFetch from '@/services/hooks/useFetch';
 
 interface GetLabResultsOptions {
   onlyExamsCompleteLabs?: boolean;
@@ -45,7 +45,7 @@ const LabResultsProvider = ({ children }) => {
       options,
     }: GetLabResultsDTO): Promise<void> => {
       try {
-        const ApiCall = await api.get('/search/results', {
+        const ApiCall = useFetch<LabResultFromAPIFormatted[]>('/search/results', {
           params: {
             ids: examsIds,
             add: address,
@@ -57,7 +57,7 @@ const LabResultsProvider = ({ children }) => {
           },
         });
 
-        const ApiResults: LabResultFromAPIFormatted[] = ApiCall.data;
+        const ApiResults = ApiCall.data;
 
         const resultsFormatted = ApiResults.map(result => {
           return {
