@@ -1,6 +1,6 @@
 
 import { useAuth } from "@/hooks/auth";
-import { Container, Content, Logo, Line, SidebarAndLogo, Badges } from "../../styles/components/organisms/Navbar";
+import { Container, Content, Logo, SidebarAndLogo, Badges } from "../../styles/components/organisms/Navbar";
 import BagBadge from "../molecule/BagBadge";
 import SidebarMenu from "../molecule/SidebarMenu";
 import UserMenu from "../molecule/UserMenu";
