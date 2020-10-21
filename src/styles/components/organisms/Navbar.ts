@@ -31,6 +31,10 @@ export const Logo = styled.h1`
   margin-left: 16px;
 `;
 
+export const Badges = styled.section`
+  display: flex;
+`;
+
 export const Line = styled.div`
   height: 1px;
   width: 100%;

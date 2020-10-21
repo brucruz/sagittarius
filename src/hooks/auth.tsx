@@ -26,12 +26,12 @@ const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 
 const AuthProvider = ({ children }) => {
   const [data, setData] = useState<AuthState>(() => {
-    const token = localStorage.getItem('@Heali:token');
-    const user = localStorage.getItem('@Heali:user');
+    // const token = localStorage.getItem('@Heali:token');
+    // const user = localStorage.getItem('@Heali:user');
 
-    if (token && user) {
-      return { token, user: JSON.parse(user) };
-    }
+    // if (token && user) {
+    //   return { token, user: JSON.parse(user) };
+    // }
 
     return {} as AuthState;
   });

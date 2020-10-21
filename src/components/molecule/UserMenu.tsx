@@ -7,7 +7,7 @@ import { MdPerson } from "react-icons/md";
 const UserMenu = () => {
   const { user } = useAuth();
 
-  const [isMenuOpen, setIsMenuOpen] = useState(true);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
     <Container>
@@ -23,7 +23,9 @@ const UserMenu = () => {
       }
 
       { !!user && (
-        <OnlineUserMenu>
+        <OnlineUserMenu
+          onBlur={() => setIsMenuOpen(false)}
+        >
           <UserAvatarDummy
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
@@ -52,7 +54,7 @@ const UserMenu = () => {
                 </MenuItem>
 
                 <MenuItem>
-                  <button>
+                  <button type="button">
                     <p>Sair</p>
                   </button>
                 </MenuItem>

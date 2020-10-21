@@ -13,7 +13,7 @@ import Lab from '../@types/Lab';
 import { useAuth } from './auth';
 
 interface BagContextData {
-  bagOpen: boolean;
+  isBagOpen: boolean;
   openBag(): void;
   closeBag(): void;
   bagItems: PricesInBag[];
@@ -31,21 +31,21 @@ interface BagContextData {
 const BagContext = createContext<BagContextData>({} as BagContextData);
 
 const BagProvider = ({ children }) => {
-  const [bagOpen, setBagOpen] = useState(false);
+  const [isBagOpen, setIsBagOpen] = useState(false);
 
   const [bagItems, setBagItems] = useState<PricesInBag[]>([]);
 
   const { user } = useAuth();
 
   const openBag = useCallback(() => {
-    setBagOpen(true);
+    setIsBagOpen(true);
 
     // user && mixpanel.identify(user.id);
     // mixpanel.track('Open Bag');
   }, [user]);
 
   const closeBag = useCallback(() => {
-    setBagOpen(false);
+    setIsBagOpen(false);
 
     // user && mixpanel.identify(user.id);
     // mixpanel.track('Close Bag');
@@ -176,7 +176,7 @@ const BagProvider = ({ children }) => {
   return (
     <BagContext.Provider
       value={{
-        bagOpen,
+        isBagOpen,
         openBag,
         closeBag,
         bagItems,

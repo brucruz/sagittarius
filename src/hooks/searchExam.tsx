@@ -17,22 +17,22 @@ const SearchExamContext = createContext<SearchExamContextData>(
 
 const SearchExamProvider = ({ children }) => {
   const [examsToQuote, setExamsToQuote] = useState<Exam[]>(() => {
-    const exams = sessionStorage.getItem('@Heali:lastExamsSearched');
+    // const exams = sessionStorage.getItem('@Heali:lastExamsSearched');
 
-    if (exams) {
-      return JSON.parse(exams);
-    }
+    // if (exams) {
+    //   return JSON.parse(exams);
+    // }
 
     return [] as Exam[];
   });
   const [address, setAddress] = useState<Address>(() => {
-    const storagedAddress = sessionStorage.getItem(
-      '@Heali:lastAddressSearched',
-    );
+    // const storagedAddress = sessionStorage.getItem(
+    //   '@Heali:lastAddressSearched',
+    // );
 
-    if (storagedAddress) {
-      return JSON.parse(storagedAddress);
-    }
+    // if (storagedAddress) {
+    //   return JSON.parse(storagedAddress);
+    // }
 
     return {} as Address;
   });
