@@ -1,14 +1,14 @@
 import Exam from '@/@types/Exam';
-import { InputContainer, UserInput, InputIcon, InputTextArea, SuggestionArea } from '@/styles/components/atom/Input';
+import { InputContainer, UserInput, InputIcon, InputTextArea, SuggestionArea, SelectedExams, SelectedExamsSummary, SelectedExamsDetail } from '@/styles/components/atom/Input';
 import { InputHTMLAttributes, useCallback, useRef, useState } from 'react';
 
-import { MdAdd } from 'react-icons/md';
+import { MdAdd, MdClose, MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/md';
 import { getGeocode, getLatLng, Suggestion } from 'use-places-autocomplete';
 
 type SuggestionProps = {
   type: 'exams',
   data: Exam[],
-  getSelectedExam?(exam: Exam): void,
+  getSelectedExam: (exam: Exam) => void,
 } |
 {
   type: 'address',
@@ -21,6 +21,7 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   icon?: any;
   suggestions?: SuggestionProps;
   getInputValue?(value: string): void;
+  selectedExams?: Exam[];
 }
 
 const Input = ({
@@ -31,12 +32,14 @@ const Input = ({
   suggestions,
   getInputValue,
   value,
+  selectedExams,
   ...rest
 }: InputProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const [isFocused, setIsFocused] = useState(false);
   const [isFilled, setIsFilled] = useState(false);
   const [hasSuggestions, setHasSuggestions] = useState(false);
+  const [isOpenSelectedExams, setIsOpenSelectedExams] = useState(false);
 
   const handleInputFocus = useCallback(() => {
     inputRef.current?.focus();
@@ -46,13 +49,13 @@ const Input = ({
     suggestions && setHasSuggestions(true);
   }, []);
 
-  // const handleInputBlur = useCallback(() => {
-  //   setIsFocused(false);
+  const handleInputBlur = useCallback(() => {
+    setIsFocused(false);
 
-  //   setIsFilled(!!inputRef.current?.value);
+    setIsFilled(!!inputRef.current?.value);
 
-  //   setHasSuggestions(false);
-  // }, [inputRef]);
+    setHasSuggestions(false);
+  }, [inputRef]);
 
   const handleInputChange = useCallback(() => {
     setIsFilled(!!inputRef.current?.value);
@@ -94,17 +97,28 @@ const Input = ({
       });
   };
 
+  const handleExamSelect = (exam: Exam) => {
+    suggestions.type === 'exams' && suggestions.getSelectedExam(exam);
+
+    setHasSuggestions(false);
+
+    inputRef.current.value = '';
+    setIsFilled(false);
+
+    console.log(selectedExams);
+  };
+
+  console.log('selected exams Input', selectedExams);
+
   return (
-    <InputContainer
-      onFocus={handleInputFocus}
-      // onBlur={handleInputBlur}
-    >
+    <InputContainer>
       <UserInput
         // isErrored={!!error}
         isFilled={isFilled}
         isFocused={isFocused}
         onClick={handleInputFocus}
         hasSuggestions={hasSuggestions}
+        onBlur={handleInputBlur}
       >
         <InputIcon>
           {Icon && <Icon />}
@@ -120,7 +134,7 @@ const Input = ({
       {hasSuggestions && suggestions.type === 'exams' && (
         <SuggestionArea>
           {suggestions.data.map(exam => (
-            <article key={exam.id} onClick={() => suggestions.getSelectedExam(exam)}>
+            <article key={exam.id} onClick={() => handleExamSelect(exam)}>
               <p>{exam.title}</p>
               <MdAdd />
             </article>
@@ -142,6 +156,46 @@ const Input = ({
           })}
         </SuggestionArea>
       )}
+
+      <SelectedExams>
+        {selectedExams?.length > 0 && (
+          <SelectedExamsSummary>
+            <p>3 exames selecionados</p>
+            <button type="button" onClick={() => setIsOpenSelectedExams(!isOpenSelectedExams)}>
+              {isOpenSelectedExams ? <MdKeyboardArrowUp /> : <MdKeyboardArrowDown />}
+            </button>
+          </SelectedExamsSummary>
+        )}
+
+        {isOpenSelectedExams && (
+            <SelectedExamsDetail>
+              <article>
+                <p>Exame 1</p>
+                <MdClose />
+              </article>
+              <article>
+                <p>Exame 2</p>
+                <MdClose />
+              </article>
+              <article>
+                <p>Exame 3</p>
+                <MdClose />
+              </article>
+              <article>
+                <p>Exame 1</p>
+                <MdClose />
+              </article>
+              <article>
+                <p>Exame 2</p>
+                <MdClose />
+              </article>
+              <article>
+                <p>Exame 3</p>
+                <MdClose />
+              </article>
+            </SelectedExamsDetail>
+          )}
+        </SelectedExams>
     </InputContainer>
   );
 };
