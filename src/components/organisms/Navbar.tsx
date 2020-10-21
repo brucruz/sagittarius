@@ -23,7 +23,6 @@ export default function Navbar() {
           { user && <BagBadge />}
         </Badges>
       </Content>
-      <Line />
     </Container>
   )
 }
