@@ -4,18 +4,18 @@ export const Container = styled.header`
     position: fixed;
     top: 0;
     width: 100%;
-    background-color: #fff;
+    background: #FFFFFF;
+    box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.08);
 `;
 
-export const Content = styled.div`
-    margin-top: 10px;
-    margin-bottom: 10px;
-    margin-left: 24px;
-    margin-right: 24px;
-
+export const Content = styled.section`
     display: flex;
     align-items: center;
     justify-content: space-between;
+`;
+
+export const SidebarAndLogo = styled.section`
+  display: flex;
 `;
 
 export const Logo = styled.h1`
@@ -23,10 +23,15 @@ export const Logo = styled.h1`
   font-weight: 900;
   color: #4D49C4;
   letter-spacing: 0.07em;
+
+  font-size: 22px;
+  line-height: 30px;
+
+  margin-top: 9px;
+  margin-bottom: 8px;
+  margin-left: 16px;
 `;
 
-export const Line = styled.div`
-  height: 1px;
-  width: 100%;
-  background-color: rgba(196, 196, 196, 0.2);
+export const Badges = styled.section`
+  display: flex;
 `;

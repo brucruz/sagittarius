@@ -1,16 +1,28 @@
-import { Container, Content, Logo, Line } from "../../styles/components/organisms/Navbar";
-import NavbarMenu from "../molecule/NavbarMenu";
+
+import { useAuth } from "@/hooks/auth";
+import { Container, Content, Logo, Line, SidebarAndLogo, Badges } from "../../styles/components/organisms/Navbar";
+import BagBadge from "../molecule/BagBadge";
+import SidebarMenu from "../molecule/SidebarMenu";
+import UserMenu from "../molecule/UserMenu";
 
 export default function Navbar() {
+  const { user } = useAuth();
+
   return (
     <Container>
       <Content>
-        <Logo>Heali</Logo>
+        <SidebarAndLogo>
+          <SidebarMenu />
 
-        <NavbarMenu />
+          <Logo>Heali</Logo>
+        </SidebarAndLogo>
+
+        <Badges>
+          <UserMenu />
+
+          { user && <BagBadge />}
+        </Badges>
       </Content>
-
-      <Line />
     </Container>
   )
 }
