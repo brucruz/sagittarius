@@ -28,19 +28,15 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   icon?: any;
   suggestions?: SuggestionProps;
   getInputValue?(value: string): void;
-  selectedExams?: Exam[];
 }
 
 const Input = ({
   name,
   label,
   icon: Icon,
-  disabled,
   suggestions,
   getInputValue,
   value,
-  selectedExams,
-  ...rest
 }: InputProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
 

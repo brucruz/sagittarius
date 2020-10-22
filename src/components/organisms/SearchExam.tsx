@@ -25,10 +25,7 @@ type SearchDisplay = 'initial' | 'exam' | 'address';
 const SearchExam = () => {
   const [searchDisplay, setSearchDisplay] = useState<SearchDisplay>('initial');
   const [examTypedValue, setExamTypedValue] = useState('');
-  const [selectedExams, setSelectedExams] = useState<Exam[]>([]);
   const [examResults, setExamResults] = useState<Exam[]>([]);
-  const [hasAddress, setHasAddress] = useState(false);
-  const [disableSearchButton, setDisableSearchButton] = useState(true);
 
   const {
     ready,
@@ -49,22 +46,9 @@ const SearchExam = () => {
 
   const router = useRouter();
 
-  const { addExam, addAddress, removeExam, exams, address } = useSearchExam();
+  const { addExam, exams, address } = useSearchExam();
   const { user } = useAuth();
   const { addToast } = useToast();
-
-  useEffect(() => {
-    if (address.address && !addressValue) {
-      setValue(address.address, false);
-      setHasAddress(true);
-    }
-  }, [address, addressValue, setValue]);
-
-  useEffect(() => {
-    exams.length === 0 || !hasAddress
-      ? setDisableSearchButton(true)
-      : setDisableSearchButton(false);
-  }, [exams.length, hasAddress]);
 
   useEffect(() => {
     examTypedValue !== ''
@@ -282,7 +266,6 @@ const SearchExam = () => {
             }}
             getInputValue={handleGetAddressInnerValue}
             value={addressValue}
-            selectedExams={selectedExams}
           />
 
           <ButtonNext text="Continuar" disabled={!address.address} onClick={handleSubmit}/>
