@@ -1,3 +1,4 @@
+import device from "@/utils/devices";
 import styled from "styled-components";
 
 export const Container = styled.header`
@@ -30,6 +31,40 @@ export const Logo = styled.h1`
   margin-top: 9px;
   margin-bottom: 8px;
   margin-left: 16px;
+
+  @media ${device.tablet} {
+    font-size: 30px;
+    line-height: 41px;
+  }
+`;
+
+export const NavLinks = styled.section`
+  display: none;
+
+  @media ${device.laptop} {
+    display: flex;
+  }
+
+  margin-top: 22px;
+  margin-bottom: 22px;
+
+  p {
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 22px;
+    /* identical to box height, or 137% */
+
+    text-align: right;
+    letter-spacing: 0.192941px;
+
+    /* Titles */
+
+    color: #232B3B;
+
+    & + p {
+      margin-left: 49px;
+    }
+  }
 `;
 
 export const Badges = styled.section`
