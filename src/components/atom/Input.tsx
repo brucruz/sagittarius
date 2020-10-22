@@ -68,7 +68,7 @@ const Input = ({
 
     getInputValue('');
 
-    setIsFilled(false);
+    !value && setIsFilled(false);
 
     setHasSuggestions(false);
   }, [inputRef]);
@@ -144,7 +144,7 @@ const Input = ({
         // isErrored={!!error}
         isFilled={isFilled}
         isFocused={isFocused}
-        onClick={handleInputFocus}
+        onFocus={handleInputFocus}
         hasSuggestions={hasSuggestions}
         ref={clickOutsideUserInputRef}
       >
