@@ -1,4 +1,4 @@
-import { createContext, useCallback, useState, useContext } from 'react';
+import { createContext, useCallback, useState, useContext, useEffect } from 'react';
 import Exam from '@/@types/Exam';
 import Address from '@/@types/Address';
 
@@ -16,26 +16,31 @@ const SearchExamContext = createContext<SearchExamContextData>(
 );
 
 const SearchExamProvider = ({ children }) => {
-  const [examsToQuote, setExamsToQuote] = useState<Exam[]>(() => {
-    // const exams = sessionStorage.getItem('@Heali:lastExamsSearched');
+  const [examsToQuote, setExamsToQuote] = useState<Exam[]>([] as Exam[]);
 
-    // if (exams) {
-    //   return JSON.parse(exams);
-    // }
+  useEffect(() => {
+    const exams = sessionStorage.getItem('@Heali:lastExamsSearched');
 
-    return [] as Exam[];
-  });
-  const [address, setAddress] = useState<Address>(() => {
-    // const storagedAddress = sessionStorage.getItem(
-    //   '@Heali:lastAddressSearched',
-    // );
+    if (exams) {
+       setExamsToQuote(JSON.parse(exams));
+    } else {
+      setExamsToQuote([] as Exam[]);
+    }
+  }, []);
 
-    // if (storagedAddress) {
-    //   return JSON.parse(storagedAddress);
-    // }
+  const [address, setAddress] = useState<Address>({} as Address);
 
-    return {} as Address;
-  });
+  useEffect(() => {
+    const storagedAddress = sessionStorage.getItem(
+      '@Heali:lastAddressSearched',
+    );
+
+    if (storagedAddress) {
+      setAddress(JSON.parse(storagedAddress));
+    } else {
+      setAddress({} as Address);
+    }
+  }, []);
 
   const addExam = useCallback(
     (examToQuote: Exam) => {
