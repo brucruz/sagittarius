@@ -38,7 +38,7 @@ const UserMenu = () => {
 
               <MenuItems>
                 <MenuHelloItem>
-                  <p>Olá, Bruno</p>
+                  <p>Olá, {user.first_name}</p>
                 </MenuHelloItem>
 
                 <MenuItem>
