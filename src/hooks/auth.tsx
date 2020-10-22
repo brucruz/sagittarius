@@ -1,5 +1,5 @@
 import User from '@/@types/User';
-import { createContext, useCallback, useState, useContext } from 'react';
+import { createContext, useCallback, useState, useContext, useEffect } from 'react';
 import api from '../services/api';
 // import { Mixpanel } from '../mixpanel';
 
@@ -25,16 +25,18 @@ interface AuthContextData {
 const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 
 const AuthProvider = ({ children }) => {
-  const [data, setData] = useState<AuthState>(() => {
-    // const token = localStorage.getItem('@Heali:token');
-    // const user = localStorage.getItem('@Heali:user');
+  const [data, setData] = useState<AuthState>({} as AuthState);
 
-    // if (token && user) {
-    //   return { token, user: JSON.parse(user) };
-    // }
+  useEffect(() => {
+    const token = localStorage.getItem('@Heali:token');
+    const user = localStorage.getItem('@Heali:user');
 
-    return {} as AuthState;
-  });
+    if (token && user) {
+      setData({ token, user: JSON.parse(user) });
+    } else {
+      setData({} as AuthState);
+    }
+  }, []);
 
   const storeUserInfo = (token: string, user: User): void => {
     localStorage.setItem('@Heali:token', token);

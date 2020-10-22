@@ -105,8 +105,6 @@ const SearchExam = () => {
     setSelectedExams(exams => [...exams, exam]);
   }, []);
 
-  console.log('selected exams Search', selectedExams);
-
   return (
     <Container>
       <HeaderSpaceContent />
