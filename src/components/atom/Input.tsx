@@ -1,7 +1,7 @@
 import { InputHTMLAttributes, useCallback, useEffect, useRef, useState } from 'react';
 import mixpanel from 'mixpanel-browser';
 
-import { MdAdd, MdClose, MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/md';
+import { MdAdd, MdClose, MdKeyboardArrowDown, MdKeyboardArrowUp, MdRemoveRedEye } from 'react-icons/md';
 import { getGeocode, getLatLng, Suggestion } from 'use-places-autocomplete';
 
 import Exam from '@/@types/Exam';
@@ -9,6 +9,8 @@ import { useSearchExam } from '@/hooks/searchExam';
 import { InputContainer, UserInput, InputIcon, InputTextArea, SuggestionArea, SelectedExams, SelectedExamsSummary, SelectedExamsDetail } from '@/styles/components/atom/Input';
 import useClickOutsideRef from '@/hooks/clickOutside';
 import { useAuth } from '@/hooks/auth';
+
+import { useField } from '@unform/core';
 
 type SuggestionProps = {
   type: 'exams',
@@ -26,6 +28,7 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   name: string;
   label: string;
   icon?: any;
+  type?: string,
   suggestions?: SuggestionProps;
   getInputValue?(value: string): void;
 }
@@ -35,6 +38,7 @@ const Input = ({
   label,
   icon: Icon,
   suggestions,
+  type,
   getInputValue,
   value,
 }: InputProps) => {
@@ -44,13 +48,24 @@ const Input = ({
   const [isFilled, setIsFilled] = useState(false);
   const [hasSuggestions, setHasSuggestions] = useState(false);
   const [isOpenSelectedExams, setIsOpenSelectedExams] = useState(false);
+  const [inputType, setInputType] = useState('text');
+  const { fieldName, registerField } = useField(name);
 
   const { addAddress, addExam, exams, removeExam } = useSearchExam();
   const { user } = useAuth();
 
   useEffect(() => {
     inputRef.current.value && setIsFilled(true);
+    setInputType(type);
   }, [])
+
+  useEffect(() => {
+    registerField({
+      name: fieldName,
+      ref: inputRef.current,
+      path: 'value',
+    });
+  }, [fieldName, registerField]);
 
   const handleInputFocus = useCallback(() => {
     inputRef.current?.focus();
@@ -61,6 +76,7 @@ const Input = ({
   }, []);
 
   const handleClickOutsideInput = useCallback(() => {
+    if(type === 'email' || type === 'password') return;
     setIsFocused(false);
 
     inputRef.current.value = '';
@@ -174,8 +190,15 @@ const Input = ({
         <InputTextArea>
           <label htmlFor={name}>{label}</label>
 
-          <input type="text" id={name} onChange={handleInputChange} ref={inputRef} value={value}/>
+          <input type={type ? inputType : 'text'} id={name} name={name} onChange={handleInputChange} ref={inputRef} value={value}/>
         </InputTextArea>
+
+        {type === 'password' && 
+          <MdRemoveRedEye 
+            className="password-eye-icon" 
+            onClick={() => inputType === 'password' ? setInputType('text') : setInputType('password')}
+          />
+        }
       </UserInput>
 
       {hasSuggestions && suggestions.type === 'exams' && (
@@ -207,7 +230,7 @@ const Input = ({
       <SelectedExams
         ref={clickOutsideUserSelectedExams}
       >
-        {exams?.length > 0 && suggestions.type === 'exams' && (
+        {exams?.length > 0 && suggestions?.type === 'exams' && (
           <SelectedExamsSummary onClick={() => setIsOpenSelectedExams(!isOpenSelectedExams)}>
             {exams.length === 1 ? (<p>1 exame selecionado</p>) : (<p>{exams.length} exames selecionados</p>)}
             <button type="button" onClick={() => setIsOpenSelectedExams(!isOpenSelectedExams)}>
