@@ -1,5 +1,5 @@
 import ButtonNext from "../atom/ButtonNext";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import banner from '@/assets/components/organisms/SearchExam/banner.svg';
 import { MdSearch, MdPlace } from 'react-icons/md'
@@ -11,6 +11,11 @@ import PageHeader from "../molecule/PageHeader";
 import Input from "../atom/Input";
 import Exam from "@/@types/Exam";
 import usePlacesAutocomplete from "use-places-autocomplete";
+import { useSearchExam } from "@/hooks/searchExam";
+import { useAuth } from "@/hooks/auth";
+import { useToast } from "@/hooks/toast";
+import ExamSearchResult from "@/@types/ExamSearchResult";
+import examIndex from "@/services/search";
 
 type SearchDisplay = 'initial' | 'exam' | 'address';
 
@@ -63,13 +68,16 @@ const SearchExam = () => {
   const [searchDisplay, setSearchDisplay] = useState<SearchDisplay>('initial');
   const [examTypedValue, setExamTypedValue] = useState('');
   const [selectedExams, setSelectedExams] = useState<Exam[]>([]);
+  const [examResults, setExamResults] = useState<Exam[]>([]);
+  const [hasAddress, setHasAddress] = useState(false);
+  const [disableSearchButton, setDisableSearchButton] = useState(true);
 
   const {
     ready,
     value: addressValue,
     suggestions: { status, data: addressSuggestions },
     setValue,
-    clearSuggestions,
+    clearSuggestions: clearAddressSuggestions,
   } = usePlacesAutocomplete({
     requestOptions: {
       bounds: {
@@ -80,6 +88,50 @@ const SearchExam = () => {
       },
     },
   });
+
+  const { addExam, addAddress, removeExam, exams, address } = useSearchExam();
+  const { user } = useAuth();
+  const { addToast } = useToast();
+
+  useEffect(() => {
+    if (address.address && !addressValue) {
+      setValue(address.address, false);
+      setHasAddress(true);
+    }
+  }, [address, addressValue, setValue]);
+
+  useEffect(() => {
+    exams.length === 0 || !hasAddress
+      ? setDisableSearchButton(true)
+      : setDisableSearchButton(false);
+  }, [exams.length, hasAddress]);
+
+  useEffect(() => {
+    examTypedValue !== ''
+      ? examIndex
+          .search<ExamSearchResult>(examTypedValue, {
+            attributesToRetrieve: ['title', 'alternative_titles'],
+            hitsPerPage: 5,
+            clickAnalytics: true,
+            analytics: true,
+          })
+          .then(({ hits }) => {
+            const results = hits.map(hit => {
+              return {
+                id: hit.objectID,
+                title: hit.title,
+                slug: hit.slug,
+                alternative_titles: hit.alternative_titles,
+                created_date: '',
+                updated_date: '',
+              };
+            });
+
+            setExamResults(results);
+          })
+          .catch(err => console.log(err))
+      : setExamResults([]);
+  }, [examTypedValue, exams]);
 
   const handleBeginButtonClick = useCallback(() => {
     setSearchDisplay('exam');
@@ -102,7 +154,11 @@ const SearchExam = () => {
   }, []);
 
   const handleExamSelection = useCallback((exam: Exam): void => {
-    setSelectedExams(exams => [...exams, exam]);
+    addExam(exam);
+  }, []);
+
+  const handleClearExamSuggestions = useCallback(() => {
+    setExamResults([]);
   }, []);
 
   return (
@@ -137,13 +193,14 @@ const SearchExam = () => {
             icon={MdSearch}
             suggestions={{
               type: 'exams',
-              data: exams,
+              data: examResults,
               getSelectedExam: handleExamSelection,
+              clearSuggestions: handleClearExamSuggestions,
             }}
             getInputValue={handleGetExamInnerValue}
           />
 
-          <ButtonNext text="Continuar" onClick={handleExamSubmit}/>
+          <ButtonNext text="Continuar" onClick={handleExamSubmit} disabled={exams.length < 1}/>
         </ExamState>
       )}
 
@@ -161,14 +218,14 @@ const SearchExam = () => {
               type: 'address',
               data: addressSuggestions,
               getSelectedAddress: setValue,
+              clearSuggestions: clearAddressSuggestions,
             }}
             getInputValue={handleGetAddressInnerValue}
-            onBlur={clearSuggestions}
             value={addressValue}
             selectedExams={selectedExams}
           />
 
-          <ButtonNext text="Continuar"/>
+          <ButtonNext text="Continuar" disabled={!address.address}/>
         </AddressState>
       )}
 

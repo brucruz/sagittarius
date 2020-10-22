@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 export const Container = styled.button`
   color: #fff;
@@ -30,4 +30,24 @@ export const Container = styled.button`
 
     letter-spacing: 0.192941px;
   }
+
+  &:hover {
+    background: linear-gradient(90deg, #2471A6 0%, #38A1CE 97.71%);
+  }
+
+  ${props => props.disabled && css`
+    border: 1px solid rgba(0, 0, 0, 0.2);
+
+    background-color: rgba(188,195,212,0.4);
+
+    cursor: not-allowed;
+
+    p {
+      color: rgba(60,71,89,0.6);
+    }
+
+    &:hover {
+      background: rgba(188,195,212,0.4);
+    }
+  `}
 `;

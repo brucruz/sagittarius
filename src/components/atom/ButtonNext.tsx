@@ -6,10 +6,13 @@ type ButtonNextProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   text: string;
 };
 
-const ButtonNext = ({text, ...rest}: ButtonNextProps) => {
+const ButtonNext = ({text, disabled, ...rest}: ButtonNextProps) => {
   return (
-    <Container {...rest}>
-      <p>{text.toUpperCase()}</p>
+    <Container
+      disabled={disabled}
+      {...rest}
+    >
+      <p>{text}</p>
 
       <img src={next} alt=""/>
     </Container>
