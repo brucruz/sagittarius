@@ -199,6 +199,8 @@ export const SelectedExamsSummary = styled.header`
 
   margin-top: 12px;
 
+  cursor: pointer;
+
   p {
     font-weight: bold;
     font-size: 16px;
@@ -285,7 +287,9 @@ export const SelectedExamsDetail = styled.footer`
       height: 16px;
       width: 16px;
 
-      color: rgba(60,71,89,0.6)
+      color: rgba(60,71,89,0.6);
+
+      cursor: pointer;
     }
   }
 `;

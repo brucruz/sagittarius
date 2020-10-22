@@ -1,19 +1,26 @@
-import Exam from '@/@types/Exam';
-import { InputContainer, UserInput, InputIcon, InputTextArea, SuggestionArea, SelectedExams, SelectedExamsSummary, SelectedExamsDetail } from '@/styles/components/atom/Input';
-import { InputHTMLAttributes, useCallback, useRef, useState } from 'react';
+import { InputHTMLAttributes, useCallback, useEffect, useRef, useState } from 'react';
+import mixpanel from 'mixpanel-browser';
 
 import { MdAdd, MdClose, MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/md';
 import { getGeocode, getLatLng, Suggestion } from 'use-places-autocomplete';
+
+import Exam from '@/@types/Exam';
+import { useSearchExam } from '@/hooks/searchExam';
+import { InputContainer, UserInput, InputIcon, InputTextArea, SuggestionArea, SelectedExams, SelectedExamsSummary, SelectedExamsDetail } from '@/styles/components/atom/Input';
+import useClickOutsideRef from '@/hooks/clickOutside';
+import { useAuth } from '@/hooks/auth';
 
 type SuggestionProps = {
   type: 'exams',
   data: Exam[],
   getSelectedExam: (exam: Exam) => void,
+  clearSuggestions: () => void,
 } |
 {
   type: 'address',
   data: Suggestion[],
   getSelectedAddress: (val: string, shouldFetchData?: boolean) => void,
+  clearSuggestions: () => void,
 }
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   name: string;
@@ -21,25 +28,29 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   icon?: any;
   suggestions?: SuggestionProps;
   getInputValue?(value: string): void;
-  selectedExams?: Exam[];
 }
 
 const Input = ({
   name,
   label,
   icon: Icon,
-  disabled,
   suggestions,
   getInputValue,
   value,
-  selectedExams,
-  ...rest
 }: InputProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
+
   const [isFocused, setIsFocused] = useState(false);
   const [isFilled, setIsFilled] = useState(false);
   const [hasSuggestions, setHasSuggestions] = useState(false);
   const [isOpenSelectedExams, setIsOpenSelectedExams] = useState(false);
+
+  const { addAddress, addExam, exams, removeExam } = useSearchExam();
+  const { user } = useAuth();
+
+  useEffect(() => {
+    inputRef.current.value && setIsFilled(true);
+  }, [])
 
   const handleInputFocus = useCallback(() => {
     inputRef.current?.focus();
@@ -49,13 +60,21 @@ const Input = ({
     suggestions && setHasSuggestions(true);
   }, []);
 
-  const handleInputBlur = useCallback(() => {
+  const handleClickOutsideInput = useCallback(() => {
     setIsFocused(false);
 
-    setIsFilled(!!inputRef.current?.value);
+    inputRef.current.value = '';
+
+    getInputValue('');
+
+    !value && setIsFilled(false);
 
     setHasSuggestions(false);
   }, [inputRef]);
+
+  const handleClickOutsideSelectedExams = useCallback(() => {
+    setIsOpenSelectedExams(false);
+  }, []);
 
   const handleInputChange = useCallback(() => {
     setIsFilled(!!inputRef.current?.value);
@@ -65,13 +84,15 @@ const Input = ({
     suggestions && setHasSuggestions(true);
   } , []);
 
-  const handlePlaceSelect = (address: string) => () => {
+  const handlePlaceSelect = useCallback((address: string) => () => {
     // When user selects a place, we can replace the keyword without request data from API
     // by setting the second parameter as "false"
     // setHasAddress(true);
     suggestions.type === 'address' && suggestions.getSelectedAddress(address, false);
 
     setHasSuggestions(false);
+
+    suggestions.type === "exams" && suggestions.clearSuggestions();
 
     // Get latitude and longitude via utility functions
     getGeocode({
@@ -81,34 +102,60 @@ const Input = ({
       .then(({ lat, lng }) => {
         console.log('📍 Coordinates: ', { lat, lng });
 
-        // addAddress({
-        //   address: description,
-        //   latitude: lat,
-        //   longitude: lng,
-        // });
+        addAddress({
+          address,
+          latitude: lat,
+          longitude: lng,
+        });
 
-        // user && mixpanel.identify(user.id);
-        // mixpanel.track('Add Address To Search', {
-        //   Address: description,
-        // });
+        user && mixpanel.identify(user.id);
+        mixpanel.track('Add Address To Search', {
+          Address: address,
+          Latitude: lat,
+          Longitude: lng,
+        });
       })
       .catch(error => {
         console.log('😱 Error: ', error);
       });
-  };
+  }, [suggestions, user]);
 
-  const handleExamSelect = (exam: Exam) => {
-    suggestions.type === 'exams' && suggestions.getSelectedExam(exam);
+  const handleExamSelect = useCallback((exam: Exam) => {
+    addExam(exam);
 
     setHasSuggestions(false);
+    suggestions.type === "exams" && suggestions.clearSuggestions;
 
     inputRef.current.value = '';
     setIsFilled(false);
 
-    console.log(selectedExams);
-  };
+    // ReactGA.event({
+    //   category: 'search',
+    //   action: 'click',
+    //   label: user
+    //     ? `UserId ${user.id} - Added ${clickedExam.title} to search params`
+    //     : `Unknown user - Added ${clickedExam.title} to search params`,
+    // });
 
-  console.log('selected exams Input', selectedExams);
+    user && mixpanel.identify(user.id);
+    mixpanel.track('Add Exam To Search', {
+      Exam: exam.title,
+    });
+  }, [suggestions, addExam, user]);
+
+  const handleExamRemove = useCallback((exam: Exam) => {
+    exams.length === 0 && setIsOpenSelectedExams(false);
+
+    user && mixpanel.identify(user.id);
+    mixpanel.track('Remove Exam From Search', {
+      Exam: exam.title,
+    });
+
+    removeExam(exam.id);
+  }, [exams, removeExam, user]);
+
+  const clickOutsideUserInputRef = useClickOutsideRef(handleClickOutsideInput);
+  const clickOutsideUserSelectedExams = useClickOutsideRef(handleClickOutsideSelectedExams);
 
   return (
     <InputContainer>
@@ -116,9 +163,9 @@ const Input = ({
         // isErrored={!!error}
         isFilled={isFilled}
         isFocused={isFocused}
-        onClick={handleInputFocus}
+        onFocus={handleInputFocus}
         hasSuggestions={hasSuggestions}
-        onBlur={handleInputBlur}
+        ref={clickOutsideUserInputRef}
       >
         <InputIcon>
           {Icon && <Icon />}
@@ -157,10 +204,12 @@ const Input = ({
         </SuggestionArea>
       )}
 
-      <SelectedExams>
-        {selectedExams?.length > 0 && (
-          <SelectedExamsSummary>
-            <p>3 exames selecionados</p>
+      <SelectedExams
+        ref={clickOutsideUserSelectedExams}
+      >
+        {exams?.length > 0 && suggestions.type === 'exams' && (
+          <SelectedExamsSummary onClick={() => setIsOpenSelectedExams(!isOpenSelectedExams)}>
+            {exams.length === 1 ? (<p>1 exame selecionado</p>) : (<p>{exams.length} exames selecionados</p>)}
             <button type="button" onClick={() => setIsOpenSelectedExams(!isOpenSelectedExams)}>
               {isOpenSelectedExams ? <MdKeyboardArrowUp /> : <MdKeyboardArrowDown />}
             </button>
@@ -169,30 +218,12 @@ const Input = ({
 
         {isOpenSelectedExams && (
             <SelectedExamsDetail>
-              <article>
-                <p>Exame 1</p>
-                <MdClose />
-              </article>
-              <article>
-                <p>Exame 2</p>
-                <MdClose />
-              </article>
-              <article>
-                <p>Exame 3</p>
-                <MdClose />
-              </article>
-              <article>
-                <p>Exame 1</p>
-                <MdClose />
-              </article>
-              <article>
-                <p>Exame 2</p>
-                <MdClose />
-              </article>
-              <article>
-                <p>Exame 3</p>
-                <MdClose />
-              </article>
+              {exams.map(exam => (
+                <article key={exam.id}>
+                  <p>{exam.title}</p>
+                  <MdClose onClick={() => handleExamRemove(exam)}/>
+                </article>
+              ))}
             </SelectedExamsDetail>
           )}
         </SelectedExams>
