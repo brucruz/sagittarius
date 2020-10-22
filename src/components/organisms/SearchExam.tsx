@@ -1,8 +1,10 @@
+import { useRouter } from 'next/router';
 import ButtonNext from "../atom/ButtonNext";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 import banner from '@/assets/components/organisms/SearchExam/banner.svg';
-import { MdSearch, MdPlace } from 'react-icons/md'
+import { MdSearch, MdPlace } from 'react-icons/md';
+import mixpanel from 'mixpanel-browser';
 
 import { AddressState, Banner, Container, ExamState, InitialState, InitialStateContent, ValueProposition } from "@/styles/components/organisms/SearchExam";
 import TitleMain from "../molecule/TitleMain";
@@ -16,53 +18,9 @@ import { useAuth } from "@/hooks/auth";
 import { useToast } from "@/hooks/toast";
 import ExamSearchResult from "@/@types/ExamSearchResult";
 import examIndex from "@/services/search";
+import { buildSearchQuery } from "@/helpers/searchExams";
 
 type SearchDisplay = 'initial' | 'exam' | 'address';
-
-const exams: Exam[] = [
-  {
-    id: '001',
-    title: 'Hemograma completo',
-    slug: 'hemograma-completo',
-    created_date: 'now',
-    updated_date: 'now',
-  },
-  {
-    id: '002',
-    title: 'Glicose',
-    slug: 'glicose',
-    created_date: 'now',
-    updated_date: 'now',
-  },
-  {
-    id: '003',
-    title: 'Ecocardiograma com Doppler Colorido',
-    slug: 'ecocardiograma-com-doppler-colorido',
-    created_date: 'now',
-    updated_date: 'now',
-  },
-  {
-    id: '004',
-    title: 'Bilirrubinas',
-    slug: 'bilirrubinas',
-    created_date: 'now',
-    updated_date: 'now',
-  },
-  {
-    id: '005',
-    title: 'Ultrassom da Tireóide',
-    slug: 'ultrassom-da-tireoide',
-    created_date: 'now',
-    updated_date: 'now',
-  },
-  {
-    id: '006',
-    title: 'Ultrassonografia do Membro Inferior Esquerdo com Doppler Colorido',
-    slug: 'ultrassonografia-do-membro-inferior-esquerdo-com-doppler-colorido',
-    created_date: 'now',
-    updated_date: 'now',
-  },
-]
 
 const SearchExam = () => {
   const [searchDisplay, setSearchDisplay] = useState<SearchDisplay>('initial');
@@ -88,6 +46,8 @@ const SearchExam = () => {
       },
     },
   });
+
+  const router = useRouter();
 
   const { addExam, addAddress, removeExam, exams, address } = useSearchExam();
   const { user } = useAuth();
@@ -132,6 +92,106 @@ const SearchExam = () => {
           .catch(err => console.log(err))
       : setExamResults([]);
   }, [examTypedValue, exams]);
+
+  const resultsSearchUrl = useMemo(() => buildSearchQuery(address, exams), [
+    address,
+    exams,
+  ]);
+
+  const examsTitles = useMemo(() => {
+    return exams.map(exam => exam.title);
+  }, [exams]);
+
+  const handleSubmit = useCallback(() => {
+    // no server, criar table e service de pesquisas, contendo: date, user, exams e address
+    // criar envio desses dados para server
+
+    if (exams.length === 0) {
+      addToast({
+        type: 'error',
+        title: 'Você precisa informar seus exames',
+        description: 'Para prosseguir, informe os exames que está buscando',
+      });
+
+      // ReactGA.event({
+      //   category: 'search',
+      //   action: 'error - exams missing',
+      //   label: `Search trial missing exams - ${
+      //     user?.id && `- UserId ${user.id}`
+      //   }`,
+      // });
+
+      user && mixpanel.identify(user.id);
+      mixpanel.register(
+        {
+          Exams: examsTitles,
+          Address: address,
+          'Result Direct Access': false,
+        },
+        1, // cookie: 1 day storage
+      );
+      mixpanel.track('Exam Search', {
+        Status: 'Error: exam missing',
+      });
+
+      return;
+    }
+
+    if (!address) {
+      addToast({
+        type: 'error',
+        title: 'Você precisa informar seu endereço',
+        description: 'Informe um endereço de referência para poder prosseguir',
+      });
+
+      // ReactGA.event({
+      //   category: 'search',
+      //   action: 'error - address missing',
+      //   label: `Search trial missing an address ${
+      //     user?.id && `- UserId ${user.id}`
+      //   }`,
+      // });
+
+      user && mixpanel.identify(user.id);
+      mixpanel.register(
+        {
+          Exams: examsTitles,
+          Address: address,
+          'Result Direct Access': false,
+        },
+        1, // cookie: 1 day storage
+      );
+      mixpanel.track('Exam Search', {
+        Status: 'Error: address missing',
+      });
+
+      return;
+    }
+
+    // ReactGA.event({
+    //   category: 'search',
+    //   action: 'success - exams searched',
+    //   label: `Successfully searched exams ${user?.id && `- UserId ${user.id}`}`,
+    // });
+
+    user && mixpanel.identify(user.id);
+    mixpanel.register(
+      {
+        'Searched Exams': examsTitles,
+        'Searched Address': address.address,
+        'Result Direct Access': false,
+      },
+      1, // cookie: 1 day storage
+    );
+    mixpanel.track('Exam Search', {
+      Status: 'Success',
+    });
+
+    router.push({
+      pathname: '/results',
+      search: resultsSearchUrl,
+    });
+  }, [router, user, addToast, resultsSearchUrl, exams, address, examsTitles]);
 
   const handleBeginButtonClick = useCallback(() => {
     setSearchDisplay('exam');
@@ -225,7 +285,7 @@ const SearchExam = () => {
             selectedExams={selectedExams}
           />
 
-          <ButtonNext text="Continuar" disabled={!address.address}/>
+          <ButtonNext text="Continuar" disabled={!address.address} onClick={handleSubmit}/>
         </AddressState>
       )}
 

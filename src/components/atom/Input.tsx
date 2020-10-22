@@ -1,4 +1,5 @@
 import { InputHTMLAttributes, useCallback, useEffect, useRef, useState } from 'react';
+import mixpanel from 'mixpanel-browser';
 
 import { MdAdd, MdClose, MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/md';
 import { getGeocode, getLatLng, Suggestion } from 'use-places-autocomplete';
@@ -7,6 +8,7 @@ import Exam from '@/@types/Exam';
 import { useSearchExam } from '@/hooks/searchExam';
 import { InputContainer, UserInput, InputIcon, InputTextArea, SuggestionArea, SelectedExams, SelectedExamsSummary, SelectedExamsDetail } from '@/styles/components/atom/Input';
 import useClickOutsideRef from '@/hooks/clickOutside';
+import { useAuth } from '@/hooks/auth';
 
 type SuggestionProps = {
   type: 'exams',
@@ -48,6 +50,7 @@ const Input = ({
   const [isOpenSelectedExams, setIsOpenSelectedExams] = useState(false);
 
   const { addAddress, addExam, exams, removeExam } = useSearchExam();
+  const { user } = useAuth();
 
   useEffect(() => {
     inputRef.current.value && setIsFilled(true);
@@ -109,15 +112,17 @@ const Input = ({
           longitude: lng,
         });
 
-        // user && mixpanel.identify(user.id);
-        // mixpanel.track('Add Address To Search', {
-        //   Address: description,
-        // });
+        user && mixpanel.identify(user.id);
+        mixpanel.track('Add Address To Search', {
+          Address: address,
+          Latitude: lat,
+          Longitude: lng,
+        });
       })
       .catch(error => {
         console.log('😱 Error: ', error);
       });
-  }, [suggestions]);
+  }, [suggestions, user]);
 
   const handleExamSelect = useCallback((exam: Exam) => {
     addExam(exam);
@@ -127,13 +132,31 @@ const Input = ({
 
     inputRef.current.value = '';
     setIsFilled(false);
-  }, [suggestions]);
+
+    // ReactGA.event({
+    //   category: 'search',
+    //   action: 'click',
+    //   label: user
+    //     ? `UserId ${user.id} - Added ${clickedExam.title} to search params`
+    //     : `Unknown user - Added ${clickedExam.title} to search params`,
+    // });
+
+    user && mixpanel.identify(user.id);
+    mixpanel.track('Add Exam To Search', {
+      Exam: exam.title,
+    });
+  }, [suggestions, addExam, user]);
 
   const handleExamRemove = useCallback((exam: Exam) => {
     exams.length === 0 && setIsOpenSelectedExams(false);
 
+    user && mixpanel.identify(user.id);
+    mixpanel.track('Remove Exam From Search', {
+      Exam: exam.title,
+    });
+
     removeExam(exam.id);
-  }, [exams]);
+  }, [exams, removeExam, user]);
 
   const clickOutsideUserInputRef = useClickOutsideRef(handleClickOutsideInput);
   const clickOutsideUserSelectedExams = useClickOutsideRef(handleClickOutsideSelectedExams);

@@ -1,6 +1,6 @@
+import Address from '@/@types/Address';
 import querystring from 'query-string';
 import Exam from '../@types/Exam';
-import { Address } from '../hooks/searchExam';
 
 export const buildSearchQuery = (address: Address, exams: Exam[]): string =>
   querystring.stringify(
