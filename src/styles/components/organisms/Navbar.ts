@@ -2,17 +2,20 @@ import device from "@/utils/devices";
 import styled from "styled-components";
 
 export const Container = styled.header`
-    position: fixed;
-    top: 0;
-    width: 100%;
-    background: #FFFFFF;
-    box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.08);
+  z-index: 1000;
+  position: fixed;
+  margin: 0;
+  padding: 0 8.3%;
+  top: 0;
+  width: 100%;
+  background: #FFFFFF;
+  box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.08);
 `;
 
 export const Content = styled.section`
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 `;
 
 export const SidebarAndLogo = styled.section`
@@ -35,6 +38,7 @@ export const Logo = styled.h1`
   @media ${device.tablet} {
     font-size: 30px;
     line-height: 41px;
+    margin-left: 0;
   }
 `;
 

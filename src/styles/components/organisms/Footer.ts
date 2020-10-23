@@ -10,7 +10,7 @@ export const Container = styled.footer`
   align-items: center;
   
   @media ${device.tablet} {
-    padding: 0 25px;
+    padding: 0 8.3%;
   }
 `;
 

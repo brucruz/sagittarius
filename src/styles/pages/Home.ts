@@ -14,6 +14,29 @@ export const SectionAbout = styled.section`
       }
     }
   }
+
+  @media ${device.tablet} {
+    margin-top: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-left: 0;
+    margin-right: 0; 
+    padding: 100px 8.3%;
+    background-color: #247FA6;
+    text-align: center;
+
+    h2 {
+      font-size: 32px;
+      color: #fff;
+    }
+
+    p {
+      max-width: 1000px;
+      font-size: 20px;
+      color: #fff;
+    }
+  }
 `;
 
 export const SectionPayment = styled.section`
@@ -21,6 +44,11 @@ export const SectionPayment = styled.section`
   margin-bottom: 60px;
   margin-left: 25px;
   margin-right: 25px;
+
+  @media ${device.tablet} {
+    margin-left: 8.3%;
+    margin-right: 8.3%; 
+  }
 
   h2 {
     margin-bottom: 32px;
@@ -102,6 +130,11 @@ export const SectionFAQ = styled.section`
   margin-bottom: 60px;
   margin-left: 25px;
   margin-right: 25px;
+
+  @media ${device.tablet} {
+    margin-left: 8.3%;
+    margin-right: 8.3%; 
+  }
 
   h2 {
     margin-bottom: 32px;
