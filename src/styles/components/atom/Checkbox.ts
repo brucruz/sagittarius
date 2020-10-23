@@ -27,7 +27,6 @@ export const CheckboxItem = styled.label<CheckboxItemProps>`
 
   ${props => props.isChecked && css`
     font-weight: bold;
-    line-height: 24px;
   `}
 
   input {

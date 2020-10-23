@@ -1,12 +1,10 @@
-import Checkbox from "@/components/atom/Checkbox";
 import CheckboxGroup from "@/components/molecule/CheckboxGroup";
 import DateSelector from "@/components/molecule/DateSelector";
 import PageTemplate from "@/components/templates/PageTemplate";
-import { CheckboxItem } from "@/styles/components/atom/Checkbox";
+import hoursCheckboxes from "@/contents/pages/DateSelectionPage/hoursCheckboxes";
 import { DateRange, HourSelection
 } from "@/styles/pages/DateSelectionPage";
 import { useCallback, useMemo, useState } from "react";
-import { MdCheck } from "react-icons/md";
 
 const DateSelectionPage = () => {
   const [fromDate, setFromDate] = useState<Date>(null);
@@ -42,7 +40,9 @@ const DateSelectionPage = () => {
       <HourSelection>
         <h3>Selecione os horários preferíveis:</h3>
 
-        <CheckboxGroup />
+        {hoursCheckboxes && hoursCheckboxes.map(hour => (
+          <CheckboxGroup title={hour.period} checkboxes={hour.hours}/>
+        ))}
       </HourSelection>
 
 
