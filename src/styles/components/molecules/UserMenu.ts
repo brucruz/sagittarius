@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import devices from '@/utils/devices';
 
 interface OnlineUserMenuProps {
   isMenuOpen: boolean;
@@ -12,6 +13,10 @@ export const OfflineUser = styled.button`
   display: flex;
 
   margin-right: 16.5px;
+
+  @media ${devices.tablet} {
+    margin-right: 0;
+  }
 
   p {
     font-weight: bold;
