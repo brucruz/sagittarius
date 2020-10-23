@@ -4,4 +4,6 @@ export const LinkBackContainer = styled.div`
   background: transparent;
   border: 0;
   height: 40px;
+
+  cursor: pointer;
 `;

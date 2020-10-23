@@ -4,13 +4,13 @@ import PageHeader from '../molecule/PageHeader';
 import TitleMain from '../molecule/TitleMain';
 import { Container } from '../../styles/components/templates/PageTemplate';
 import { HTMLAttributes } from 'react';
-
+import { UrlObject } from 'url';
 interface PageTemplateProps extends HTMLAttributes<HTMLDivElement>{
   titleMain?: {
     title?: string,
     subTitle?: string,
   };
-  backLinkUrl: string;
+  backLinkUrl: UrlObject | string;
 }
 
 const PageTemplate = ({ children, titleMain, backLinkUrl }: PageTemplateProps) => {

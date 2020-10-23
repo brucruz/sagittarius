@@ -5,13 +5,14 @@ import stepper1 from '@/assets/components/organisms/SearchExam/stepper1.svg';
 import stepper2 from '@/assets/components/organisms/SearchExam/stepper2.svg';
 import LinkBack from "../atom/LinkBack";
 import { useCallback } from "react";
+import { UrlObject } from "url";
 
 interface PageHeaderProps {
   type: 'link' | 'button';
   stepper?: '1/2' | '2/2';
   backButtonNewState?: any;
   backButtonStateCallback?(state: any): void;
-  backLinkUrl?: string;
+  backLinkUrl?: UrlObject | string;
 }
 
 const PageHeader = ({
