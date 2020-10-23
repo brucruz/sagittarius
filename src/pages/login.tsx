@@ -127,6 +127,7 @@ export default function Login() {
           label="E-mail" 
           type="email"
           icon={MdEmail}
+          isSubmit
           value={emailValue}
           getInputValue={handleEmailChange}
         />
@@ -135,6 +136,7 @@ export default function Login() {
           label="Senha" 
           type="password"
           icon={MdLock}
+          isSubmit
           value={passwordValue}
           getInputValue={handlePasswordChange}
         />

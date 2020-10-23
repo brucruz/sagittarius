@@ -31,6 +31,7 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   type?: string,
   suggestions?: SuggestionProps;
   getInputValue?(value: string): void;
+  isSubmit?:boolean,
 }
 
 const Input = ({
@@ -41,6 +42,7 @@ const Input = ({
   type,
   getInputValue,
   value,
+  isSubmit,
 }: InputProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -49,7 +51,6 @@ const Input = ({
   const [hasSuggestions, setHasSuggestions] = useState(false);
   const [isOpenSelectedExams, setIsOpenSelectedExams] = useState(false);
   const [inputType, setInputType] = useState('text');
-  const { fieldName, registerField } = useField(name);
 
   const { addAddress, addExam, exams, removeExam } = useSearchExam();
   const { user } = useAuth();
@@ -59,13 +60,18 @@ const Input = ({
     setInputType(type);
   }, [])
 
-  useEffect(() => {
-    registerField({
-      name: fieldName,
-      ref: inputRef.current,
-      path: 'value',
-    });
-  }, [fieldName, registerField]);
+  if(isSubmit) {
+    const { fieldName, registerField } = useField(name);
+
+    useEffect(() => {
+      registerField({
+        name: fieldName,
+        ref: inputRef.current,
+        path: 'value',
+      });
+
+    }, [fieldName, registerField])
+  }
 
   const handleInputFocus = useCallback(() => {
     inputRef.current?.focus();
