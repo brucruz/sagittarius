@@ -64,6 +64,12 @@ export const UserInput = styled.header<UserInputProps>`
 
   }
 
+  svg.password-eye-icon {
+    color: #3C4759 !important;
+    opacity: 0.4;
+    cursor: pointer;
+  }
+
   ${props =>
     props.isFocused &&
     css`
