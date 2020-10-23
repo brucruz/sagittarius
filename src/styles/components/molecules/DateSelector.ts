@@ -29,6 +29,7 @@ export const DateSelectorContainer = styled.section`
 
 export const DateInput = styled.div<DateInputProps>`
   position: relative;
+  z-index: 0;
 
   display: flex;
 

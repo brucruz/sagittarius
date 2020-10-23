@@ -1,7 +1,12 @@
+import Checkbox from "@/components/atom/Checkbox";
+import CheckboxGroup from "@/components/molecule/CheckboxGroup";
 import DateSelector from "@/components/molecule/DateSelector";
 import PageTemplate from "@/components/templates/PageTemplate";
-import { DateRange } from "@/styles/pages/DateSelectionPage";
+import { CheckboxItem } from "@/styles/components/atom/Checkbox";
+import { DateRange, HourSelection
+} from "@/styles/pages/DateSelectionPage";
 import { useCallback, useMemo, useState } from "react";
+import { MdCheck } from "react-icons/md";
 
 const DateSelectionPage = () => {
   const [fromDate, setFromDate] = useState<Date>(null);
@@ -33,6 +38,14 @@ const DateSelectionPage = () => {
 
         <DateSelector name='toDate'label='Até:' startDate={toStartDate} getSelectedDate={getToDate}/>
       </DateRange>
+
+      <HourSelection>
+        <h3>Selecione os horários preferíveis:</h3>
+
+        <CheckboxGroup />
+      </HourSelection>
+
+
     </PageTemplate>
   )
 };

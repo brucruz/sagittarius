@@ -1,5 +1,5 @@
 import { Calendar, DateInput, DateSelectorContainer } from "@/styles/components/molecules/DateSelector";
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import DayPicker from "react-day-picker";
 import 'react-day-picker/lib/style.css';
 

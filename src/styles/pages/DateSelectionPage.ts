@@ -21,3 +21,11 @@ export const DateRange = styled.section`
     }
   }
 `;
+
+export const HourSelection = styled.section`
+  margin-top: 25px;
+
+  section {
+    margin-top: 16px;
+  }
+`
