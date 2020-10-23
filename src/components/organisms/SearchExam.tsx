@@ -5,7 +5,6 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import banner from '@/assets/components/organisms/SearchExam/banner.svg';
 import { MdSearch, MdPlace } from 'react-icons/md';
 import mixpanel from 'mixpanel-browser';
-
 import { AddressState, Banner, Container, ExamState, InitialState, InitialStateContent, ValueProposition } from "@/styles/components/organisms/SearchExam";
 import TitleMain from "../molecule/TitleMain";
 import { HeaderSpaceContent } from "@/styles/components/atom/HeaderSpace";
@@ -49,6 +48,10 @@ const SearchExam = () => {
   const { addExam, exams, address } = useSearchExam();
   const { user } = useAuth();
   const { addToast } = useToast();
+
+  useEffect(() => {
+    address && setValue(address.address);
+  }, [address]);
 
   useEffect(() => {
     examTypedValue !== ''
@@ -230,7 +233,6 @@ const SearchExam = () => {
           <PageHeader type='button' backButtonNewState="initial" backButtonStateCallback={handleReturnButtonClick} stepper='1/2'/>
 
           <TitleMain title="Quais exames está buscando?" subtitle="Digite e adicione os exames que quer agendar."/>
-
           <Input
             name='exam'
             label='Seus Exames'
