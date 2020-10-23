@@ -3,7 +3,12 @@ import styled from "styled-components";
 
 export const Container = styled.main``;
 
-export const InitialState = styled.section``;
+export const InitialState = styled.section`
+  @media ${device.tablet} {
+    height: 700px;
+    background-color: #c4c4c4;
+  }
+`;
 
 export const Banner = styled.img`
   width: 100%;
@@ -11,13 +16,17 @@ export const Banner = styled.img`
   margin-top: 15px;
 
   @media ${device.tablet} {
-    width: auto;
+    display: none;
   }
 `;
 
 export const InitialStateContent = styled.section`
-  margin-right: 24px;
-  margin-left: 24px;
+  margin: 0 8.3%;
+
+  @media ${device.tablet} {
+    position: absolute;
+    top: 300px;
+  }
 `;
 
 export const ValueProposition = styled.section`
@@ -37,7 +46,7 @@ export const ValueProposition = styled.section`
   }
 
   h1 {
-    margin-bottom: 13px;
+    margin-bottom: 20px;
 
     font-weight: 800;
     font-size: 32px;
@@ -49,6 +58,7 @@ export const ValueProposition = styled.section`
 
   h3 {
     line-height: 1.4rem;
+    margin-bottom: 48px;
   }
 
 `;
@@ -58,13 +68,23 @@ export const ExamState = styled.section`
   margin-right: 25px;
 
   padding-top: 2px;
+
+  @media ${device.tablet} {
+    max-width: 400px;
+    margin: 64px auto;
+  }
 `;
 
 export const AddressState = styled.section`
-margin-left: 25px;
-margin-right: 25px;
+  margin-left: 25px;
+  margin-right: 25px;
 
-padding-top: 2px;
+  padding-top: 2px;
+
+  @media ${device.tablet} {
+    max-width: 400px;
+    margin: 64px auto;
+  }
 `;
 
 

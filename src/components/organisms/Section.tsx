@@ -19,19 +19,21 @@ const Section = ({
     <Container>
       <h2>{title}</h2>
 
-      {articles.map(article => (
-        <SectionItem key={article.id}>
-          <SectionItemImg>
-            <img src={article.image} alt=""/>
-          </SectionItemImg>
+      <div className="items-div">
+        {articles.map(article => (
+          <SectionItem key={article.id}>
+            <SectionItemImg>
+              <img src={article.image} alt=""/>
+            </SectionItemImg>
 
-          <SectionItemText>
-            <h3>{article.title}</h3>
+            <SectionItemText>
+              <h3>{article.title}</h3>
 
-            <p>{article.text}</p>
-          </SectionItemText>
-        </SectionItem>
-      ))}
+              <p>{article.text}</p>
+            </SectionItemText>
+          </SectionItem>
+        ))}
+      </div>
     </Container>
   )
 }
