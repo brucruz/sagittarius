@@ -35,6 +35,11 @@ export default class MyDocument extends Document {
           <meta charSet="utf-8"/>
 
           <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;700;800;900&family=Russo+One&display=swap" rel="stylesheet"></link>
+
+          <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NRGSWXG"
+      height="0" width="0"></iframe></noscript>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCxkR94NQPNxvyNdl5itMziJtc8edBJdkc&libraries=places"></script>
         </Head>
 
         <body>
