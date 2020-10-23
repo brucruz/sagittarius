@@ -52,13 +52,13 @@ const Input = ({
   const [isOpenSelectedExams, setIsOpenSelectedExams] = useState(false);
   const [inputType, setInputType] = useState('text');
 
-  const { addAddress, addExam, exams, removeExam } = useSearchExam();
+  const { addAddress, addExam, exams, removeExam, address } = useSearchExam();
   const { user } = useAuth();
 
   useEffect(() => {
     inputRef.current.value && setIsFilled(true);
     setInputType(type);
-  }, [])
+  }, [suggestions, inputRef]);
 
   if(isSubmit) {
     const { fieldName, registerField } = useField(name);
@@ -110,11 +110,11 @@ const Input = ({
     // When user selects a place, we can replace the keyword without request data from API
     // by setting the second parameter as "false"
     // setHasAddress(true);
-    suggestions.type === 'address' && suggestions.getSelectedAddress(address, false);
+    suggestions.type === 'address' && suggestions.getSelectedAddress(address);
 
     setHasSuggestions(false);
 
-    suggestions.type === "exams" && suggestions.clearSuggestions();
+    suggestions.type === "address" && suggestions.clearSuggestions();
 
     // Get latitude and longitude via utility functions
     getGeocode({
@@ -199,9 +199,9 @@ const Input = ({
           <input type={type ? inputType : 'text'} id={name} name={name} onChange={handleInputChange} ref={inputRef} value={value}/>
         </InputTextArea>
 
-        {type === 'password' && 
-          <MdRemoveRedEye 
-            className="password-eye-icon" 
+        {type === 'password' &&
+          <MdRemoveRedEye
+            className="password-eye-icon"
             onClick={() => inputType === 'password' ? setInputType('text') : setInputType('password')}
           />
         }

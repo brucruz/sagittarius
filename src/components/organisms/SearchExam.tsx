@@ -50,6 +50,10 @@ const SearchExam = () => {
   const { addToast } = useToast();
 
   useEffect(() => {
+    address && setValue(address.address);
+  }, [address]);
+
+  useEffect(() => {
     examTypedValue !== ''
       ? examIndex
           .search<ExamSearchResult>(examTypedValue, {
