@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import ButtonNext from "../atom/ButtonNext";
-import { useCallback, useEffect, useMemo, useState, useRef } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 import banner from '@/assets/components/organisms/SearchExam/banner.svg';
 import { MdSearch, MdPlace } from 'react-icons/md';
