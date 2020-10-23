@@ -11,10 +11,12 @@ interface DateSelectorProps {
   label?: string;
   name: string;
   startDate: Date;
-  getSelectedDate: (date: Date) => void;
+  getSelectedDate?: (date: Date) => void;
+  getTypedDate?: (date: string) => void;
+  calendar?: boolean;
 }
 
-const DateSelector = ({ name, label, startDate, getSelectedDate }: DateSelectorProps) => {
+const DateSelector = ({ name, label, startDate, getSelectedDate, getTypedDate, calendar = true }: DateSelectorProps) => {
   const [isActive, setIsActive] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date>(null)
 
@@ -32,6 +34,7 @@ const DateSelector = ({ name, label, startDate, getSelectedDate }: DateSelectorP
     if (selected) {
       setSelectedDate(null);
       getSelectedDate(null);
+      getTypedDate(null);
 
       inputRef.current.value = null;
 
@@ -39,6 +42,8 @@ const DateSelector = ({ name, label, startDate, getSelectedDate }: DateSelectorP
     }
 
     inputRef.current.value = format(date, 'dd/MM/yyyy');
+
+    getTypedDate(inputRef.current.value);
 
     getSelectedDate(date);
 
@@ -55,12 +60,13 @@ const DateSelector = ({ name, label, startDate, getSelectedDate }: DateSelectorP
       <DateInput
         isFocused={isActive}
         onClick={handleInputClick}
+        fullWidth={!calendar}
       >
         <MdDateRange />
-        <input type="text" id={name} ref={inputRef} placeholder='dd/mm/aaaa'/>
+        <input type="text" id={name} ref={inputRef} placeholder='dd/mm/aaaa' onChange={() => getTypedDate(inputRef.current?.value)}/>
       </DateInput>
 
-      {isActive && (
+      {isActive && calendar && (
         <Calendar>
           <DayPicker
             weekdaysShort={['D', 'S', 'T', 'Q', 'Q', 'S', 'S']}

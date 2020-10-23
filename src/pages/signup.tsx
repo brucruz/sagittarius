@@ -131,8 +131,6 @@ const SignUpPage = () => {
           return;
         }
 
-        console.log(err.response.data);
-
         if (err.response.data.error === 'Email address already used') {
           addToast({
             type: 'error',

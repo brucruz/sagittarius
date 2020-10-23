@@ -2,6 +2,7 @@ import styled, { css } from "styled-components";
 
 interface DateInputProps {
   isFocused: boolean;
+  fullWidth: boolean;
 }
 
 export const DateSelectorContainer = styled.section`
@@ -34,6 +35,10 @@ export const DateInput = styled.div<DateInputProps>`
   display: flex;
 
   width: 156px;
+
+  ${props => props.fullWidth && css`
+    width: 100%;
+  `}
 
   background: #FFFFFF;
   /* grey staff */
