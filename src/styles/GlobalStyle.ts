@@ -49,11 +49,11 @@ export default createGlobalStyle`
 
   h3 {
     font-weight: 700;
-    font-size: 16px;
-    line-height: 32px;
+    font-size: 20px;
+    line-height: 24px;
     letter-spacing: 0.192941px;
 
-    color: #232B3B;
+    color: #3C4759;
   }
 
   button {
