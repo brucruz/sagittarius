@@ -120,7 +120,7 @@ const SignUpPage = () => {
         mixpanel.track('Select Patient');
 
         router.push({
-          pathname: `checkout/${patient.id}/date`,
+          pathname: `/checkout/${patient.id}/date`,
         });
 
         addToast({
