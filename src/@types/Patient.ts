@@ -10,6 +10,7 @@ export default interface Patient {
   phone_whatsapp: string;
   document_id: string;
   document_type: 'RG' | 'CPF' | 'Passaporte' | 'RNE';
+  relationship: 'self' | string;
   height?: number;
   weight?: number;
   mobility_restrictions?: string;

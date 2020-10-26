@@ -1,4 +1,5 @@
 import User from '@/@types/User';
+import mixpanel from 'mixpanel-browser';
 import { createContext, useCallback, useState, useContext, useEffect } from 'react';
 import api from '../services/api';
 // import { Mixpanel } from '../mixpanel';
@@ -55,13 +56,13 @@ const AuthProvider = ({ children }) => {
 
     const { id, first_name, last_name, avatar_url, created_date } = user;
 
-    // Mixpanel.people.set({
-    //   $distinct_id: id,
-    //   $first_name: first_name,
-    //   $last_name: last_name,
-    //   $avatar: avatar_url,
-    //   $created: created_date,
-    // });
+    mixpanel.people.set({
+      $distinct_id: id,
+      $first_name: first_name,
+      $last_name: last_name,
+      $avatar: avatar_url,
+      $created: created_date,
+    });
 
     storeUserInfo(token, user);
   }, []);
@@ -69,13 +70,13 @@ const AuthProvider = ({ children }) => {
   const socialNetworkSignIn = useCallback(({ user, token }: AuthState) => {
     const { id, first_name, last_name, avatar_url, created_date } = user;
 
-    // Mixpanel.people.set({
-    //   $distinct_id: id,
-    //   $first_name: first_name,
-    //   $last_name: last_name,
-    //   $avatar: avatar_url,
-    //   $created: created_date,
-    // });
+    mixpanel.people.set({
+      $distinct_id: id,
+      $first_name: first_name,
+      $last_name: last_name,
+      $avatar: avatar_url,
+      $created: created_date,
+    });
 
     storeUserInfo(token, user);
   }, []);

@@ -78,6 +78,7 @@ const SignUpPage = () => {
           document_id,
           phone_whatsapp: user.phone_whatsapp,
           email: user.email,
+          relationship: 'self',
         }
 
         formRef.current?.setErrors({});
@@ -99,6 +100,7 @@ const SignUpPage = () => {
           sex: Yup.string().oneOf(['male', 'female']).required('Sexo é obrigatório'),
           document_type: Yup.string().oneOf(['RG', 'CPF', 'Passaporte', 'RNE']).required('Tipo de documento é obrigatório.'),
           document_id: Yup.string().required('Documento é obrigatório.'),
+          relationship: Yup.string(),
         });
 
         await schema.validate(createPatientData, {
