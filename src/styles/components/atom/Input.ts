@@ -1,7 +1,7 @@
 import styled, { css } from "styled-components";
 
 interface UserInputProps {
-  // isErrored: boolean;
+  isErrored?: boolean;
   isFilled: boolean;
   isFocused: boolean;
   hasSuggestions: boolean;
@@ -115,6 +115,13 @@ export const UserInput = styled.header<UserInputProps>`
       css`
         border-radius: 6px 6px 0 0;
         border-bottom: 2px solid #4D49C4;
+    `}
+
+    ${props =>
+      props.isErrored &&
+      css`
+        border-radius: 6px 6px 0 0;
+        border-bottom: 2px solid #BA3737;
     `}
 `;
 
@@ -296,6 +303,25 @@ export const SelectedExamsDetail = styled.footer`
       color: rgba(60,71,89,0.6);
 
       cursor: pointer;
+    }
+  }
+`;
+
+export const ErrorMessage = styled.div`
+  margin-top: -9px;
+
+  p {
+    font-weight: bold;
+    font-size: 12px;
+    line-height: 16px;
+
+    /* Vermelho - ERRO! */
+
+    color: #BA3737;
+
+    span {
+      color: #3C4759;
+      font-weight: 500;
     }
   }
 `;

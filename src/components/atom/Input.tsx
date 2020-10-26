@@ -6,7 +6,7 @@ import { getGeocode, getLatLng, Suggestion } from 'use-places-autocomplete';
 
 import Exam from '@/@types/Exam';
 import { useSearchExam } from '@/hooks/searchExam';
-import { InputContainer, UserInput, InputIcon, InputTextArea, SuggestionArea, SelectedExams, SelectedExamsSummary, SelectedExamsDetail } from '@/styles/components/atom/Input';
+import { InputContainer, UserInput, InputIcon, InputTextArea, SuggestionArea, SelectedExams, SelectedExamsSummary, SelectedExamsDetail, ErrorMessage } from '@/styles/components/atom/Input';
 import useClickOutsideRef from '@/hooks/clickOutside';
 import { useAuth } from '@/hooks/auth';
 
@@ -60,6 +60,8 @@ const Input = ({
     setInputType(type);
   }, [suggestions, inputRef]);
 
+  const { error } = isSubmit ? useField(name) : { error: '' };
+
   if(isSubmit) {
     const { fieldName, registerField } = useField(name);
 
@@ -82,7 +84,7 @@ const Input = ({
   }, []);
 
   const handleClickOutsideInput = useCallback(() => {
-    if(type === 'email' || type === 'password') return;
+    if(!suggestions) return;
     setIsFocused(false);
 
     inputRef.current.value = '';
@@ -101,7 +103,7 @@ const Input = ({
   const handleInputChange = useCallback(() => {
     setIsFilled(!!inputRef.current?.value);
 
-    getInputValue(inputRef.current?.value);
+    suggestions && getInputValue(inputRef.current?.value);
 
     suggestions && setHasSuggestions(true);
   } , []);
@@ -182,7 +184,7 @@ const Input = ({
   return (
     <InputContainer>
       <UserInput
-        // isErrored={!!error}
+        isErrored={!!error}
         isFilled={isFilled}
         isFocused={isFocused}
         onFocus={handleInputFocus}
@@ -202,7 +204,7 @@ const Input = ({
         {type === 'password' &&
           <MdRemoveRedEye
             className="password-eye-icon"
-            onClick={() => inputType === 'password' ? setInputType('text') : setInputType('password')}
+            onClick={() => inputRef.current?.value && (inputType === 'password' ? setInputType('text') : setInputType('password'))}
           />
         }
       </UserInput>
@@ -256,6 +258,12 @@ const Input = ({
             </SelectedExamsDetail>
           )}
         </SelectedExams>
+
+        {error && (
+          <ErrorMessage>
+            <p>{error} <span>Tente novamente.</span></p>
+          </ErrorMessage>
+        )}
     </InputContainer>
   );
 };

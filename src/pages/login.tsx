@@ -15,6 +15,13 @@ import { useToast } from '@/hooks/toast';
 import getValidationErrors from '@/utils/getValidationErrors';
 import { SocialButton, SocialButtonsContainer, RegisterLink, ForgotPassword } from '@/styles/pages/Login';
 import api from '@/services/api';
+import { buildSearchQuery } from '@/helpers/searchExams';
+import { useSearchExam } from '@/hooks/searchExam';
+import { useBag } from '@/hooks/bag';
+
+interface RouterQueryParams {
+  isBeforeSchedule?: boolean;
+}
 
 export default function Login() {
 
@@ -26,6 +33,25 @@ export default function Login() {
 
   const { signIn, socialNetworkSignIn } = useAuth();
   const { addToast } = useToast();
+  const { address, exams } = useSearchExam();
+  const { bagItems } = useBag();
+
+  const params: RouterQueryParams = router.query;
+
+  const authRedirect = useCallback(() => {
+    const searchQueries = buildSearchQuery(address, exams);
+
+    if (params.isBeforeSchedule && bagItems.length > 0) {
+      router.push('/checkout/patient');
+    } else if (searchQueries && exams.length > 0 && address) {
+      router.push({
+        pathname: '/results',
+        search: searchQueries || '',
+      });
+    } else {
+      router.push('/');
+    }
+  }, [address, exams, router, bagItems, params]);
 
   const handlePasswordChange = useCallback((value: string) => {
     setPasswordValue(value);
@@ -37,7 +63,7 @@ export default function Login() {
 
   function saveUserAuthenticated(data: AuthState) {
     socialNetworkSignIn(data);
-    router.push('/');
+    authRedirect();
   }
 
   async function handleGoogleLogin(response) {
@@ -82,7 +108,7 @@ export default function Login() {
         password: data.password
       });
 
-      router.push('/');
+      authRedirect();
     } catch(err) {
       if (err instanceof Yup.ValidationError) {
         const errors = getValidationErrors(err);
@@ -111,29 +137,29 @@ export default function Login() {
         description: 'Ocorreu um erro ao fazer login, cheque as credenciais.',
       });
     }
-  }, []) 
+  }, [authRedirect])
 
   return (
-    <PageTemplate 
-      backLinkUrl={''} 
+    <PageTemplate
+      backLinkUrl={''}
       titleMain={{
         title: 'Acesse sua conta',
         subTitle: 'Digite seus dados para continuar'
       }}
     >
       <Form ref={formRef} onSubmit={handleSubmit}>
-        <Input 
-          name="email" 
-          label="E-mail" 
+        <Input
+          name="email"
+          label="E-mail"
           type="email"
           icon={MdEmail}
           isSubmit
           value={emailValue}
           getInputValue={handleEmailChange}
         />
-        <Input 
-          name="password" 
-          label="Senha" 
+        <Input
+          name="password"
+          label="Senha"
           type="password"
           icon={MdLock}
           isSubmit
@@ -143,7 +169,7 @@ export default function Login() {
         <Link href="">
           <ForgotPassword>Esqueci minha senha</ForgotPassword>
         </Link>
-        <Button 
+        <Button
           type="submit"
           disabled={!emailValue || !passwordValue}
         >
@@ -168,7 +194,10 @@ export default function Login() {
             callback={handleFacebookLogin}
           />
         </SocialButtonsContainer>
-        <Link href="">
+        <Link href={{
+          pathname: '/signup',
+          query: { isBeforeSchedule: !!params.isBeforeSchedule }
+        }}>
           <RegisterLink>Não tem uma conta? <span>Cadastre-se</span></RegisterLink>
         </Link>
       </Form>
