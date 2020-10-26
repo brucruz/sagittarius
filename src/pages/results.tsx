@@ -12,6 +12,7 @@ import { useToast } from '@/hooks/toast';
 import img from '@/assets/rect.svg';
 import star from '@/assets/pages/LabResults/star-image.svg';
 import { LabResultFromAPIFormatted } from '@/hooks/labResults';
+import MapsScript from '@/services/components/MapsScript';
 
 interface QueryParamsProps {
   ids?: string[];
@@ -25,7 +26,6 @@ interface LabResultCardProp {
 }
 
 const LabResultCard = ({ data }: LabResultCardProp) => {
-  console.log(data);
   return (
     <Card className="card">
       <CardHeader>
@@ -80,9 +80,11 @@ export default function LabResults() {
 
   const examsIds = useMemo(() => {
     const ids = exams.map(exam => exam.id);
-
+    
     return ids;
   }, [exams]);
+
+  console.log(examsIds);
 
   useEffect(() => {
     if (queryParams) {
@@ -115,10 +117,9 @@ export default function LabResults() {
       <NavBar />
         <Container>
           <Content>
-            <h1>Buscando 3 Exames</h1> 
+            <h1>Buscando {examsIds.length} Exames</h1> 
             <LabResultList>
               {results.map((lab) => {
-                console.log(lab);
                 return (
                   <LabResultCard data={lab}/>
                 );
@@ -133,6 +134,7 @@ export default function LabResults() {
             />
           )}
         </Container>
+        <MapsScript />
       <Footer />
     </>    
   );
