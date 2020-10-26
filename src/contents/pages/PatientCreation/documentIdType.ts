@@ -1,7 +1,7 @@
 const documentIdType = [
   {
     label: 'CPF',
-    id: 'cpf',
+    id: 'CPF',
   },
   {
     label: 'RG',

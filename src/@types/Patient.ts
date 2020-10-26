@@ -7,6 +7,7 @@ export default interface Patient {
   birth_date: Date;
   sex: 'male' | 'female';
   email: string;
+  phone_whatsapp: string;
   document_id: string;
   document_type: 'RG' | 'CPF' | 'Passaporte' | 'RNE';
   height?: number;

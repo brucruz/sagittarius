@@ -67,17 +67,17 @@ const SignUpPage = () => {
   const handleSubmit = useCallback(
     async (data: SigUpFormData) => {
       try {
-        const { document_id, email, first_name, last_name, phone_whatsapp } = data;
+        const { document_id } = data;
 
         const createPatientData = {
-          first_name,
-          last_name,
+          first_name: user.first_name,
+          last_name: user.last_name,
           birth_date: parse(birthDate, 'dd/MM/yyyy', new Date()),
           sex: selectedSex,
           document_type: selectedIdType,
           document_id,
-          phone_whatsapp,
-          email,
+          phone_whatsapp: user.phone_whatsapp,
+          email: user.email,
         }
 
         formRef.current?.setErrors({});
@@ -93,7 +93,9 @@ const SignUpPage = () => {
           ),
           email: Yup.string()
             .email('Digite um e-mail válido.'),
-          birth_date: Yup.date().required('Data de Nascimento obrigatória. Você deve digitar o endereço no formato: DD/MM/AAAA'),
+          birth_date: Yup
+            .date()
+            .required('Data de Nascimento obrigatória. Você deve digitar o endereço no formato: DD/MM/AAAA'),
           sex: Yup.string().oneOf(['male', 'female']).required('Sexo é obrigatório'),
           document_type: Yup.string().oneOf(['RG', 'CPF', 'Passaporte', 'RNE']).required('Tipo de documento é obrigatório.'),
           document_id: Yup.string().required('Documento é obrigatório.'),
@@ -138,7 +140,7 @@ const SignUpPage = () => {
           return;
         }
 
-        console.log(err.response.data);
+        console.log(err.response?.data);
 
         addToast({
           type: 'error',
@@ -147,7 +149,7 @@ const SignUpPage = () => {
         });
       }
     },
-    [addToast, birthDate, selectedSex, selectedIdType],
+    [addToast, birthDate, selectedSex, selectedIdType, formRef],
   );
 
   const errors = useMemo(() => {
@@ -161,15 +163,10 @@ const SignUpPage = () => {
       }}
       titleMain={{
         title: 'Cadastrar Paciente',
-        subTitle:  'Digite os dados do paciente para continuar'
+        subTitle:  'Insira seus dados abaixo'
       }}
     >
-      <Form ref={formRef} onSubmit={handleSubmit}>
-        <InputGroupTitle>Dados Pessoais</InputGroupTitle>
-
-        <Input name='first_name' label='Nome *' icon={MdPerson} isSubmit />
-        <Input name='last_name' label='Sobrenome *' icon={MdPerson}isSubmit />
-
+      <Form ref={formRef} onSubmit={handleSubmit} >
         <DateSelector name='birth_date' startDate={new Date} calendar={false} getTypedDate={handleGetBirthDate} label='Data de nascimento' error={errors?.birth_date}/>
 
         <InputGroupTitle>Sexo *</InputGroupTitle>
@@ -201,11 +198,6 @@ const SignUpPage = () => {
         </RadioButtonGroup>
 
         <Input name='document_id' label='Número de Documento *' icon={MdVerifiedUser} isSubmit />
-
-        <InputGroupTitle>Contato</InputGroupTitle>
-
-        <Input name='email' label='E-mail *' icon={MdMail} isSubmit />
-        <Input name='phone_whatsapp' label='WhatsApp *' icon={FaWhatsapp} isSubmit />
 
         <Button
           type='submit'
