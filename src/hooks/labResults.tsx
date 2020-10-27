@@ -4,6 +4,7 @@ import formatValue from '@/utils/formatValue';
 import formatDistance from '@/utils/formatDistance';
 import LabResultFromAPI from '@/@types/LabResultFromAPI';
 import useFetch from '@/services/hooks/useFetch';
+import api from '@/services/api';
 
 interface GetLabResultsOptions {
   onlyExamsCompleteLabs?: boolean;
@@ -45,7 +46,7 @@ const LabResultsProvider = ({ children }) => {
       options,
     }: GetLabResultsDTO): Promise<void> => {
       try {
-        const ApiCall = useFetch<LabResultFromAPIFormatted[]>('/search/results', {
+        const { data } = await api.get('/search/results', {
           params: {
             ids: examsIds,
             add: address,
@@ -56,8 +57,7 @@ const LabResultsProvider = ({ children }) => {
             brands: options?.brands,
           },
         });
-
-        const ApiResults = ApiCall.data;
+        const ApiResults = data;
 
         const resultsFormatted = ApiResults.map(result => {
           return {
