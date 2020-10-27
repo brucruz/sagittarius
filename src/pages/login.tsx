@@ -141,7 +141,9 @@ export default function Login() {
 
   return (
     <PageTemplate
-      backLinkUrl={''}
+      buttonType={{
+        type: 'go_back_button',
+      }}
       titleMain={{
         title: 'Acesse sua conta',
         subTitle: 'Digite seus dados para continuar'

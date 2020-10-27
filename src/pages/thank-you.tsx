@@ -5,7 +5,11 @@ import ButtonNext from '@/components/atom/ButtonNext';
 
 export default function ThankYou() {
   return (
-    <PageTemplate backLinkUrl={''}>
+    <PageTemplate
+      buttonType={{
+        type: 'go_back_button',
+      }}
+    >
       <Content>
         <Smile>;D</Smile>
         <Title>

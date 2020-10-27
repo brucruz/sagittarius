@@ -154,9 +154,12 @@ const SignUpPage = () => {
 
   return (
     <PageTemplate
-      backLinkUrl={{
-        pathname: '/signup',
-        query: { isBeforeSchedule: params.isBeforeSchedule && params.isBeforeSchedule.valueOf.toString() }
+      buttonType={{
+        type: 'link',
+        backLinkUrl: {
+          pathname: '/signup',
+          query: { isBeforeSchedule: params.isBeforeSchedule && params.isBeforeSchedule.valueOf.toString() }
+        }
       }}
       titleMain={{
         title: 'Criar conta',
