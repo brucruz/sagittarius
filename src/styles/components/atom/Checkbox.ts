@@ -25,6 +25,14 @@ export const CheckboxItem = styled.label<CheckboxItemProps>`
 
   color: #3C4759;
 
+  &.checkbox-align-center svg {
+    margin: auto 0;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
+
   ${props => props.isChecked && css`
     font-weight: bold;
   `}
@@ -74,6 +82,21 @@ export const CheckboxItem = styled.label<CheckboxItemProps>`
       -webkit-transform: rotate(45deg);
       -ms-transform: rotate(45deg);
       transform: rotate(45deg);
+    }
+  }
+
+  .checkbox-with-description {
+
+    display: flex;
+    flex-direction: column;
+
+    span {
+      font-size: 16px;
+      font-weight: 400 !important;
+    }
+
+    label {
+      font-weight: 700 !important;
     }
   }
 `;

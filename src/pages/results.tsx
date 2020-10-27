@@ -22,10 +22,14 @@ interface QueryParamsProps {
 }
 
 interface LabResultCardProp {
-  data: LabResultFromAPIFormatted
+  data: LabResultFromAPIFormatted;
+  searchQuery: string;
 }
 
-const LabResultCard = ({ data }: LabResultCardProp) => {
+const LabResultCard = ({ data, searchQuery }: LabResultCardProp) => {
+
+  const router = useRouter();
+
   return (
     <Card className="card">
       <CardHeader>
@@ -48,7 +52,7 @@ const LabResultCard = ({ data }: LabResultCardProp) => {
             <span>ou {data?.totalPriceFormatted}</span>
           </Price>
         </div>
-        <button>Ver detalhes</button>
+        <button onClick={() => router.push({ pathname: `${data.lab.id}/detail`, search: searchQuery })}>Ver detalhes</button>
       </CardFooter>
     </Card>
   );
@@ -84,7 +88,53 @@ export default function LabResults() {
     return ids;
   }, [exams]);
 
-  console.log(examsIds);
+  const resultsSearchUrl = useMemo(() => {
+    if (examsIds && address) {
+      const add = address.address;
+      const lat = address.latitude;
+      const lng = address.longitude;
+      const ids = examsIds;
+
+      const addQuery = `add=${add}`;
+      const latQuery = `lat=${lat}`;
+      const lngQuery = `lng=${lng}`;
+
+      const idsQueryArray = ids.map(id => {
+        const idFormatted = `ids[]=${id.toString()}`;
+
+        return idFormatted;
+      });
+
+      const idsQueryWithComma = idsQueryArray.toString();
+
+      const idsQuery = idsQueryWithComma.replace(/,/g, '&');
+
+      const finalQuery = `?${idsQuery}&${addQuery}&${latQuery}&${lngQuery}`;
+
+      return finalQuery;
+    }
+    if (queryParams) {
+      const { add, lat, lng, ids } = queryParams;
+
+      const addQuery = `add=${add}`;
+      const latQuery = `lat=${lat}`;
+      const lngQuery = `lng=${lng}`;
+
+      const idsQueryArray = ids.map(id => {
+        const idFormatted = `ids[]=${id.toString()}`;
+
+        return idFormatted;
+      });
+
+      const idsQueryWithComma = idsQueryArray.toString();
+
+      const idsQuery = idsQueryWithComma.replace(/,/g, '&');
+
+      const finalQuery = `?${idsQuery}&${addQuery}&${latQuery}&${lngQuery}`;
+
+      return finalQuery;
+    }
+  }, [address, examsIds, queryParams]);
 
   useEffect(() => {
     if (queryParams) {
@@ -121,7 +171,7 @@ export default function LabResults() {
             <LabResultList>
               {results.map((lab) => {
                 return (
-                  <LabResultCard data={lab}/>
+                  <LabResultCard data={lab} searchQuery={resultsSearchUrl}/>
                 );
               })}
             </LabResultList>
