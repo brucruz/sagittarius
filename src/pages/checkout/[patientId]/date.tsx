@@ -28,7 +28,7 @@ const DateSelectionPage = () => {
         title: 'Entre quais dias ficaria melhor?',
         subTitle: 'Selecione as datas que pretende realizar os exames.'
       }}
-      backLinkUrl='/patients'
+      backLinkUrl='/checkout/patients'
     >
 
       <DateRange>

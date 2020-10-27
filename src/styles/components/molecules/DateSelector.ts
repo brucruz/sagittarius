@@ -1,7 +1,10 @@
 import styled, { css } from "styled-components";
+import { boolean } from "yup";
 
 interface DateInputProps {
   isFocused: boolean;
+  isErrored: boolean;
+  fullWidth: boolean;
 }
 
 export const DateSelectorContainer = styled.section`
@@ -34,6 +37,10 @@ export const DateInput = styled.div<DateInputProps>`
   display: flex;
 
   width: 156px;
+
+  ${props => props.fullWidth && css`
+    width: 100%;
+  `}
 
   background: #FFFFFF;
   /* grey staff */
@@ -78,6 +85,13 @@ export const DateInput = styled.div<DateInputProps>`
       `}
     }
   }
+
+  ${props =>
+      props.isErrored &&
+      css`
+        border-radius: 6px 6px 0 0;
+        border-bottom: 2px solid #BA3737;
+    `}
 `;
 
 export const Calendar = styled.div`
@@ -189,4 +203,23 @@ z-index: 2;
   border-radius: 50%;
   color: #FFFFFF;
 }
+`;
+
+export const ErrorMessage = styled.div`
+  margin-top: 9px;
+
+  p {
+    font-weight: bold;
+    font-size: 12px;
+    line-height: 16px;
+
+    /* Vermelho - ERRO! */
+
+    color: #BA3737;
+
+    span {
+      color: #3C4759;
+      font-weight: 500;
+    }
+  }
 `;
