@@ -1,6 +1,8 @@
+import dynamic from 'next/dynamic';
+
 import Accordion from "@/components/molecule/Accordion";
 import Footer from "@/components/organisms/Footer";
-import SearchExam from "@/components/organisms/SearchExam";
+// import SearchExam from "@/components/organisms/SearchExam";
 import Section from "@/components/organisms/Section";
 import { faqQuestions } from "@/contents/pages/Home/faq";
 import howItWorks from "@/contents/pages/Home/howItWorks";
@@ -9,6 +11,15 @@ import MapsScript from "@/services/components/MapsScript";
 import { PaymentOption, PaymentOptions, SectionAbout, SectionFAQ, SectionPayment } from "@/styles/pages/Home";
 import WhatsappWidget from '@/components/atom/WhatsappWidget';
 import Navbar from "../components/organisms/Navbar";
+import InitialState from '@/components/molecule/HomeInitialState';
+
+const SearchExam = dynamic(
+  () => import("@/components/organisms/SearchExam"),
+  {
+    loading: () => <InitialState/>,
+    ssr: true,
+  }
+);
 
 const Home = () => {
   return (

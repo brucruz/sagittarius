@@ -89,8 +89,10 @@ export default function Patients() {
         title: 'Quem vai fazer esses exames?',
         subTitle: 'Selecione abaixo quem fará os exames.'
       }}
-
-      backLinkUrl={'/checkout/bag'}
+      buttonType={{
+        type: 'link',
+        backLinkUrl: '/checkout/bag',
+      }}
     >
       <Content>
       {self ? (

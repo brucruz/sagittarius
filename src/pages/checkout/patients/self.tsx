@@ -160,8 +160,11 @@ const SignUpPage = () => {
 
   return (
     <PageTemplate
-      backLinkUrl={{
-        pathname: '/checkout/patients',
+      buttonType={{
+        type: 'link',
+        backLinkUrl: {
+          pathname: '/checkout/patients',
+        }
       }}
       titleMain={{
         title: 'Cadastrar Paciente',
