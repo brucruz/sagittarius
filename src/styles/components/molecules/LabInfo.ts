@@ -13,7 +13,7 @@ export const Container = styled.div`
 `;
 
 export const Content = styled.div`
-
+  width: 100%;
   margin-left: 16px;
 
   h2 {
@@ -28,6 +28,11 @@ export const Content = styled.div`
     color: #3C4759;
     margin-top: 8px;
     margin-bottom: 24px;
+  }
+
+  button {
+    text-decoration: underline;
+    color: #4D49C4;
   }
 `;
 

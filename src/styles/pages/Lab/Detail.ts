@@ -19,10 +19,12 @@ export const LabInfoContainer = styled.div`
 `
 
 export const Content = styled.div`
+  min-height: calc(100vh);
   margin: 64px 0;
   padding: 0 8.3%;
 
   @media ${device.laptop} {
+    min-height: fit-content;
     margin: 0;
     padding: 0;
   }
@@ -41,6 +43,12 @@ export const CompanyTitle = styled.div`
     font-size: 24px;
   }
 
+  padding: 12px 0;
+  border-bottom: 1px solid #BCC3D4;
+
+  @media ${device.laptop} {
+    border-bottom: none;
+  } 
   
   & > div {
     margin-left: 12px;
@@ -51,6 +59,10 @@ export const CompanyTitle = styled.div`
       height: 70px;
       display: flex;
       align-items: center;
+    }
+
+    @media ${device.laptop} {
+      padding: 12px 0;
       border-bottom: 1px solid #BCC3D4;
     }
   }
@@ -91,6 +103,7 @@ export const BagContainer = styled.div`
 
       @media ${device.laptop} {
         padding: 12px 16px;
+        border-bottom: 1px solid #BCC3D4;
       }
 
     }
@@ -207,10 +220,6 @@ export const BagContainer = styled.div`
 
 export const ExamContainer = styled.div`
 
-  & > label {
-    border-bottom: 1px solid #BCC3D4;
-  }
-
   & > div {
     display: flex;
     justify-content: space-between;
@@ -218,13 +227,73 @@ export const ExamContainer = styled.div`
     border-bottom: 1px solid #BCC3D4;
     padding: 8px 16px 0 16px;
 
+
     span {
       font-size: 16px !important;
       min-width: fit-content;
+    }
+
+    label {
+      font-weight: 700;
+      width: 80%;
+    }
+
+    svg {
+      height: 21px;
+      width: 21px;
+    }
+
+    div {
+      margin-left: 8px;
     }
   }
 
   & > div:last-child {
     border: none;
+  }
+`;
+
+export const ModalMapContent = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  height: 80vh;
+
+  & > div {
+    padding: 12px 20px;
+    height: 100%;
+    width: 100%;
+    display: block;
+    border-radius: 0;
+  }
+
+  @media ${device.laptop} {
+    height: 70vh;
+
+    & > div {
+      max-width: 100% !important;
+    }
+  }
+`;  
+
+export const ModalMapHeader = styled.header`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+  border: 1px solid #BCC3D4;
+  
+  span {
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 24px;
+    letter-spacing: 0.192941px;
+    color: #4D49C4;
+  }
+  
+  svg {
+    fill: #BCC3D4;
+    height: 20px;
+    width: 20px;
   }
 `;

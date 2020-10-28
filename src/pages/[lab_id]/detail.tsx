@@ -3,7 +3,9 @@ import { useRouter } from 'next/router';
 import mixpanel from 'mixpanel-browser';
 import LabResultFromAPI from '@/@types/LabResultFromAPI';
 import PriceFormatted from '@/@types/PriceFormatted';
-import PageTemplate from "@/components/templates/PageTemplate";
+import { MdClose } from 'react-icons/md';
+import Modal from '@/components/organisms/Modal';
+import GoogleMap from '@/components/organisms/Map';
 import useFetch from '@/services/hooks/useFetch';
 import Navbar from '@/components/organisms/Navbar';
 import Footer from '@/components/organisms/Footer';
@@ -18,6 +20,8 @@ import {
   BagContainer,
   ExamContainer,
   LabInfoContainer, 
+  ModalMapContent,
+  ModalMapHeader,
 } from '@/styles/pages/Lab/Detail';
 import LabInfo from '@/components/molecule/LabInfo';
 import Link from 'next/link';
@@ -28,6 +32,7 @@ import formatValueWo$ from '@/utils/formatValueWo$';
 import { useBag } from '@/hooks/bag';
 import PricesInBag from '@/@types/PricesInBag';
 import { useAuth } from '@/hooks/auth';
+import MapsScript from '@/services/components/MapsScript';
 
 interface QueryParamsProps {
   ids?: string[];
@@ -44,6 +49,7 @@ interface LabPricesResultFromAPI extends LabResultFromAPI {
 export default function Detail() {
 
   const [displayListExams, setDisplayListExams] = useState(true);
+  const [displayMap, setDisplayMap] = useState(false);
   const [selectedExams, setSelectedExams] = useState<string[]>([]);
   
   const router = useRouter();
@@ -134,16 +140,14 @@ export default function Detail() {
             <CompanyTitle>
               <img src={data.lab.company.logo} alt="Logo da companhia"/>
               <div>
-                <h1>{data.lab.title}</h1>
+                <h1>{data.lab.company.title} - {data.lab.title}</h1>
               </div>
             </CompanyTitle>
             <LabInfoContainer>
               <LabInfo icon={locationIcon}> 
                 <LabInfo.InlineContent>
                   <LabInfo.Title>Localização</LabInfo.Title>
-                  <Link href="">
-                    <a>Ver no mapa</a>
-                  </Link>
+                  <button type="button" onClick={() => setDisplayMap(true)}>Ver no mapa</button>
                 </LabInfo.InlineContent>
                 <LabInfo.Description>{data.lab.address}</LabInfo.Description>
               </LabInfo>
@@ -199,6 +203,19 @@ export default function Detail() {
             </div>
           </BagContainer>
         </Container>
+        <Modal isOpen={displayMap} setIsOpen={() => setDisplayMap(false)}>
+          <ModalMapContent>
+            <ModalMapHeader>
+              <span>Localização</span>
+              <MdClose onClick={() => setDisplayMap(false)}/>
+            </ModalMapHeader>
+            <GoogleMap
+              lat={Number(data.lab.latitude)}
+              lng={Number(data.lab.longitude)}
+            />
+          </ModalMapContent>
+        </Modal>
+        <MapsScript />
       <Footer />
     </>
   ) : (<> </>)
