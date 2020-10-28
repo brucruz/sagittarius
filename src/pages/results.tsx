@@ -13,6 +13,7 @@ import img from '@/assets/rect.svg';
 import star from '@/assets/pages/LabResults/star-image.svg';
 import { LabResultFromAPIFormatted } from '@/hooks/labResults';
 import MapsScript from '@/services/components/MapsScript';
+import { GetServerSideProps } from 'next';
 
 interface QueryParamsProps {
   ids?: string[];
@@ -23,6 +24,13 @@ interface QueryParamsProps {
 
 interface LabResultCardProp {
   data: LabResultFromAPIFormatted
+}
+
+interface LabResultsProps {
+  labResults: LabResultFromAPIFormatted[];
+  examsIds: string[];
+  lat: string;
+  lng: string;
 }
 
 const LabResultCard = ({ data }: LabResultCardProp) => {
@@ -54,17 +62,17 @@ const LabResultCard = ({ data }: LabResultCardProp) => {
   );
 }
 
-export default function LabResults() {
+export default function LabResults({ labResults, examsIds, lat, lng }: LabResultsProps) {
 
-  const router = useRouter();
-  const queryParams: QueryParamsProps = router.query;
+  // const router = useRouter();
+  // const queryParams: QueryParamsProps = router.query;
 
-  const { exams, address } = useSearchExam();
-  const { results, getLabResults } = useLabResults();
-  const { addToast } = useToast();
+  // const { exams, address } = useSearchExam();
+  // const { results, getLabResults } = useLabResults();
+  // const { addToast } = useToast();
 
   const labsLocation = useMemo(() => {
-    const locations = results.map(result => {
+    const locations = labResults.map(result => {
       const { lab } = result;
       const marker = {
         name: `${lab.company.title} - ${lab.title}`,
@@ -74,17 +82,100 @@ export default function LabResults() {
       };
       return marker;
     });
-  
+
     return locations;
-  }, [results]);
+  }, [labResults]);
+
+  // const examsIds = useMemo(() => {
+  //   const ids = exams.map(exam => exam.id);
+
+  //   return ids;
+  // }, [exams]);
+
+  // console.log(examsIds);
+
+  // useEffect(() => {
+  //   if (queryParams) {
+  //     getLabResults({
+  //       examsIds: queryParams['ids[]'],
+  //       address: queryParams.add,
+  //       latitude: Number(queryParams.lat),
+  //       longitude: Number(queryParams.lng),
+  //     });
+  //   } else if (examsIds && address) {
+  //     getLabResults({
+  //       examsIds,
+  //       address: address.address,
+  //       latitude: address.latitude,
+  //       longitude: address.longitude,
+  //     });
+  //   } else {
+  //     router.push('/');
+  //     addToast({
+  //       type: 'info',
+  //       title: 'Informações faltantes',
+  //       description:
+  //         'Para pesquisar, informe os exames e um endereço de referência',
+  //     });
+  //   }
+  // }, [examsIds, address, getLabResults, queryParams, addToast, router]);
+
+  return (
+    <>
+      <NavBar />
+        <Container>
+          <Content>
+            <h1>Buscando {examsIds.length} Exames</h1>
+            <LabResultList>
+              {labResults.map((lab) => {
+                return (
+                  <LabResultCard data={lab}/>
+                );
+              })}
+            </LabResultList>
+          </Content>
+          {lat && lng && (
+            <GoogleMap
+              lat={Number(lat)}
+              lng={Number(lng)}
+              markers={labsLocation}
+            />
+          )}
+        </Container>
+        <MapsScript />
+      <Footer />
+    </>
+  );
+}
+
+export const getServerSideProps: GetServerSideProps<LabResultsProps> = async () => {
+  const router = useRouter();
+  const queryParams: QueryParamsProps = router.query;
+
+  const { exams, address } = useSearchExam();
+  const { results, getLabResults } = useLabResults();
+  const { addToast } = useToast();
+
+  // const labsLocation = useMemo(() => {
+  //   const locations = results.map(result => {
+  //     const { lab } = result;
+  //     const marker = {
+  //       name: `${lab.company.title} - ${lab.title}`,
+  //       lat: lab.latitude,
+  //       lng: lab.longitude,
+  //       key: lab.id,
+  //     };
+  //     return marker;
+  //   });
+
+  //   return locations;
+  // }, [results]);
 
   const examsIds = useMemo(() => {
     const ids = exams.map(exam => exam.id);
-    
+
     return ids;
   }, [exams]);
-
-  console.log(examsIds);
 
   useEffect(() => {
     if (queryParams) {
@@ -112,30 +203,12 @@ export default function LabResults() {
     }
   }, [examsIds, address, getLabResults, queryParams, addToast, router]);
 
-  return (
-    <>
-      <NavBar />
-        <Container>
-          <Content>
-            <h1>Buscando {examsIds.length} Exames</h1> 
-            <LabResultList>
-              {results.map((lab) => {
-                return (
-                  <LabResultCard data={lab}/>
-                );
-              })}
-            </LabResultList>
-          </Content>
-          {queryParams?.lat && (
-            <GoogleMap
-              lat={Number(queryParams?.lat)}
-              lng={Number(queryParams?.lng)}
-              markers={labsLocation}
-            />
-          )}
-        </Container>
-        <MapsScript />
-      <Footer />
-    </>    
-  );
+  return {
+    props: {
+      labResults: results,
+      examsIds,
+      lat: queryParams?.lat,
+      lng: queryParams?.lng,
+    }
+  }
 }
