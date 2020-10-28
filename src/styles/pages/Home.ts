@@ -3,8 +3,8 @@ import styled from "styled-components";
 
 export const SectionAbout = styled.section`
   margin-top: 91px;
-  margin-left: 25px;
-  margin-right: 25px;
+  padding: 32px 4%;
+  background-color: #F2F5FB;
 
   article {
     p {
@@ -23,18 +23,16 @@ export const SectionAbout = styled.section`
     margin-left: 0;
     margin-right: 0; 
     padding: 100px 8.3%;
-    background-color: #247FA6;
     text-align: center;
 
     h2 {
       font-size: 32px;
-      color: #fff;
+      color: #2F2C77;
     }
 
     p {
       max-width: 1000px;
       font-size: 20px;
-      color: #fff;
     }
   }
 `;
@@ -42,12 +40,17 @@ export const SectionAbout = styled.section`
 export const SectionPayment = styled.section`
   margin-top: 74px;
   margin-bottom: 60px;
-  margin-left: 25px;
-  margin-right: 25px;
+  margin-left: 4%;
+  margin-right: 4%;
 
   @media ${device.tablet} {
     margin-left: 8.3%;
     margin-right: 8.3%; 
+    text-align: center;
+
+    p {
+      font-weight: 700;
+    }
   }
 
   h2 {
@@ -57,53 +60,41 @@ export const SectionPayment = styled.section`
   p {
     margin-bottom: 32px;
   }
+
+  @media ${device.laptop} {
+    margin: auto;
+    width: 100%;
+    max-width: 700px;
+  }
 `;
 
 export const PaymentOptions = styled.section`
   display: flex;
   flex-wrap: wrap;
-
-  @media ${device.tablet} {
-    justify-content: space-between;
-  }
+  justify-content: space-between;
 `;
 
 export const PaymentOption = styled.article`
+  display: flex;
+  justify-content: center;
   min-width: 165px;
   width: 100%;
   height: 118px;
 
-  background: rgba(196, 196, 196, 0.3);
+  background: #F2F5FB;
   border-radius: 8px;
-
-  position: relative;
-
   margin-bottom: 16px;
 
-  @media ${device.mobileL} {
-    width: calc(100% / 2 - 16px);
+  position: relative;
+  width: calc(100% / 4 - 32px);
 
-    &:first-child {
-      margin-right: 16px;
-    }
-
-    &:nth-child(3) {
-      margin-right: 16px;
-    }
+  &:first-child {
+    margin-right: 0px;
   }
 
-  @media ${device.tablet} {
-    width: calc(100% / 4 - 32px);
-
-    &:first-child {
-      margin-right: 0px;
-    }
-
-    &:nth-child(3) {
-      margin-right: 0px;
-    }
+  &:nth-child(3) {
+    margin-right: 0px;
   }
-
 
   p {
     font-weight: bold;
@@ -126,10 +117,7 @@ export const PaymentOption = styled.article`
 `;
 
 export const SectionFAQ = styled.section`
-  margin-top: 60px;
-  margin-bottom: 60px;
-  margin-left: 25px;
-  margin-right: 25px;
+  margin: 60px 4%;
 
   @media ${device.tablet} {
     margin-left: 8.3%;
@@ -138,5 +126,11 @@ export const SectionFAQ = styled.section`
 
   h2 {
     margin-bottom: 32px;
+  }
+
+  @media ${device.laptop} {
+    margin: 60px auto;
+    width: 100%;
+    max-width: 700px;
   }
 `;

@@ -11,6 +11,10 @@ import { PaymentOption, PaymentOptions, SectionAbout, SectionFAQ, SectionPayment
 import WhatsappWidget from '@/components/atom/WhatsappWidget';
 import Navbar from "../components/organisms/Navbar";
 import InitialState from '@/components/molecule/HomeInitialState';
+import mastercardImg from '@/assets/pages/Home/master-card.svg';
+import visaImg from '@/assets/pages/Home/visa-card.svg';
+import dinnerImg from '@/assets/pages/Home/dinner-card.svg';
+import picpayImg from '@/assets/pages/Home/picpay-card.svg';
 
 const SearchExam = dynamic(
   () => import("@/components/organisms/SearchExam"),
@@ -51,19 +55,19 @@ const Home = () => {
 
         <PaymentOptions>
           <PaymentOption>
-            <p>Cartão de crédito</p>
+            <img src={visaImg} alt="Ícone cartão de crédito Visa" />
           </PaymentOption>
 
           <PaymentOption>
-            <p>Boleto bancário</p>
+            <img src={mastercardImg} alt="Ícone cartão de crédito Mastercard" />
           </PaymentOption>
 
           <PaymentOption>
-            <p>PicPay</p>
+            <img src={dinnerImg} alt="Ícone cartão de crédito Dinner Club" />
           </PaymentOption>
 
           <PaymentOption>
-            <p>PIX (em breve)</p>
+            <img src={picpayImg} alt="Ícone Picpay" />
           </PaymentOption>
         </PaymentOptions>
       </SectionPayment>
