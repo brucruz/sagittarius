@@ -1,8 +1,10 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import mixpanel from 'mixpanel-browser';
 import LabResultFromAPI from '@/@types/LabResultFromAPI';
 import PriceFormatted from '@/@types/PriceFormatted';
+import TotalPriceBagContainer from '@/components/molecule/TotalPriceBagContainer';
+import PageTemplate from "@/components/templates/PageTemplate";
 import { MdClose } from 'react-icons/md';
 import Modal from '@/components/organisms/Modal';
 import GoogleMap from '@/components/organisms/Map';
@@ -50,12 +52,12 @@ export default function Detail() {
 
   const [displayListExams, setDisplayListExams] = useState(true);
   const [displayMap, setDisplayMap] = useState(false);
-  const [selectedExams, setSelectedExams] = useState<string[]>([]);
+  const [selectedPrices, setSelectedPrices] = useState<PriceFormatted[]>([]);
   
   const router = useRouter();
   const queryParams: QueryParamsProps = router.query;
 
-  const { addBagItem } = useBag();
+  const { addBagItems, bagItems } = useBag();
   const { user } = useAuth();
 
   const { data } = useFetch<LabPricesResultFromAPI>(`/search/${queryParams.lab_id}/results`, {
@@ -67,70 +69,30 @@ export default function Detail() {
     },
   });
 
+  useEffect(() => {
+    if (!data) return;
+    setSelectedPrices(data.prices.map(price => price));
+  }, [data]);
+
   const handlePriceSelection = useCallback(
     (): void => {
-      data.prices.map((price) => {
+      addBagItems(selectedPrices, data.lab)
 
-        if (!selectedExams.includes(price.exam_id)) return;
-
-        const itemToAdd: PricesInBag = {
-          id: price.lab.id,
-          title: price.lab.title,
-          slug: price.lab.slug,
-          address: price.lab.address,
-          city: price.lab.city,
-          state: price.lab.state,
-          latitude: price.lab.latitude,
-          longitude: price.lab.longitude,
-          collect_hour: price.lab.collect_hour,
-          open_hour: price.lab.open_hour,
-          company: price.lab.company,
-          company_id: price.lab.company_id,
-          price: [
-            {
-              id: price.id,
-              price: price.price,
-              formatted_price: price.formatted_price,
-              created_date: price.created_date,
-              exam: price.exam,
-              exam_id: price.exam_id,
-              lab_id: price.lab_id,
-              lab: price.lab,
-            },
-          ],
-          
-        };
-
-        addBagItem(itemToAdd);
-
-        // ReactGA.event({
-        //   category: 'select exam',
-        //   action: 'add exam',
-        //   label: `Added exam to bag: ${clickedPrice.exam.title} from lab ${
-        //     clickedLab.company.title
-        //   } - ${clickedLab.title} to bag ${user?.id && `- UserId ${user.id}`}`,
-        // });
-
-        user && mixpanel.identify(user.id);
-        mixpanel.track('Add Exam To Bag', {
-          Lab: price.lab.title,
-          Company: price.lab.company.title,
-          Exam: price.exam.title,
-          Price: price.price,
-        });
-      })
-    },
-    [addBagItem, user],
+      router.push('/carrinho');
+    }, [addBagItems, selectedPrices],
   );
   
-  function handleExamsChange(examId: string) {
-    if (selectedExams.includes(examId)) {
-      const exams = selectedExams.filter((exam) => exam !== examId);
-      setSelectedExams(exams);
+  function handlePriceChange(price: PriceFormatted) {
+    if (selectedPrices.includes(price)) {
+      const priceIndex = selectedPrices.findIndex((selectedPrice) => price.id === selectedPrice.id);
+      const exams = selectedPrices.filter((price, index) => index !== priceIndex && price);
+      setSelectedPrices(exams);
     } else { 
-      setSelectedExams([ ...selectedExams, examId ]);
+      setSelectedPrices([ ...selectedPrices, price ]);
     }
   }
+
+  const totalValue = selectedPrices.length > 0 && selectedPrices.map((price) => price.price)?.reduce((acc, cur)=> acc + cur);
   
   return data ? (
     <>
@@ -174,8 +136,8 @@ export default function Detail() {
                       return (
                         <div key={price.id}>
                           <Checkbox 
-                            isChecked={selectedExams.includes(price.exam_id)}
-                            onChange={() => handleExamsChange(price.exam_id)}
+                            isChecked={selectedPrices.includes(price)}
+                            onChange={() => handlePriceChange(price)}
                             //description="Esse exame exige preparo" 
                             label={price.exam.title} 
                             id={price.exam.id}
@@ -191,8 +153,8 @@ export default function Detail() {
             <div className="total-price-bag-container">
               <span>Valor Total:</span>
               <div className="content-price">
-                <span>À vista R${formatValueWo$(data.total_price)} ou</span>
-                <h2>12x de R$ {formatValueWo$((data.total_price / 12))}</h2>
+                <span>À vista R${formatValueWo$(totalValue)} ou</span>
+                <h2>12x de R$ {formatValueWo$((totalValue / 12))}</h2>
               </div>
             </div>
             <div className="footer-bag-container">
