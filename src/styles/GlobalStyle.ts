@@ -62,4 +62,8 @@ export default createGlobalStyle`
     border: 0;
     background-color: transparent;
   }
+
+  .ReactModalPortal div{
+    z-index: 3000;
+  }
 `;
