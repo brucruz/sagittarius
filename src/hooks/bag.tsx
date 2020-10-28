@@ -6,11 +6,14 @@ import {
   useCallback,
   useMemo,
 } from 'react';
-// import mixpanel from 'mixpanel-browser';
+import mixpanel from 'mixpanel-browser';
+
 import PriceFormatted from '@/@types/PriceFormatted';
 import PricesInBag from '@/@types/PricesInBag';
 import Lab from '../@types/Lab';
 import { useAuth } from './auth';
+
+import formatValue from '@/utils/formatValue';
 
 interface BagContextData {
   isBagOpen: boolean;
@@ -22,6 +25,7 @@ interface BagContextData {
   clearBag(): void;
   bagPrices: PriceFormatted[];
   bagTotalPrice: number;
+  bagTotalPriceFormatted: string;
   bagPriceCount: number;
   bagExamsTitles: string[];
   bagCompanyLabTitles: string[];
@@ -40,15 +44,15 @@ const BagProvider = ({ children }) => {
   const openBag = useCallback(() => {
     setIsBagOpen(true);
 
-    // user && mixpanel.identify(user.id);
-    // mixpanel.track('Open Bag');
+    user && mixpanel.identify(user.id);
+    mixpanel.track('Open Bag');
   }, [user]);
 
   const closeBag = useCallback(() => {
     setIsBagOpen(false);
 
-    // user && mixpanel.identify(user.id);
-    // mixpanel.track('Close Bag');
+    user && mixpanel.identify(user.id);
+    mixpanel.track('Close Bag');
   }, [user]);
 
   const addBagItem = useCallback(
@@ -95,13 +99,13 @@ const BagProvider = ({ children }) => {
 
   const removeBagItem = useCallback(
     (item: PriceFormatted, selectedLab: PricesInBag) => {
-      // user && mixpanel.identify(user.id);
-      // mixpanel.track('Remove Exam from Bag', {
-      //   Lab: selectedLab.title,
-      //   Company: selectedLab.company.title,
-      //   Exam: item.exam.title,
-      //   Price: item.price,
-      // });
+      user && mixpanel.identify(user.id);
+      mixpanel.track('Remove Exam from Bag', {
+        Lab: selectedLab.title,
+        Company: selectedLab.company.title,
+        Exam: item.exam.title,
+        Price: item.price,
+      });
 
       const labIndex = bagItems.findIndex(lab => lab.id === selectedLab.id);
 
@@ -129,8 +133,8 @@ const BagProvider = ({ children }) => {
   const clearBag = useCallback(() => {
     setBagItems([]);
 
-    // user && mixpanel.identify(user.id);
-    // mixpanel.track('Clear Bag');
+    user && mixpanel.identify(user.id);
+    mixpanel.track('Clear Bag');
   }, [user]);
 
   const bagPrices = useMemo(() => {
@@ -146,6 +150,10 @@ const BagProvider = ({ children }) => {
 
     return totalPrice;
   }, [bagPrices]);
+
+  const bagTotalPriceFormatted = useMemo(() => {
+    return formatValue(bagTotalPrice);
+  }, [bagTotalPrice]);
 
   const bagPriceCount = useMemo(() => {
     const priceCount = bagPrices.length;
@@ -185,6 +193,7 @@ const BagProvider = ({ children }) => {
         clearBag,
         bagPrices,
         bagTotalPrice,
+        bagTotalPriceFormatted,
         bagPriceCount,
         bagExamsTitles,
         bagCompanyLabTitles,
