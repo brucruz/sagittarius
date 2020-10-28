@@ -4,6 +4,7 @@ export const AccordionButton = styled.button`
   color: #3c4759;
   background: #fff;
   display: flex;
+  font-weight: 700;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
@@ -20,6 +21,11 @@ export const AccordionButton = styled.button`
     margin-left: 1.6rem;
     height: 16px;
     width: 16px;
+  }
+
+  &.active {
+    background: #F2F5FB;
+    color: #2F2C77;
   }
 `;
 
