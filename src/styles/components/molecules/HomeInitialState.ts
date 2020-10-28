@@ -46,6 +46,12 @@ export const InitialStateContent = styled.section`
     }
   }
 
+  @media ${device.laptop} {
+    button {
+      font-size: 20px;
+    }
+  }
+
 `;
 
 export const ValueProposition = styled.section`
@@ -68,6 +74,19 @@ export const ValueProposition = styled.section`
     letter-spacing: 0.192941px;
     color: rgba(35, 43, 59, 0.96);
     margin-bottom: 24px;
+  }
+
+  @media ${device.tablet} {
+    h1 {
+      font-size: 32px;
+    }
+  }
+
+  @media ${device.laptop} {
+    h1 {
+      font-size: 40px;
+      line-height: 50px;
+    }
   }
 
 `;

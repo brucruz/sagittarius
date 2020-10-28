@@ -51,6 +51,10 @@ export const SectionPayment = styled.section`
     p {
       font-weight: 700;
     }
+
+    h2 {
+      font-size: 32px;
+    }
   }
 
   h2 {
@@ -62,7 +66,7 @@ export const SectionPayment = styled.section`
   }
 
   @media ${device.laptop} {
-    margin: auto;
+    margin: 128px auto;
     width: 100%;
     max-width: 700px;
   }
@@ -122,6 +126,11 @@ export const SectionFAQ = styled.section`
   @media ${device.tablet} {
     margin-left: 8.3%;
     margin-right: 8.3%; 
+
+    h2 {
+      font-size: 32px;
+      text-align: center;
+    }
   }
 
   h2 {
