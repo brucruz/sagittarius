@@ -1,11 +1,10 @@
 import { useRouter } from 'next/router';
-import ButtonNext from "../atom/ButtonNext";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
-import banner from '@/assets/components/organisms/SearchExam/banner.svg';
+import ButtonNext from "../atom/ButtonNext";
 import { MdSearch, MdPlace } from 'react-icons/md';
 import mixpanel from 'mixpanel-browser';
-import { AddressState, Banner, Container, ExamState, InitialState, InitialStateContent, ValueProposition } from "@/styles/components/organisms/SearchExam";
+import { AddressState, Container, ExamState } from "@/styles/components/organisms/SearchExam";
 import TitleMain from "../molecule/TitleMain";
 import { HeaderSpaceContent } from "@/styles/components/atom/HeaderSpace";
 import PageHeader from "../molecule/PageHeader";
@@ -18,6 +17,7 @@ import { useToast } from "@/hooks/toast";
 import ExamSearchResult from "@/@types/ExamSearchResult";
 import examIndex from "@/services/search";
 import { buildSearchQuery } from "@/helpers/searchExams";
+import InitialState from '../molecule/HomeInitialState';
 
 type SearchDisplay = 'initial' | 'exam' | 'address';
 
@@ -213,24 +213,19 @@ const SearchExam = () => {
       <HeaderSpaceContent />
 
       {searchDisplay === 'initial' && (
-        <InitialState>
-          <Banner src={banner} alt="banner"/>
-
-          <InitialStateContent>
-            <ValueProposition>
-              <h1>Vários exames para agendar?<br />
-              Deixa com a Heali!</h1>
-              <h3>Busque, compare laboratórios e agende</h3>
-            </ValueProposition>
-
-            <ButtonNext type="button" text="Começar" onClick={handleBeginButtonClick}/>
-          </InitialStateContent>
-        </InitialState>
+        <InitialState beginButtonCallback={handleBeginButtonClick} />
       )}
 
       {searchDisplay === 'exam' && (
         <ExamState>
-          <PageHeader type='button' backButtonNewState="initial" backButtonStateCallback={handleReturnButtonClick} stepper='1/2'/>
+          <PageHeader
+            buttonType={{
+              type: 'change_state_button',
+              backButtonNewState: "initial",
+              backButtonStateCallback: handleReturnButtonClick,
+              stepper: '1/2',
+            }}
+          />
 
           <TitleMain title="Quais exames está buscando?" subtitle="Digite e adicione os exames que quer agendar."/>
           <Input
@@ -252,7 +247,14 @@ const SearchExam = () => {
 
       {searchDisplay === 'address' && (
         <AddressState>
-          <PageHeader type='button' backButtonNewState="exam" backButtonStateCallback={handleReturnButtonClick} stepper='2/2'/>
+          <PageHeader
+            buttonType={{
+              type: 'change_state_button',
+              backButtonNewState: 'exam',
+              backButtonStateCallback: handleReturnButtonClick,
+              stepper: '2/2',
+            }}
+          />
 
           <TitleMain title="Onde quer fazer os exames?" subtitle="Digite o endereço, bairro ou cidade de onde quer fazer o exame."/>
 

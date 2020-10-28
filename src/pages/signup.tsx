@@ -131,8 +131,6 @@ const SignUpPage = () => {
           return;
         }
 
-        console.log(err.response.data);
-
         if (err.response.data.error === 'Email address already used') {
           addToast({
             type: 'error',
@@ -156,9 +154,12 @@ const SignUpPage = () => {
 
   return (
     <PageTemplate
-      backLinkUrl={{
-        pathname: '/signup',
-        query: { isBeforeSchedule: params.isBeforeSchedule && params.isBeforeSchedule.valueOf.toString() }
+      buttonType={{
+        type: 'link',
+        backLinkUrl: {
+          pathname: '/signup',
+          query: { isBeforeSchedule: params.isBeforeSchedule && params.isBeforeSchedule.valueOf.toString() }
+        }
       }}
       titleMain={{
         title: 'Criar conta',

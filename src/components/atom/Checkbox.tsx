@@ -5,7 +5,6 @@ import { MdCheck } from "react-icons/md";
 export interface CheckboxType {
   isChecked?: boolean;
   label: string;
-  type?: 'checkbox' | 'radio';
   id: string;
 }
 
@@ -13,14 +12,14 @@ interface CheckboxProps extends CheckboxType, Omit<LabelHTMLAttributes<HTMLLabel
 
 }
 
-const Checkbox = ({ isChecked = false, label, type = 'checkbox', id, ...rest }: CheckboxProps) => {
+const Checkbox = ({ isChecked = false, label, id, ...rest }: CheckboxProps) => {
   return (
     <CheckboxItem
       isChecked={isChecked}
       id={id}
       {...rest}
     >{label}
-      <input type={type} checked={isChecked}/>
+      <input type='checkbox' checked={isChecked}/>
       <MdCheck/>
     </CheckboxItem>
   )

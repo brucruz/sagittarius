@@ -9,7 +9,8 @@ interface RadioButtonProps {
 
 const RadioButton = ({ label, value, isChecked, name }: RadioButtonProps) => {
   return (
-    <Base>
+    <Base
+    >
       <span className="text">{label}</span>
       <input type="radio"checked={isChecked} value={value} name={name}/>
       <span className="checkmark">

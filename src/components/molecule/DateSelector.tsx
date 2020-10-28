@@ -1,4 +1,4 @@
-import { Calendar, DateInput, DateSelectorContainer } from "@/styles/components/molecules/DateSelector";
+import { Calendar, DateInput, DateSelectorContainer, ErrorMessage } from "@/styles/components/molecules/DateSelector";
 import { useCallback, useRef, useState } from "react";
 import DayPicker from "react-day-picker";
 import 'react-day-picker/lib/style.css';
@@ -11,10 +11,13 @@ interface DateSelectorProps {
   label?: string;
   name: string;
   startDate: Date;
-  getSelectedDate: (date: Date) => void;
+  getSelectedDate?: (date: Date) => void;
+  getTypedDate?: (date: string) => void;
+  calendar?: boolean;
+  error?: string,
 }
 
-const DateSelector = ({ name, label, startDate, getSelectedDate }: DateSelectorProps) => {
+const DateSelector = ({ name, label, startDate, getSelectedDate, getTypedDate, calendar = true, error }: DateSelectorProps) => {
   const [isActive, setIsActive] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date>(null)
 
@@ -32,6 +35,7 @@ const DateSelector = ({ name, label, startDate, getSelectedDate }: DateSelectorP
     if (selected) {
       setSelectedDate(null);
       getSelectedDate(null);
+      getTypedDate(null);
 
       inputRef.current.value = null;
 
@@ -39,6 +43,8 @@ const DateSelector = ({ name, label, startDate, getSelectedDate }: DateSelectorP
     }
 
     inputRef.current.value = format(date, 'dd/MM/yyyy');
+
+    getTypedDate(inputRef.current.value);
 
     getSelectedDate(date);
 
@@ -54,13 +60,15 @@ const DateSelector = ({ name, label, startDate, getSelectedDate }: DateSelectorP
 
       <DateInput
         isFocused={isActive}
+        isErrored={!!error}
         onClick={handleInputClick}
+        fullWidth={!calendar}
       >
         <MdDateRange />
-        <input type="text" id={name} ref={inputRef} placeholder='dd/mm/aaaa'/>
+        <input type="text" id={name} ref={inputRef} placeholder='dd/mm/aaaa' onChange={() => getTypedDate(inputRef.current?.value)}/>
       </DateInput>
 
-      {isActive && (
+      {isActive && calendar && (
         <Calendar>
           <DayPicker
             weekdaysShort={['D', 'S', 'T', 'Q', 'Q', 'S', 'S']}
@@ -87,6 +95,12 @@ const DateSelector = ({ name, label, startDate, getSelectedDate }: DateSelectorP
           />
         </Calendar>
       )}
+
+    {error && (
+      <ErrorMessage>
+        <p>O formato deve ser como em '01/01/1990'. <span>Tente novamente.</span></p>
+      </ErrorMessage>
+    )}
     </DateSelectorContainer>
   )
 };
