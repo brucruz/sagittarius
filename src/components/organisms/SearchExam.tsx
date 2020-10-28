@@ -100,14 +100,6 @@ const SearchExam = () => {
         description: 'Para prosseguir, informe os exames que está buscando',
       });
 
-      // ReactGA.event({
-      //   category: 'search',
-      //   action: 'error - exams missing',
-      //   label: `Search trial missing exams - ${
-      //     user?.id && `- UserId ${user.id}`
-      //   }`,
-      // });
-
       user && mixpanel.identify(user.id);
       mixpanel.register(
         {
@@ -131,14 +123,6 @@ const SearchExam = () => {
         description: 'Informe um endereço de referência para poder prosseguir',
       });
 
-      // ReactGA.event({
-      //   category: 'search',
-      //   action: 'error - address missing',
-      //   label: `Search trial missing an address ${
-      //     user?.id && `- UserId ${user.id}`
-      //   }`,
-      // });
-
       user && mixpanel.identify(user.id);
       mixpanel.register(
         {
@@ -154,12 +138,6 @@ const SearchExam = () => {
 
       return;
     }
-
-    // ReactGA.event({
-    //   category: 'search',
-    //   action: 'success - exams searched',
-    //   label: `Successfully searched exams ${user?.id && `- UserId ${user.id}`}`,
-    // });
 
     user && mixpanel.identify(user.id);
     mixpanel.register(

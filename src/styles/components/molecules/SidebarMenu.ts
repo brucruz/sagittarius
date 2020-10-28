@@ -23,6 +23,7 @@ export const HamburguerButton = styled.button<SideBarProps>`
   margin-left: 24px;
 
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
 
@@ -33,7 +34,7 @@ export const HamburguerButton = styled.button<SideBarProps>`
     color: #4D49C4;
   }
 
-  @media ${device.laptop} {
+  @media ${device.laptopL} {
     display: none;
   }
 
@@ -65,18 +66,29 @@ export const MenuLinks = styled.div`
   margin-left: 24px;
   margin-top: 16px;
 
-  p {
-    color: #ffffff;
+  a {
+    cursor: pointer;
+    text-decoration: none;
 
-    font-weight: bold;
-    font-size: 12px;
-    line-height: 24px;
-    /* identical to box height, or 200% */
+    p {
+      opacity: 1;
+    }
 
-    letter-spacing: 0.192941px;
-
-    &+p {
+    &+a {
       margin-top: 7px;
     }
   }
+
+  p {
+      cursor: pointer;
+      color: #ffffff;
+      opacity: 0.3;
+
+      font-weight: bold;
+      font-size: 12px;
+      line-height: 24px;
+      /* identical to box height, or 200% */
+
+      letter-spacing: 0.192941px;
+    }
 `;

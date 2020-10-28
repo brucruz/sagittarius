@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import devices from '@/utils/devices';
+import device from "@/utils/devices";
 
 interface OnlineUserMenuProps {
   isMenuOpen: boolean;
@@ -63,6 +64,24 @@ export const OnlineUserMenu = styled.button`
   margin-right: 15px;
 
   position: relative;
+
+  div {
+    p {
+      display: none;
+    }
+  }
+
+  @media ${device.tablet} {
+    div {
+      display: flex;
+      align-items: center;
+
+      p {
+        display: block;
+        margin-left: 8px;
+      }
+    }
+  }
 `;
 
 export const UserMenuContainer = styled.section`
@@ -97,6 +116,10 @@ export const MenuItems = styled.section`
 
   width: 106px;
 
+  @media ${device.tablet} {
+      width: 140px;
+    }
+
   padding-top: 16px;
   padding-bottom: 11.5px;
   padding-left: 13px;
@@ -105,6 +128,10 @@ export const MenuItems = styled.section`
 `;
 
 export const MenuHelloItem = styled.article`
+  @media ${device.tablet} {
+    display: none;
+  }
+
   p {
     font-style: normal;
     font-weight: 600;
@@ -129,6 +156,11 @@ export const MenuItem = styled.article`
     color: rgba(0, 0, 0, 0.7);
 
     margin-top: 8.3px;
+
+    @media ${device.tablet} {
+      font-size: 16px;
+      line-height: 22px;
+    }
   }
 `;
 

@@ -2,8 +2,8 @@ import styled from "styled-components";
 import devices from '@/utils/devices';
 
 export const Container = styled.section`
-  margin-top: 74px;
-  margin-bottom: 60px;
+  padding-top: 74px;
+  padding-bottom: 60px;
   margin-left: 25px;
   margin-right: 25px;
 

@@ -26,11 +26,15 @@ const UserMenu = () => {
         <OnlineUserMenu
           onBlur={() => setIsMenuOpen(false)}
         >
-          <UserAvatarDummy
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-          >
-            <MdPerson />
-          </UserAvatarDummy>
+          <div>
+            <UserAvatarDummy
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+            >
+              <MdPerson />
+            </UserAvatarDummy>
+
+            <p>Olá, {user.first_name}</p>
+          </div>
 
           {isMenuOpen && (
             <UserMenuContainer>

@@ -1,7 +1,8 @@
 import { NextComponentType } from 'next'
 import { Container, SectionItem, SectionItemImg, SectionItemText } from "@/styles/components/organisms/Section";
+import { HTMLAttributes } from 'react';
 
-interface SectionProps {
+interface SectionProps extends HTMLAttributes<HTMLDivElement> {
   title: string;
   articles: {
     id: number;
@@ -11,12 +12,9 @@ interface SectionProps {
   }[]
 }
 
-const Section = ({
-  title,
-  articles,
-}: SectionProps) => {
+const Section = ({ title, articles, ...rest }: SectionProps) => {
   return (
-    <Container>
+    <Container {...rest} >
       <h2>{title}</h2>
 
       <div className="items-div">

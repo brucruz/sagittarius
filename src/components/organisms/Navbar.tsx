@@ -15,24 +15,26 @@ export default function Navbar() {
         <SidebarAndLogo>
           <SidebarMenu />
 
-          <Logo>Heali</Logo>
+          <Link href='/'>
+            <Logo>Heali</Logo>
+          </Link>
         </SidebarAndLogo>
 
         <NavLinks>
-          <Link href="">
-            <p>Sobre Nós</p>
+          <Link href="/#sobre">
+            <a>Sobre Nós</a>
+          </Link>
+
+          <Link href="/#como-funciona">
+            <a>Como Funciona</a>
+          </Link>
+
+          <Link href="/#nossos-servicos">
+            <a>Nossos Serviços</a>
           </Link>
 
           <Link href="">
-            <p>Como Funciona</p>
-          </Link>
-
-          <Link href="">
-            <p>Nossos Serviços</p>
-          </Link>
-
-          <Link href="">
-            <p>Para Laboratórios</p>
+            <a>Para Laboratórios</a>
           </Link>
         </NavLinks>
 
