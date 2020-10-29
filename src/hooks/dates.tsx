@@ -4,8 +4,10 @@ import mixpanel from 'mixpanel-browser';
 interface DatesContextData {
   preferredDateFrom: Date;
   preferredDateTo: Date;
+  preferredHours: string[];
   selectPreferredFromDate: (from: Date) => void;
   selectPreferredToDate: (to: Date) => void;
+  selectPreferredHour: (hour: string) => void;
 }
 
 const DatesContext = createContext<DatesContextData>({} as DatesContextData);
@@ -14,18 +16,22 @@ const DatesProvider = ({ children }) => {
   const [preferredDateFrom, setPreferredDateFrom] = useState<Date>(null);
   const [preferredDateTo, setPreferredDateTo] = useState<Date>(null);
 
-  // const [preferredHours, setPreferredHours] = useState(null);
+  const [preferredHours, setPreferredHours] = useState<string[]>([] as string[]);
 
   useEffect(() => {
     const from = localStorage.getItem('@Heali:preferredDateFrom');
     const to = localStorage.getItem('@Heali:preferredDateTo');
 
-    if (from && to) {
+    const hours = localStorage.getItem('@Heali:preferredHours');
+
+    if (from && to && hours) {
       setPreferredDateFrom(JSON.parse(from));
       setPreferredDateTo(JSON.parse(to));
+      setPreferredHours(JSON.parse(hours));
     } else {
       setPreferredDateFrom(null);
       setPreferredDateTo(null);
+      setPreferredHours([] as string[]);
     }
   }, []);
 
@@ -48,18 +54,51 @@ const DatesProvider = ({ children }) => {
         'Preferred Date: to': to,
       },
       1
-    )
+    );
 
     setPreferredDateTo(to);
   }, []);
+
+  const selectPreferredHour = useCallback((hour: string) => {
+    if (preferredHours.includes(hour)) {
+      const hourIndex = preferredHours.findIndex(preferredHour => preferredHour === hour);
+
+      const hours = preferredHours.filter((hour, index) => index !== hourIndex && hour);
+
+      setPreferredHours(hours);
+      localStorage.setItem('@Heali:preferredHours', JSON.stringify(hours));
+
+      mixpanel.register({
+          'Preferred Hours': hours,
+        },
+        1
+      );
+    } else {
+      const newPreferredHours = [...preferredHours, hour ]
+
+      setPreferredHours(newPreferredHours);
+
+      localStorage.setItem('@Heali:preferredHours', JSON.stringify(newPreferredHours));
+
+      mixpanel.register({
+          'Preferred Hours': newPreferredHours,
+        },
+        1
+      );
+    }
+  }, [preferredHours]);
+
+  console.log(preferredHours);
 
   return (
     <DatesContext.Provider
       value={{
         preferredDateFrom,
         preferredDateTo,
+        preferredHours,
         selectPreferredFromDate,
         selectPreferredToDate,
+        selectPreferredHour
       }}
     >
       {children}
