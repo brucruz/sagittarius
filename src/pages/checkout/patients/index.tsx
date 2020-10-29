@@ -129,7 +129,7 @@ export default function Patients() {
 
         <Schedule>
           <span>Quer agendar para outra pessoa?</span>
-          <span>Você pode <Link href="#"><a>cadastrar amigos e parentes</a></Link></span>
+          <span>Você pode <Link href='/checkout/patients/new'><a>cadastrar amigos e parentes</a></Link></span>
         </Schedule>
 
         <ButtonNext text="Continuar" onClick={handlePatientSelection}/>
