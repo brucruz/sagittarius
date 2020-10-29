@@ -1,10 +1,14 @@
-import { useBag } from "@/hooks/bag";
-import { BagBadgeButton, BagBadgeContainer, BagBadgeFooter, BagBadgeLabSummary, BagBadgeMenu, BagBadgeMenuContainer, BagBadgeSummary, MenuArrow } from "@/styles/components/molecules/BagBadge";
 import Link from "next/link";
-import { MdKeyboardArrowDown, MdKeyboardArrowUp, MdShoppingCart } from "react-icons/md";
+import { useBag } from "@/hooks/bag";
+import { BagBadgeButton, BagBadgeContainer, EmptyBagContent, BagBadgeFooter, BagBadgeLabSummary, BagBadgeMenu, BagBadgeMenuContainer, BagBadgeSummary, MenuArrow } from "@/styles/components/molecules/BagBadge";
+import { MdKeyboardArrowDown, MdKeyboardArrowUp, MdLightbulbOutline, MdShoppingCart } from "react-icons/md";
+
+import formatValue from '@/utils/formatValue';
+import { useAuth } from "@/hooks/auth";
 
 const BagBadge = () => {
-  const { isBagOpen, openBag, closeBag } = useBag();
+  const { isBagOpen, openBag, closeBag, bagItems, bagTotalPriceFormatted } = useBag();
+  const { user } = useAuth();
 
   return (
     <BagBadgeContainer>
@@ -13,7 +17,7 @@ const BagBadge = () => {
       >
         <MdShoppingCart />
 
-        <p>R$ 2.323,44</p>
+        <p>{bagTotalPriceFormatted}</p>
 
         { isBagOpen ? (<MdKeyboardArrowUp />) : (<MdKeyboardArrowDown />) }
       </BagBadgeButton>
@@ -24,47 +28,57 @@ const BagBadge = () => {
 
           <BagBadgeMenu>
             <BagBadgeLabSummary>
-              <article>
-                <div>
-                  logo
-                </div>
+            {bagItems.length > 0 && bagItems.map(bagItem => {
+              const priceValues = bagItem.price.map(price => price.price);
 
-                <div>
-                  <h5>Dr Consulta - Shopping Santa Cruz</h5>
+              const totalPrice = priceValues.reduce((total, price) => total + price, 0);
+
+              const totalPriceFormmatted = formatValue(totalPrice);
+
+              return (
+                <article>
                   <div>
-                    <p>3 exames</p>
-
-                    <p>R$ 2.300,99</p>
+                    <img src={bagItem.company.logo} alt={bagItem.company.title}/>
                   </div>
-                </div>
-              </article>
 
-              <article>
-                <div>
-                  logo
-                </div>
-
-                <div>
-                  <h5>Delboni Auriemo - Augusta</h5>
                   <div>
-                    <p>3 exames</p>
+                    <h5>{`${bagItem.company.title} - ${bagItem.title}`}</h5>
 
-                    <p>R$ 2.300,99</p>
+                    <div>
+                      {bagItem.price.length === 1 ? (
+                        <p>{bagItem.price.length} exame</p>
+                      ) : (
+                        <p>{bagItem.price.length} exames</p>
+                      )}
+
+                      <p>{totalPriceFormmatted}</p>
+                    </div>
                   </div>
-                </div>
-              </article>
+                </article>
+              )
+            })}
+
+            {bagItems.length === 0 && (
+              <EmptyBagContent>
+                <MdLightbulbOutline />
+
+                <p>Adicione exames ao carrinho para visualizá-los aqui</p>
+              </EmptyBagContent>
+            )}
             </BagBadgeLabSummary>
 
             <BagBadgeSummary>
-              <h6>Total:<strong> R$ 4.601,98</strong></h6>
+              <h6>Total:<strong> {bagTotalPriceFormatted}</strong></h6>
             </BagBadgeSummary>
 
             <BagBadgeFooter>
-              <Link href="">
+              <Link href='/carrinho'>
                 <p>Ver Carrinho</p>
               </Link>
-
-              <Link href="">
+              
+              <Link href={{
+                pathname: user ? '/patients' : '/login',
+              }}>
                 <button>Fechar Pedido</button>
               </Link>
             </BagBadgeFooter>
