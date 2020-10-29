@@ -115,6 +115,12 @@ export const BagBadgeLabSummary = styled.section`
       height: 40px;
 
       margin-right: 12px;
+
+      img {
+        width: 40px;
+        height: 40px;
+        /* contain */
+      }
     }
 
     div:last-child {
@@ -150,6 +156,24 @@ export const BagBadgeLabSummary = styled.section`
         }
       }
     }
+  }
+`;
+
+export const EmptyBagContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  margin-bottom: 12px;
+  svg {
+    color: #247FA6;
+    height: 36px;
+    width: 36px;
+  }
+  p {
+    margin-top: 10px;
+    font-size: 14px;
   }
 `;
 
@@ -194,6 +218,8 @@ export const BagBadgeFooter = styled.footer`
     margin-left: 33px;
     margin-top: 12px;
     margin-bottom: 26px;
+
+    cursor: pointer;
   }
 
   button {
