@@ -53,7 +53,7 @@ const DatesProvider = ({ children }) => {
       1
     )
 
-    setPreferredDateFrom(to);
+    setPreferredDateTo(to);
   }, []);
 
   return (

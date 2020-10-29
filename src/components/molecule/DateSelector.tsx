@@ -74,6 +74,7 @@ const DateSelector = ({ name, label, startDate, getSelectedDate, getTypedDate, c
             disabledDays={{
               before: startDate,
             }}
+            initialMonth={startDate}
             selectedDays={selectedDate}
             onDayClick={handleDayClick}
             months={[

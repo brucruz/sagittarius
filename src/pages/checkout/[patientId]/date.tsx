@@ -7,15 +7,14 @@ import PageTemplate from "@/components/templates/PageTemplate";
 import hoursCheckboxes from "@/contents/pages/DateSelectionPage/hoursCheckboxes";
 import { DateRange, HourSelection } from "@/styles/pages/DateSelectionPage";
 import { useDates } from '@/hooks/dates';
+import { parse } from "date-fns";
 
 const DateSelectionPage = () => {
   const [fromDate, setFromDate] = useState<Date>(null);
   const [toDate, setToDate] = useState<Date>(null);
+  const [errors, setErrors] = useState(null)
 
-  const { preferredDateFrom, preferredDateTo, selectPreferredFromDate, selectPreferredToDate } = useDates();
-
-  console.log('from', preferredDateFrom);
-  console.log('to', preferredDateTo);
+  const { selectPreferredFromDate, selectPreferredToDate } = useDates();
 
   const toStartDate = useMemo(() => {
     return fromDate ? fromDate : new Date();
@@ -31,6 +30,20 @@ const DateSelectionPage = () => {
     setToDate(date);
   }, []);
 
+  const getFromTypedDate = useCallback((date: string) => {
+    const parsedDate = parse(date, 'dd/MM/yyyy', new Date());
+
+    console.log(parsedDate);
+
+  }, []);
+
+  const getToTypedDate = useCallback((date: string) => {
+    const parsedDate = parse(date, 'dd/MM/yyyy', new Date());
+
+    console.log(parsedDate);
+
+  }, []);
+
   return (
     <PageTemplate
       titleMain={{
@@ -44,9 +57,23 @@ const DateSelectionPage = () => {
     >
 
       <DateRange>
-        <DateSelector name='fromDate' label='A partir de:' startDate={new Date()} getSelectedDate={getFromDate}/>
+        <DateSelector
+          name='fromDate'
+          label='A partir de:'
+          startDate={new Date()}
+          getSelectedDate={getFromDate}
+          getTypedDate={getFromTypedDate}
+          error='Data de Nascimento obrigatória. Você deve digitar o endereço no formato: DD/MM/AAAA'
+        />
 
-        <DateSelector name='toDate'label='Até:' startDate={toStartDate} getSelectedDate={getToDate}/>
+        <DateSelector
+          name='toDate'
+          label='Até:'
+          startDate={toStartDate}
+          getSelectedDate={getToDate}
+          getTypedDate={getToTypedDate}
+          error='Data de Nascimento obrigatória. Você deve digitar o endereço no formato: DD/MM/AAAA'
+        />
       </DateRange>
 
       <HourSelection>
