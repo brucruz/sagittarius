@@ -1,3 +1,4 @@
+import device from '@/utils/devices';
 import styled from 'styled-components';
 
 export const Container = styled.div`
@@ -8,4 +9,8 @@ export const Container = styled.div`
   overflow: hidden;
 
   z-index: 199;
+
+  @media ${device.laptop} {
+    top: 50px;
+  }
 `;
