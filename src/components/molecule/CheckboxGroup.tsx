@@ -10,14 +10,16 @@ interface CheckboxGroupProps {
 const CheckboxGroup = ({ title, checkboxes }: CheckboxGroupProps) => {
   const [checkboxItems, setCheckboxItems] = useState<CheckboxType[]>(checkboxes);
 
+  console.log(checkboxItems);
+
   const handleCheckboxChange = useCallback((checkbox: CheckboxType) => {
-    const modifiedItems = checkboxItems.map(item => {
-      item.id === checkbox.id ? item.isChecked = !checkbox.isChecked : item = item;
+    // const modifiedItems = checkboxItems.map(item => {
+    //   item.id === checkbox.id ? item.isChecked = !checkbox.isChecked : item = item;
 
-      return item;
-    });
+    //   return item;
+    // });
 
-    setCheckboxItems([...modifiedItems]);
+    setCheckboxItems((markedCheckboxes) => [...markedCheckboxes, checkbox]);
   }, [checkboxItems]);
 
   return (

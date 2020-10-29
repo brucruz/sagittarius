@@ -1,6 +1,5 @@
 import PageTemplate from '@/components/templates/PageTemplate';
-import TitleMain from '@/components/molecule/TitleMain';
-import { Smile, Title, Subtitle, Content } from '@/styles/pages/ThankYou';
+import { Smile, Title, Subtitle, Content } from '@/styles/pages/checkout/[patientId]/ThankYou';
 import ButtonNext from '@/components/atom/ButtonNext';
 
 export default function ThankYou() {
