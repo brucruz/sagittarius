@@ -30,6 +30,10 @@ interface Quote {
   hours: string[];
 }
 
+const AskingRemainingInfo = () => {
+
+};
+
 const OrderReview = () => {
   const [patient, setPatient] = useState<Patient | null>(null);
 
