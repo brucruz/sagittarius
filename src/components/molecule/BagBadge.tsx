@@ -36,7 +36,7 @@ const BagBadge = () => {
               const totalPriceFormmatted = formatValue(totalPrice);
 
               return (
-                <article>
+                <article key={bagItem.id}>
                   <div>
                     <img src={bagItem.company.logo} alt={bagItem.company.title}/>
                   </div>
@@ -75,7 +75,7 @@ const BagBadge = () => {
               <Link href='/carrinho'>
                 <p>Ver Carrinho</p>
               </Link>
-              
+
               <Link href={{
                 pathname: user ? '/patients' : '/login',
               }}>

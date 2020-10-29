@@ -39,7 +39,7 @@ export default function Cart() {
                   <span className="title-lab-item">{item.company.title} - {item.title}</span>
                   {item.price.map(price => {
                     return(
-                      <div className="exam-lab-item">
+                      <div className="exam-lab-item" key={price.id}>
                         <div>
                           <span>{price.exam.title}</span>
                         </div>
