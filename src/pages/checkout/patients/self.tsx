@@ -91,7 +91,7 @@ const SignUpPage = () => {
           phone_whatsapp: Yup.string().matches(
             phoneRegExp,
             'Digite o celular com DDD (somente números).',
-          ),
+          ).nullable(),
           email: Yup.string()
             .email('Digite um e-mail válido.'),
           birth_date: Yup
