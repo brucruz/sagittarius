@@ -77,7 +77,7 @@ const BagBadge = () => {
               </Link>
 
               <Link href={{
-                pathname: user ? '/patients' : '/login',
+                pathname: user ? '/checkout/patients' : '/login',
               }}>
                 <button>Fechar Pedido</button>
               </Link>
