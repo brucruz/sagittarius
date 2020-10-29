@@ -1,10 +1,11 @@
 import { useAuth } from "@/hooks/auth";
-import { Container, MenuArrow, MenuHelloItem, MenuItem, MenuItems, OfflineUser, OnlineUserMenu, UserAvatarDummy, UserMenuContainer } from "@/styles/components/molecules/UserMenu";
+import { Container, MenuArrow, MenuHelloItem, MenuItem, MenuItems, OfflineUser, OnlineUserMenu, UserAvatar, UserMenuContainer } from "@/styles/components/molecules/UserMenu";
 import Link from "next/link";
 import { useState } from "react";
 import { MdPerson } from "react-icons/md";
 
 const UserMenu = () => {
+
   const { user } = useAuth();
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -12,13 +13,15 @@ const UserMenu = () => {
   return (
     <Container>
       { !user && (
-        <OfflineUser>
-          <UserAvatarDummy>
-            <MdPerson />
-          </UserAvatarDummy>
+        <Link href='/login'>
+          <OfflineUser>
+            <UserAvatar>
+              <MdPerson />
+            </UserAvatar>
 
-          <p>Acessar</p>
-        </OfflineUser>
+            <p>Acessar</p>
+          </OfflineUser>
+        </Link>
       )
       }
 
@@ -26,11 +29,20 @@ const UserMenu = () => {
         <OnlineUserMenu
           onBlur={() => setIsMenuOpen(false)}
         >
-          <UserAvatarDummy
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-          >
-            <MdPerson />
-          </UserAvatarDummy>
+          <div>
+            <UserAvatar
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+            >
+              {user.avatar_url ? (
+                  <img src={user.avatar_url} alt={user.first_name}/>
+                ) : (
+                  <MdPerson />
+                )
+              }
+            </UserAvatar>
+
+            <p>Olá, {user.first_name}</p>
+          </div>
 
           {isMenuOpen && (
             <UserMenuContainer>

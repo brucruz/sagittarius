@@ -16,10 +16,10 @@ export default function Cart() {
   const router = useRouter();
 
   return (
-    <PageTemplate 
+    <PageTemplate
       buttonType={{
         type: 'go_back_button',
-      }} 
+      }}
       titleMain={{ title: 'Meu carrinho' }}
     >
       <BagContent>
@@ -61,16 +61,16 @@ export default function Cart() {
         <ConfirmOrder>
           <TotalPriceBagContainer totalPrice={bagTotalPrice}/>
           <div>
-            <Button 
+            <Button
               onClick={() => {
                 if (!user) {
                   router.push('/login')
-                } else { 
+                } else {
                   router.push('/checkout/patients');
                 }
               }}
             >
-              Confirmar Pedido
+              Agendar Exames
             </Button>
           </div>
         </ConfirmOrder>

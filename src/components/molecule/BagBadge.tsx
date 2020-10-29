@@ -75,7 +75,7 @@ const BagBadge = () => {
               <Link href='/carrinho'>
                 <p>Ver Carrinho</p>
               </Link>
-
+              
               <Link href={{
                 pathname: user ? '/patients' : '/login',
               }}>

@@ -10,7 +10,7 @@ export const Container = styled.header`
   background: #FFFFFF;
   box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.08);
 
-  @media ${device.laptop} {
+  @media ${device.laptopL} {
     padding: 0 8.3%;
   }
 `;
@@ -38,7 +38,9 @@ export const Logo = styled.h1`
   margin-bottom: 8px;
   margin-left: 16px;
 
-  @media ${device.laptop} {
+  cursor: pointer;
+
+  @media ${device.laptopL} {
     font-size: 30px;
     line-height: 41px;
     margin-left: 0;
@@ -48,14 +50,17 @@ export const Logo = styled.h1`
 export const NavLinks = styled.section`
   display: none;
 
-  @media ${device.laptop} {
+  @media ${device.laptopL} {
     display: flex;
   }
 
   margin-top: 22px;
   margin-bottom: 22px;
 
-  p {
+  a {
+    cursor: pointer;
+    text-decoration: none;
+
     font-weight: normal;
     font-size: 16px;
     line-height: 22px;
@@ -68,12 +73,17 @@ export const NavLinks = styled.section`
 
     color: #232B3B;
 
-    & + p {
+    & + a {
       margin-left: 1.5rem;
 
       @media ${device.laptopL} {
         margin-left: 49px;
       }
+    }
+
+    &:last-child {
+      opacity: 0.4;
+      cursor: not-allowed;
     }
   }
 `;

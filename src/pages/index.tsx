@@ -27,11 +27,13 @@ const SearchExam = dynamic(
 const Home = () => {
   return (
     <>
+      <MapsScript />
+
       <Navbar />
 
       <SearchExam />
 
-      <SectionAbout>
+      <SectionAbout id='sobre'>
         <h2>Sobre a Heali</h2>
 
         <article>
@@ -44,11 +46,11 @@ const Home = () => {
         </article>
       </SectionAbout>
 
-      <Section title='Como Funciona' articles={howItWorks}/>
+      <Section id='como-funciona' title='Como Funciona' articles={howItWorks}/>
 
-      <Section title='Nossos Serviços' articles={ourServices}/>
+      <Section id='nossos-servicos' title='Nossos Serviços' articles={ourServices}/>
 
-      <SectionPayment>
+      <SectionPayment id='pagamento'>
         <h2>Formas de Pagamento</h2>
 
         <p>Para facilitar ainda mais, aceitamos diversas formas de pagamento:</p>
@@ -72,7 +74,7 @@ const Home = () => {
         </PaymentOptions>
       </SectionPayment>
 
-      <SectionFAQ>
+      <SectionFAQ id='faq'>
         <h2>Perguntas Frequentes</h2>
 
         {faqQuestions?.map(question => {
@@ -88,7 +90,7 @@ const Home = () => {
 
       <Footer />
       <WhatsappWidget />
-      <MapsScript />
+
     </>
   )
 }

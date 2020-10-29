@@ -19,21 +19,29 @@ const SidebarMenu = () => {
         isOpen={isOpen}
       >
         <MenuLinks>
-          <Link href="">
-            <p>Sobre Nós</p>
+          <Link href="/#sobre">
+            <a>
+              <p>Sobre Nós</p>
+            </a>
           </Link>
 
-          <Link href="">
-            <p>Como Funciona</p>
+          <Link href="/#como-funciona">
+            <a>
+              <p>Como Funciona</p>
+            </a>
           </Link>
 
-          <Link href="">
-            <p>Nossos Serviços</p>
+          <Link href="/#nossos-servicos">
+            <a>
+              <p>Nossos Serviços</p>
+            </a>
           </Link>
 
-          <Link href="">
-            <p>Para Laboratórios</p>
-          </Link>
+          {/* <Link href=""> */}
+            {/* <a> */}
+              <p>Para Laboratórios</p>
+            {/* </a> */}
+          {/* </Link> */}
         </MenuLinks>
       </Menu>
     </Container>
