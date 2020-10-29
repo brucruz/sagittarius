@@ -119,26 +119,22 @@ export const getServerSideProps: GetServerSideProps<LabResultsProps> = async (co
   const address = queryParams.add;
   const latitude = Number(queryParams.lat);
   const longitude = Number(queryParams.lng);
-                      
-  const resultsSearchUrl = useMemo(() => {
-      const addQuery = `add=${address}`;
-      const latQuery = `lat=${latitude}`;
-      const lngQuery = `lng=${longitude}`;
+  
+  const addQuery = `add=${address}`;
+  const latQuery = `lat=${latitude}`;
+  const lngQuery = `lng=${longitude}`;
 
-      const idsQueryArray = examsIds.map(id => {
-        const idFormatted = `ids[]=${id.toString()}`;
+  const idsQueryArray = examsIds.map(id => {
+    const idFormatted = `ids[]=${id.toString()}`;
 
-        return idFormatted;
-      });
+    return idFormatted;
+  });
 
-      const idsQueryWithComma = idsQueryArray.toString();
+  const idsQueryWithComma = idsQueryArray.toString();
 
-      const idsQuery = idsQueryWithComma.replace(/,/g, '&');
+  const idsQuery = idsQueryWithComma.replace(/,/g, '&');
 
-      const finalQuery = `?${idsQuery}&${addQuery}&${latQuery}&${lngQuery}`;
-
-      return finalQuery;
-  }, [address, examsIds, queryParams]);               
+  const resultsSearchUrl = `?${idsQuery}&${addQuery}&${latQuery}&${lngQuery}`;              
 
   try {
     const { data } = await api.get<LabResultFromAPI[]>('/search/results', {
