@@ -29,6 +29,7 @@
     "react-google-login": "^5.1.22",
     "react-icons": "^3.11.0",
     "react-mixpanel": "^1.0.5",
+    "react-modal": "^3.11.2",
     "react-spring": "^8.0.27",
     "styled-components": "^5.2.0",
     "swr": "^0.3.6",

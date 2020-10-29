@@ -19,7 +19,7 @@ const InitialState = ({ beginButtonCallback }: InitialState) => {
           <h3>Busque, compare laboratórios e agende</h3>
         </ValueProposition>
 
-        <ButtonNext type="button" text="Começar" onClick={beginButtonCallback}/>
+        <button type="button" onClick={beginButtonCallback}>Começar</button>
       </InitialStateContent>
     </InitialStateContainer>
   )

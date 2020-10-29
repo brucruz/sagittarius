@@ -38,6 +38,7 @@ const Accordion = ({ text, index }: AccordionProps) => {
       <AccordionButton
         type="button"
         onClick={() => toggleAccordion(text.question)}
+        className={isActive ? 'active' : ''}
       >
         {`${index}. `}
         {text.question}

@@ -9,16 +9,20 @@ export interface CheckboxType {
 }
 
 interface CheckboxProps extends CheckboxType, Omit<LabelHTMLAttributes<HTMLLabelElement>, 'id'> {
-
+  description?: string;
 }
 
-const Checkbox = ({ isChecked = false, label, id, ...rest }: CheckboxProps) => {
+const Checkbox = ({ isChecked = false, label, id, description, ...rest }: CheckboxProps) => {
   return (
     <CheckboxItem
       isChecked={isChecked}
       id={id}
+      className={description && 'checkbox-align-center'}
       {...rest}
-    >{label}
+    > <div className={description && 'checkbox-with-description'}>
+        <label>{label}</label>
+        <span>{description}</span>
+      </div>
       <input type='checkbox' checked={isChecked}/>
       <MdCheck/>
     </CheckboxItem>

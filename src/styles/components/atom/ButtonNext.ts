@@ -2,7 +2,7 @@ import styled, { css } from "styled-components";
 
 export const Container = styled.button`
   color: #fff;
-  background: #247FA6;
+  background: #4D49C4;
 
   margin-top: 16px;
 
@@ -32,7 +32,7 @@ export const Container = styled.button`
   }
 
   &:hover {
-    background: linear-gradient(90deg, #2471A6 0%, #38A1CE 97.71%);
+    background: linear-gradient(90deg, #4D49C4 0%, #7672DD 97.71%);
   }
 
   ${props => props.disabled && css`

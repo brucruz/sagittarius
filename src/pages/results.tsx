@@ -22,6 +22,7 @@ interface QueryParamsProps {
 
 interface LabResultCardProp {
   result: LabResultFromAPIFormatted
+  resultsSearchUrl: string;
 }
 
 interface LabResultsProps {
@@ -29,9 +30,10 @@ interface LabResultsProps {
   examsIds: string[];
   lat: string;
   lng: string;
+  resultsSearchUrl: string;
 }
 
-const LabResultCard = ({ result }: LabResultCardProp) => {
+const LabResultCard = ({ result, resultsSearchUrl }: LabResultCardProp) => {
   return (
     <Card className="card">
       <CardHeader>
@@ -54,7 +56,7 @@ const LabResultCard = ({ result }: LabResultCardProp) => {
             <span>ou {result?.totalPriceFormatted}</span>
           </Price>
         </div>
-        <button>Ver detalhes</button>
+        <button onClick={() => router.push({ pathname: `${data.lab.id}/detail`, search: resultsSearchUrl })}>Ver detalhes</button>
       </CardFooter>
     </Card>
   );
@@ -72,7 +74,6 @@ export default function LabResults({ labResults, examsIds, lat, lng }: LabResult
       };
       return marker;
     });
-
     return locations;
   }, [labResults]);
 
@@ -92,7 +93,7 @@ export default function LabResults({ labResults, examsIds, lat, lng }: LabResult
             <LabResultList>
               {labResults.map((result) => {
                 return (
-                  <LabResultCard result={result}/>
+                  <LabResultCard data={result} searchQuery={resultsSearchUrl}/>
                 );
               })}
             </LabResultList>
@@ -118,6 +119,26 @@ export const getServerSideProps: GetServerSideProps<LabResultsProps> = async (co
   const address = queryParams.add;
   const latitude = Number(queryParams.lat);
   const longitude = Number(queryParams.lng);
+                      
+  const resultsSearchUrl = useMemo(() => {
+      const addQuery = `add=${address}`;
+      const latQuery = `lat=${latitude}`;
+      const lngQuery = `lng=${longitude}`;
+
+      const idsQueryArray = examsIds.map(id => {
+        const idFormatted = `ids[]=${id.toString()}`;
+
+        return idFormatted;
+      });
+
+      const idsQueryWithComma = idsQueryArray.toString();
+
+      const idsQuery = idsQueryWithComma.replace(/,/g, '&');
+
+      const finalQuery = `?${idsQuery}&${addQuery}&${latQuery}&${lngQuery}`;
+
+      return finalQuery;
+  }, [address, examsIds, queryParams]);               
 
   try {
     const { data } = await api.get<LabResultFromAPI[]>('/search/results', {
@@ -147,6 +168,7 @@ export const getServerSideProps: GetServerSideProps<LabResultsProps> = async (co
         examsIds,
         lat: queryParams.lat,
         lng: queryParams.lng,
+        resultsSearchUrl,
       }
     }
   } catch (err) {

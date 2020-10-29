@@ -2,61 +2,91 @@ import device from "@/utils/devices";
 import styled from "styled-components";
 
 export const InitialStateContainer = styled.section`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
   @media ${device.tablet} {
     height: 700px;
-    background-color: #c4c4c4;
+    flex-direction: row-reverse;
+    align-items: center;
+    justify-content: space-between !important;
   }
 `;
 
 export const Banner = styled.img`
   width: 100%;
-
-  margin-top: 15px;
+  padding: 40px 64px;
 
   @media ${device.tablet} {
-    display: none;
+    width: 40%;
+    padding-right: 8.3%;
+    padding-left: 0;
   }
 `;
 
 export const InitialStateContent = styled.section`
-  margin: 0 8.3%;
+  margin: 0 4%;
+
+  button {
+    width: 100%;
+    padding: 12px 60px;
+    color: #fff;
+    font-weight: 700;
+    background: linear-gradient(90deg, #4D49C4 0%, #7672DD 97.71%);
+    border-radius: 6px;
+    filter: drop-shadow(0px 4px 16px rgba(0, 0, 0, 0.16));
+  }
 
   @media ${device.tablet} {
-    position: absolute;
-    top: 300px;
+    margin-left: 8.3%;
+    
+    button {
+      width: auto;
+    }
   }
+
+  @media ${device.laptop} {
+    button {
+      font-size: 20px;
+    }
+  }
+
 `;
 
 export const ValueProposition = styled.section`
   z-index: 100;
-  margin-top: -180px;
-
-  @media ${device.mobileM} {
-    margin-top: -110px;
-  }
-
-  @media ${device.mobileL} {
-    margin-top: -150px;
-  }
-
-  @media ${device.tablet} {
-    margin-top: -80px;
-  }
 
   h1 {
-    margin-bottom: 20px;
-
-    font-weight: 800;
-    font-size: 32px;
-    line-height: 34px;
-    /* or 106% */
-
-    letter-spacing: 0.192941px;
+    margin-bottom: 16px;
+    font-size: 24px;
+    line-height: 40px;
+    
+    /* Titles */
+    
+    color: rgba(35, 43, 59, 0.96);
   }
 
   h3 {
-    line-height: 1.4rem;
-    margin-bottom: 48px;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 22px;
+    letter-spacing: 0.192941px;
+    color: rgba(35, 43, 59, 0.96);
+    margin-bottom: 24px;
+  }
+
+  @media ${device.tablet} {
+    h1 {
+      font-size: 32px;
+    }
+  }
+
+  @media ${device.laptop} {
+    h1 {
+      font-size: 40px;
+      line-height: 50px;
+    }
   }
 
 `;
