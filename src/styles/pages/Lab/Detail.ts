@@ -25,6 +25,7 @@ export const Content = styled.div`
 
   @media ${device.laptop} {
     min-height: fit-content;
+    width: 100%;
     margin: 0;
     padding: 0;
   }
@@ -80,8 +81,9 @@ export const BagContainer = styled.div`
   padding: 12px 0;
 
   @media ${device.laptop} {
+    max-width: 470px;
+    width: 100%;
     position: relative;
-    width: 60%;
     margin-left: 32px;
     bottom: 0;
     height: fit-content;
@@ -158,7 +160,7 @@ export const BagContainer = styled.div`
     }
 
     .list-exams::-webkit-scrollbar-thumb {
-      background-color: #247FA6;
+      background-color: #4D49C4;
     }
 
     .list-exams::-webkit-scrollbar {
@@ -226,7 +228,6 @@ export const ExamContainer = styled.div`
     align-items: flex-start;
     border-bottom: 1px solid #BCC3D4;
     padding: 8px 16px 0 16px;
-
 
     span {
       font-size: 16px !important;

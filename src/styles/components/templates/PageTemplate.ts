@@ -10,6 +10,10 @@ export const Container = styled.div`
     margin-left: auto;
     margin-right: auto;
     max-width: 400px;
+
+    &.cart-width {
+      max-width: 900px !important;
+    }
   }
 `;
 

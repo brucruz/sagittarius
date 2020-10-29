@@ -1,8 +1,10 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import mixpanel from 'mixpanel-browser';
 import LabResultFromAPI from '@/@types/LabResultFromAPI';
 import PriceFormatted from '@/@types/PriceFormatted';
+import TotalPriceBagContainer from '@/components/molecule/TotalPriceBagContainer';
+import PageTemplate from "@/components/templates/PageTemplate";
 import { MdClose } from 'react-icons/md';
 import Modal from '@/components/organisms/Modal';
 import GoogleMap from '@/components/organisms/Map';
@@ -13,13 +15,13 @@ import labIcon from '@/assets/components/molecules/LabInfo/lab.svg';
 import clockIcon from '@/assets/components/molecules/LabInfo/clock.svg';
 import locationIcon from '@/assets/components/molecules/LabInfo/location.svg';
 import { MdKeyboardArrowUp, MdKeyboardArrowDown } from 'react-icons/md';
-import { 
+import {
   Container,
   Content,
   CompanyTitle,
   BagContainer,
   ExamContainer,
-  LabInfoContainer, 
+  LabInfoContainer,
   ModalMapContent,
   ModalMapHeader,
 } from '@/styles/pages/Lab/Detail';
@@ -33,6 +35,8 @@ import { useBag } from '@/hooks/bag';
 import PricesInBag from '@/@types/PricesInBag';
 import { useAuth } from '@/hooks/auth';
 import MapsScript from '@/services/components/MapsScript';
+import { GetServerSideProps } from 'next';
+import api from '@/services/api';
 
 interface QueryParamsProps {
   ids?: string[];
@@ -46,123 +50,87 @@ interface LabPricesResultFromAPI extends LabResultFromAPI {
   prices: PriceFormatted[];
 }
 
-export default function Detail() {
+interface LabDetailProps {
+  labDetail: LabPricesResultFromAPI,
+}
+
+export default function Detail({ labDetail }: LabDetailProps) {
 
   const [displayListExams, setDisplayListExams] = useState(true);
   const [displayMap, setDisplayMap] = useState(false);
-  const [selectedExams, setSelectedExams] = useState<string[]>([]);
-  
-  const router = useRouter();
-  const queryParams: QueryParamsProps = router.query;
+  const [selectedPrices, setSelectedPrices] = useState<PriceFormatted[]>([]);
 
-  const { addBagItem } = useBag();
+  const router = useRouter();
+  // const queryParams: QueryParamsProps = router.query;
+
+  const { addBagItems, bagItems } = useBag();
   const { user } = useAuth();
 
-  const { data } = useFetch<LabPricesResultFromAPI>(`/search/${queryParams.lab_id}/results`, {
-    params: {
-      ids: queryParams && queryParams['ids[]'],
-      add: queryParams && encodeURIComponent(queryParams.add),
-      lat: queryParams && encodeURIComponent(queryParams.lat),
-      lng: queryParams && encodeURIComponent(queryParams.lng),
-    },
-  });
+  // const { data } = useFetch<LabPricesResultFromAPI>(`/search/${queryParams.lab_id}/results`, {
+  //   params: {
+  //     ids: queryParams && queryParams['ids[]'],
+  //     add: queryParams && encodeURIComponent(queryParams.add),
+  //     lat: queryParams && encodeURIComponent(queryParams.lat),
+  //     lng: queryParams && encodeURIComponent(queryParams.lng),
+  //   },
+  // });
+
+  useEffect(() => {
+    if (!labDetail) return;
+    setSelectedPrices(labDetail.prices.map(price => price));
+  }, [labDetail]);
 
   const handlePriceSelection = useCallback(
     (): void => {
-      data.prices.map((price) => {
+      addBagItems(selectedPrices, labDetail.lab)
 
-        if (!selectedExams.includes(price.exam_id)) return;
-
-        const itemToAdd: PricesInBag = {
-          id: price.lab.id,
-          title: price.lab.title,
-          slug: price.lab.slug,
-          address: price.lab.address,
-          city: price.lab.city,
-          state: price.lab.state,
-          latitude: price.lab.latitude,
-          longitude: price.lab.longitude,
-          collect_hour: price.lab.collect_hour,
-          open_hour: price.lab.open_hour,
-          company: price.lab.company,
-          company_id: price.lab.company_id,
-          price: [
-            {
-              id: price.id,
-              price: price.price,
-              formatted_price: price.formatted_price,
-              created_date: price.created_date,
-              exam: price.exam,
-              exam_id: price.exam_id,
-              lab_id: price.lab_id,
-              lab: price.lab,
-            },
-          ],
-          
-        };
-
-        addBagItem(itemToAdd);
-
-        // ReactGA.event({
-        //   category: 'select exam',
-        //   action: 'add exam',
-        //   label: `Added exam to bag: ${clickedPrice.exam.title} from lab ${
-        //     clickedLab.company.title
-        //   } - ${clickedLab.title} to bag ${user?.id && `- UserId ${user.id}`}`,
-        // });
-
-        user && mixpanel.identify(user.id);
-        mixpanel.track('Add Exam To Bag', {
-          Lab: price.lab.title,
-          Company: price.lab.company.title,
-          Exam: price.exam.title,
-          Price: price.price,
-        });
-      })
-    },
-    [addBagItem, user],
+      router.push('/carrinho');
+    }, [addBagItems, selectedPrices],
   );
-  
-  function handleExamsChange(examId: string) {
-    if (selectedExams.includes(examId)) {
-      const exams = selectedExams.filter((exam) => exam !== examId);
-      setSelectedExams(exams);
-    } else { 
-      setSelectedExams([ ...selectedExams, examId ]);
+
+  function handlePriceChange(price: PriceFormatted) {
+    if (selectedPrices.includes(price)) {
+      const priceIndex = selectedPrices.findIndex((selectedPrice) => price.id === selectedPrice.id);
+      const exams = selectedPrices.filter((price, index) => index !== priceIndex && price);
+      setSelectedPrices(exams);
+    } else {
+      setSelectedPrices([ ...selectedPrices, price ]);
     }
   }
-  
-  return data ? (
+
+  const totalValue = selectedPrices.length > 0 && selectedPrices.map((price) => price.price)?.reduce((acc, cur)=> acc + cur);
+
+  return labDetail ? (
     <>
       <Navbar />
         <Container>
           <Content>
             <CompanyTitle>
-              <img src={data.lab.company.logo} alt="Logo da companhia"/>
+              <img src={labDetail.lab.company.logo} alt="Logo da companhia"/>
               <div>
-                <h1>{data.lab.company.title} - {data.lab.title}</h1>
+                <h1>{labDetail.lab.company.title} - {labDetail.lab.title}</h1>
               </div>
             </CompanyTitle>
             <LabInfoContainer>
-              <LabInfo icon={locationIcon}> 
+              <LabInfo icon={locationIcon}>
                 <LabInfo.InlineContent>
                   <LabInfo.Title>Localização</LabInfo.Title>
                   <button type="button" onClick={() => setDisplayMap(true)}>Ver no mapa</button>
                 </LabInfo.InlineContent>
-                <LabInfo.Description>{data.lab.address}</LabInfo.Description>
+                <LabInfo.Description>{labDetail.lab.address}</LabInfo.Description>
               </LabInfo>
-              <LabInfo icon={clockIcon}> 
+              <LabInfo icon={clockIcon}>
                 <LabInfo.Title>Horário de Atendimento</LabInfo.Title>
-                <LabInfo.Description>{data.lab.open_hour}</LabInfo.Description>
+                <LabInfo.Description>{labDetail.lab.open_hour}</LabInfo.Description>
                 <LabInfo.Title>Horário de Coleta</LabInfo.Title>
-                <LabInfo.Description>{data.lab.collect_hour}</LabInfo.Description>
+                <LabInfo.Description>{labDetail.lab.collect_hour}</LabInfo.Description>
               </LabInfo>
             </LabInfoContainer>
           </Content>
           <BagContainer>
             <div className="content-bag-container">
               <div className="header-content-bag-container">
-                <span>Exames: {data.exams_found}</span>
+                <span>Exames: {labDetail.exams_found}</span>
                 <button type="button" onClick={() => setDisplayListExams(!displayListExams)}>
                   {displayListExams ? <MdKeyboardArrowDown /> : <MdKeyboardArrowUp />}
                 </button>
@@ -170,14 +138,14 @@ export default function Detail() {
               {displayListExams && (
                 <div className="list-exams">
                   <ExamContainer>
-                    {data.prices.map((price) => {
+                    {labDetail.prices.map((price) => {
                       return (
                         <div key={price.id}>
-                          <Checkbox 
-                            isChecked={selectedExams.includes(price.exam_id)}
-                            onChange={() => handleExamsChange(price.exam_id)}
-                            //description="Esse exame exige preparo" 
-                            label={price.exam.title} 
+                          <Checkbox
+                            isChecked={selectedPrices.includes(price)}
+                            onChange={() => handlePriceChange(price)}
+                            //description="Esse exame exige preparo"
+                            label={price.exam.title}
                             id={price.exam.id}
                           />
                           <span>R$ {formatValueWo$(price.price)}</span>
@@ -191,8 +159,8 @@ export default function Detail() {
             <div className="total-price-bag-container">
               <span>Valor Total:</span>
               <div className="content-price">
-                <span>À vista R${formatValueWo$(data.total_price)} ou</span>
-                <h2>12x de R$ {formatValueWo$((data.total_price / 12))}</h2>
+                <span>À vista R${formatValueWo$(totalValue)} ou</span>
+                <h2>12x de R$ {formatValueWo$((totalValue / 12))}</h2>
               </div>
             </div>
             <div className="footer-bag-container">
@@ -210,8 +178,8 @@ export default function Detail() {
               <MdClose onClick={() => setDisplayMap(false)}/>
             </ModalMapHeader>
             <GoogleMap
-              lat={Number(data.lab.latitude)}
-              lng={Number(data.lab.longitude)}
+              lat={Number(labDetail.lab.latitude)}
+              lng={Number(labDetail.lab.longitude)}
             />
           </ModalMapContent>
         </Modal>
@@ -220,3 +188,23 @@ export default function Detail() {
     </>
   ) : (<> </>)
 }
+
+export const getServerSideProps: GetServerSideProps<LabDetailProps> = async (context) => {
+  const queryParams: QueryParamsProps = context.query;
+
+  const { data } = await api.get<LabPricesResultFromAPI>(`/search/${queryParams.lab_id}/results`, {
+    params: {
+      ids: queryParams && queryParams['ids[]'],
+      add: queryParams && encodeURIComponent(queryParams.add),
+      lat: queryParams && encodeURIComponent(queryParams.lat),
+      lng: queryParams && encodeURIComponent(queryParams.lng),
+    },
+  });
+
+  return {
+    props: {
+      labDetail: data,
+
+    },
+  }
+};

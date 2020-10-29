@@ -1,18 +1,18 @@
-import { useMemo, useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
-import qs from 'qs';
-import isArray from '@/utils/isArray';
+import { useMemo } from 'react';
 import NavBar from '@/components/organisms/Navbar';
 import Footer from '@/components/organisms/Footer';
 import { Content, Container, Card, CardHeader, CardFooter, HeaderInfo, Stars, Price, LabResultList } from '@/styles/pages/LabResults';
 import GoogleMap from '@/components/organisms/Map';
-import { useLabResults } from '@/hooks/labResults';
-import { useSearchExam } from '@/hooks/searchExam';
-import { useToast } from '@/hooks/toast';
 import img from '@/assets/rect.svg';
 import star from '@/assets/pages/LabResults/star-image.svg';
 import { LabResultFromAPIFormatted } from '@/hooks/labResults';
 import MapsScript from '@/services/components/MapsScript';
+import { GetServerSideProps } from 'next';
+import api from '@/services/api';
+import formatDistance from '@/utils/formatDistance';
+import formatValue from '@/utils/formatValue';
+import LabResultFromAPI from '@/@types/LabResultFromAPI';
+import { useRouter } from 'next/router';
 
 interface QueryParamsProps {
   ids?: string[];
@@ -22,22 +22,29 @@ interface QueryParamsProps {
 }
 
 interface LabResultCardProp {
-  data: LabResultFromAPIFormatted;
-  searchQuery: string;
+  result: LabResultFromAPIFormatted
+  resultsSearchUrl: string;
 }
 
-const LabResultCard = ({ data, searchQuery }: LabResultCardProp) => {
+interface LabResultsProps {
+  labResults: LabResultFromAPIFormatted[];
+  examsIds: string[];
+  lat: string;
+  lng: string;
+  resultsSearchUrl: string;
+}
 
+const LabResultCard = ({ result, resultsSearchUrl }: LabResultCardProp) => {
   const router = useRouter();
 
   return (
     <Card className="card">
       <CardHeader>
         <div className="img-div">
-          <img src={data.lab.company.logo} alt="Logo da companhia"/>
+          <img src={result?.lab.company.logo} alt="Logo da companhia"/>
         </div>
         <HeaderInfo>
-          <h2>{data.lab?.title}</h2>
+          <h2>{`${result?.lab.company.title} - ${result?.lab.title}`}</h2>
           {/* <Stars>
             <img src={star} alt="Avaliações icon"/>
             <span>4.2 <span>(41 avaliações)</span></span>
@@ -46,29 +53,21 @@ const LabResultCard = ({ data, searchQuery }: LabResultCardProp) => {
       </CardHeader>
       <CardFooter>
         <div>
-          <span className="amount-exams">{data?.total_exams} exames encontrados por:</span>
+          <span className="amount-exams">{result?.total_exams} exames encontrados por:</span>
           <Price>
-            <h2>12x de R$ {((data?.total_price)/12).toFixed(2)}</h2>
-            <span>ou {data?.totalPriceFormatted}</span>
+            <h2>12x de R$ {((result?.total_price)/12).toFixed(2)}</h2>
+            <span>ou {result?.totalPriceFormatted}</span>
           </Price>
         </div>
-        <button onClick={() => router.push({ pathname: `${data.lab.id}/detail`, search: searchQuery })}>Ver detalhes</button>
+        <button onClick={() => router.push({ pathname: `${result.lab.id}/detail`, search: resultsSearchUrl })}>Ver detalhes</button>
       </CardFooter>
     </Card>
   );
 }
 
-export default function LabResults() {
-
-  const router = useRouter();
-  const queryParams: QueryParamsProps = router.query;
-
-  const { exams, address } = useSearchExam();
-  const { results, getLabResults } = useLabResults();
-  const { addToast } = useToast();
-
+export default function LabResults({ labResults, examsIds, lat, lng, resultsSearchUrl }: LabResultsProps) {
   const labsLocation = useMemo(() => {
-    const locations = results.map(result => {
+    const locations = labResults.map(result => {
       const { lab } = result;
       const marker = {
         name: `${lab.company.title} - ${lab.title}`,
@@ -78,114 +77,101 @@ export default function LabResults() {
       };
       return marker;
     });
-  
     return locations;
-  }, [results]);
-
-  const examsIds = useMemo(() => {
-    const ids = exams.map(exam => exam.id);
-    
-    return ids;
-  }, [exams]);
-
-  const resultsSearchUrl = useMemo(() => {
-    if (examsIds && address) {
-      const add = address.address;
-      const lat = address.latitude;
-      const lng = address.longitude;
-      const ids = examsIds;
-
-      const addQuery = `add=${add}`;
-      const latQuery = `lat=${lat}`;
-      const lngQuery = `lng=${lng}`;
-
-      const idsQueryArray = ids.map(id => {
-        const idFormatted = `ids[]=${id.toString()}`;
-
-        return idFormatted;
-      });
-
-      const idsQueryWithComma = idsQueryArray.toString();
-
-      const idsQuery = idsQueryWithComma.replace(/,/g, '&');
-
-      const finalQuery = `?${idsQuery}&${addQuery}&${latQuery}&${lngQuery}`;
-
-      return finalQuery;
-    }
-    if (queryParams) {
-      const { add, lat, lng, ids } = queryParams;
-
-      const addQuery = `add=${add}`;
-      const latQuery = `lat=${lat}`;
-      const lngQuery = `lng=${lng}`;
-
-      const idsQueryArray = ids.map(id => {
-        const idFormatted = `ids[]=${id.toString()}`;
-
-        return idFormatted;
-      });
-
-      const idsQueryWithComma = idsQueryArray.toString();
-
-      const idsQuery = idsQueryWithComma.replace(/,/g, '&');
-
-      const finalQuery = `?${idsQuery}&${addQuery}&${latQuery}&${lngQuery}`;
-
-      return finalQuery;
-    }
-  }, [address, examsIds, queryParams]);
-
-  useEffect(() => {
-    if (queryParams) {
-      getLabResults({
-        examsIds: queryParams['ids[]'],
-        address: queryParams.add,
-        latitude: Number(queryParams.lat),
-        longitude: Number(queryParams.lng),
-      });
-    } else if (examsIds && address) {
-      getLabResults({
-        examsIds,
-        address: address.address,
-        latitude: address.latitude,
-        longitude: address.longitude,
-      });
-    } else {
-      router.push('/');
-      addToast({
-        type: 'info',
-        title: 'Informações faltantes',
-        description:
-          'Para pesquisar, informe os exames e um endereço de referência',
-      });
-    }
-  }, [examsIds, address, getLabResults, queryParams, addToast, router]);
+  }, [labResults]);
 
   return (
     <>
       <NavBar />
         <Container>
           <Content>
-            <h1>Buscando {examsIds.length} Exames</h1> 
+            <h1>Buscando {examsIds.length} Exames</h1>
+
+            {labResults.length === 1 ? (
+              <h3>{labResults.length} Laboratório encontrado</h3>
+            ) : (
+              <h3>{labResults.length} Laboratórios encontrados</h3>
+            )}
+
             <LabResultList>
-              {results.map((lab) => {
+              {labResults.map((result) => {
                 return (
-                  <LabResultCard data={lab} searchQuery={resultsSearchUrl}/>
+                  <LabResultCard result={result} resultsSearchUrl={resultsSearchUrl}/>
                 );
               })}
             </LabResultList>
           </Content>
-          {queryParams?.lat && (
+          {lat && lng && (
             <GoogleMap
-              lat={Number(queryParams?.lat)}
-              lng={Number(queryParams?.lng)}
+              lat={Number(lat)}
+              lng={Number(lng)}
               markers={labsLocation}
             />
           )}
         </Container>
         <MapsScript />
       <Footer />
-    </>    
+    </>
   );
+}
+
+export const getServerSideProps: GetServerSideProps<LabResultsProps> = async (context) => {
+  const queryParams: QueryParamsProps = context.query;
+
+  const examsIds = queryParams['ids[]'];
+  const address = queryParams.add;
+  const latitude = Number(queryParams.lat);
+  const longitude = Number(queryParams.lng);
+
+  const addQuery = `add=${address}`;
+  const latQuery = `lat=${latitude}`;
+  const lngQuery = `lng=${longitude}`;
+
+  const idsQueryArray = examsIds.map(id => {
+    const idFormatted = `ids[]=${id.toString()}`;
+
+    return idFormatted;
+  });
+
+  const idsQueryWithComma = idsQueryArray.toString();
+
+  const idsQuery = idsQueryWithComma.replace(/,/g, '&');
+
+  const resultsSearchUrl = `?${idsQuery}&${addQuery}&${latQuery}&${lngQuery}`;
+
+  try {
+    const { data } = await api.get<LabResultFromAPI[]>('/search/results', {
+      params: {
+        ids: examsIds,
+        add: address,
+        lat: latitude,
+        lng: longitude,
+        // completeOnly: options?.onlyExamsCompleteLabs,
+        // dist: options?.maxDistance,
+        // brands: options?.brands,
+      },
+    });
+    const ApiResults = data;
+
+    const resultsFormatted = ApiResults.map(result => {
+      return {
+        ...result,
+        distanceFormatted: formatDistance(result.distance),
+        totalPriceFormatted: formatValue(result.total_price),
+      };
+    });
+
+    return {
+      props: {
+        labResults: resultsFormatted,
+        examsIds,
+        lat: queryParams.lat,
+        lng: queryParams.lng,
+        resultsSearchUrl,
+      }
+    }
+  } catch (err) {
+    console.log(err);
+  }
+
 }
