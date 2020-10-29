@@ -38,7 +38,7 @@ export const OfflineUser = styled.button`
   }
 `;
 
-export const UserAvatarDummy = styled.div`
+export const UserAvatar = styled.div`
   background-color: rgba(188,195,212,0.3);
 
   border-radius: 50%;
@@ -57,6 +57,12 @@ export const UserAvatarDummy = styled.div`
     color: #4D49C4;
     height: 20px;
     width: 20px;
+  }
+
+  img {
+    height: 32px;
+    width: 32px;
+    border-radius: 50%;
   }
 `;
 

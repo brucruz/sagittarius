@@ -65,7 +65,7 @@ const BagBadge = () => {
               </Link>
 
               <Link href="">
-                <button>"Fechar Pedido"</button>
+                <button>Fechar Pedido</button>
               </Link>
             </BagBadgeFooter>
           </BagBadgeMenu>
