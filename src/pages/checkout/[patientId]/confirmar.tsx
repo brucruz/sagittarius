@@ -258,7 +258,7 @@ const OrderReview = () => {
         user && mixpanel.identify(user.id);
         mixpanel.track('Request Schedule');
 
-        if (!user.phone_whatsapp) {
+        if (user.phone_whatsapp === null) {
           setModalOpen(true);
 
           return;
