@@ -21,6 +21,7 @@ interface BagContextData {
   closeBag(): void;
   bagItems: PricesInBag[];
   addBagItem(item: PricesInBag): void;
+  addBagItems(items: PriceFormatted[], currentLab: Lab): void;
   removeBagItem(item: PriceFormatted, selectedLab: PricesInBag): void;
   clearBag(): void;
   bagPrices: PriceFormatted[];
@@ -94,7 +95,60 @@ const BagProvider = ({ children }) => {
         }
       }
     },
-    [bagItems],
+    [bagItems, setBagItems],
+  );
+
+  const addBagItems = useCallback(
+    async (items: PriceFormatted[], currentLab: Lab) => {
+      const itemToAdd: PricesInBag = {
+        id: currentLab.id,
+        title: currentLab.title,
+        slug: currentLab.slug,
+        address: currentLab.address,
+        city: currentLab.city,
+        state: currentLab.state,
+        latitude: currentLab.latitude,
+        longitude: currentLab.longitude,
+        collect_hour: currentLab.collect_hour,
+        open_hour: currentLab.open_hour,
+        company: currentLab.company,
+        company_id: currentLab.company_id,
+        price: items.map((item) => {
+          return {
+            id: item.id,
+            price: item.price,
+            formatted_price: item.formatted_price,
+            created_date: item.created_date,
+            exam: item.exam,
+            exam_id: item.exam_id,
+            lab_id: item.lab_id,
+            lab: item.lab,
+          }
+        }),
+      };
+
+      if (bagItems.length === 0) {
+        setBagItems([itemToAdd]);
+      } else { 
+        const labIndex = bagItems.findIndex(item => item.id === itemToAdd.id);
+        if (labIndex >= 0) {
+          setBagItems([...bagItems.map((item, index) => index === labIndex ? itemToAdd : item)])
+        } else { 
+          setBagItems(currentBagItem => [...currentBagItem, itemToAdd]);
+        }
+      }
+
+      itemToAdd.price.forEach(price => {
+        user && mixpanel.identify(user.id);
+        mixpanel.track('Add Exam To Bag', {
+          Lab: itemToAdd.title,
+          Company: itemToAdd.company.title,
+          Exam: price.exam.title,
+          Price: price.price,
+        });
+      });
+
+    }, [bagItems, setBagItems, user]
   );
 
   const removeBagItem = useCallback(
@@ -181,6 +235,8 @@ const BagProvider = ({ children }) => {
     return labCount;
   }, [bagItems]);
 
+ 
+
   return (
     <BagContext.Provider
       value={{
@@ -189,6 +245,7 @@ const BagProvider = ({ children }) => {
         closeBag,
         bagItems,
         addBagItem,
+        addBagItems,
         removeBagItem,
         clearBag,
         bagPrices,

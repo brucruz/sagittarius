@@ -1,0 +1,184 @@
+import { useState, useCallback, useEffect } from 'react';
+import { useRouter } from 'next/router';
+import mixpanel from 'mixpanel-browser';
+import LabResultFromAPI from '@/@types/LabResultFromAPI';
+import PriceFormatted from '@/@types/PriceFormatted';
+import TotalPriceBagContainer from '@/components/molecule/TotalPriceBagContainer';
+import PageTemplate from "@/components/templates/PageTemplate";
+import { MdClose } from 'react-icons/md';
+import Modal from '@/components/organisms/Modal';
+import GoogleMap from '@/components/organisms/Map';
+import useFetch from '@/services/hooks/useFetch';
+import Navbar from '@/components/organisms/Navbar';
+import Footer from '@/components/organisms/Footer';
+import labIcon from '@/assets/components/molecules/LabInfo/lab.svg';
+import clockIcon from '@/assets/components/molecules/LabInfo/clock.svg';
+import locationIcon from '@/assets/components/molecules/LabInfo/location.svg';
+import { MdKeyboardArrowUp, MdKeyboardArrowDown } from 'react-icons/md';
+import { 
+  Container,
+  Content,
+  CompanyTitle,
+  BagContainer,
+  ExamContainer,
+  LabInfoContainer, 
+  ModalMapContent,
+  ModalMapHeader,
+} from '@/styles/pages/Lab/Detail';
+import LabInfo from '@/components/molecule/LabInfo';
+import Link from 'next/link';
+import Button from '@/components/atom/Button';
+import bagIcon from '@/assets/pages/LabDetail/bag-icon.svg';
+import Checkbox from '@/components/atom/Checkbox';
+import formatValueWo$ from '@/utils/formatValueWo$';
+import { useBag } from '@/hooks/bag';
+import PricesInBag from '@/@types/PricesInBag';
+import { useAuth } from '@/hooks/auth';
+import MapsScript from '@/services/components/MapsScript';
+
+interface QueryParamsProps {
+  ids?: string[];
+  add?: string;
+  lat?: string;
+  lng?: string;
+  lab_id?: string,
+}
+
+interface LabPricesResultFromAPI extends LabResultFromAPI {
+  prices: PriceFormatted[];
+}
+
+export default function Detail() {
+
+  const [displayListExams, setDisplayListExams] = useState(true);
+  const [displayMap, setDisplayMap] = useState(false);
+  const [selectedPrices, setSelectedPrices] = useState<PriceFormatted[]>([]);
+  
+  const router = useRouter();
+  const queryParams: QueryParamsProps = router.query;
+
+  const { addBagItems, bagItems } = useBag();
+  const { user } = useAuth();
+
+  const { data } = useFetch<LabPricesResultFromAPI>(`/search/${queryParams.lab_id}/results`, {
+    params: {
+      ids: queryParams && queryParams['ids[]'],
+      add: queryParams && encodeURIComponent(queryParams.add),
+      lat: queryParams && encodeURIComponent(queryParams.lat),
+      lng: queryParams && encodeURIComponent(queryParams.lng),
+    },
+  });
+
+  useEffect(() => {
+    if (!data) return;
+    setSelectedPrices(data.prices.map(price => price));
+  }, [data]);
+
+  const handlePriceSelection = useCallback(
+    (): void => {
+      addBagItems(selectedPrices, data.lab)
+
+      router.push('/carrinho');
+    }, [addBagItems, selectedPrices],
+  );
+  
+  function handlePriceChange(price: PriceFormatted) {
+    if (selectedPrices.includes(price)) {
+      const priceIndex = selectedPrices.findIndex((selectedPrice) => price.id === selectedPrice.id);
+      const exams = selectedPrices.filter((price, index) => index !== priceIndex && price);
+      setSelectedPrices(exams);
+    } else { 
+      setSelectedPrices([ ...selectedPrices, price ]);
+    }
+  }
+
+  const totalValue = selectedPrices.length > 0 && selectedPrices.map((price) => price.price)?.reduce((acc, cur)=> acc + cur);
+  
+  return data ? (
+    <>
+      <Navbar />
+        <Container>
+          <Content>
+            <CompanyTitle>
+              <img src={data.lab.company.logo} alt="Logo da companhia"/>
+              <div>
+                <h1>{data.lab.company.title} - {data.lab.title}</h1>
+              </div>
+            </CompanyTitle>
+            <LabInfoContainer>
+              <LabInfo icon={locationIcon}> 
+                <LabInfo.InlineContent>
+                  <LabInfo.Title>Localização</LabInfo.Title>
+                  <button type="button" onClick={() => setDisplayMap(true)}>Ver no mapa</button>
+                </LabInfo.InlineContent>
+                <LabInfo.Description>{data.lab.address}</LabInfo.Description>
+              </LabInfo>
+              <LabInfo icon={clockIcon}> 
+                <LabInfo.Title>Horário de Atendimento</LabInfo.Title>
+                <LabInfo.Description>{data.lab.open_hour}</LabInfo.Description>
+                <LabInfo.Title>Horário de Coleta</LabInfo.Title>
+                <LabInfo.Description>{data.lab.collect_hour}</LabInfo.Description>
+              </LabInfo>
+            </LabInfoContainer>
+          </Content>
+          <BagContainer>
+            <div className="content-bag-container">
+              <div className="header-content-bag-container">
+                <span>Exames: {data.exams_found}</span>
+                <button type="button" onClick={() => setDisplayListExams(!displayListExams)}>
+                  {displayListExams ? <MdKeyboardArrowDown /> : <MdKeyboardArrowUp />}
+                </button>
+              </div>
+              {displayListExams && (
+                <div className="list-exams">
+                  <ExamContainer>
+                    {data.prices.map((price) => {
+                      return (
+                        <div key={price.id}>
+                          <Checkbox 
+                            isChecked={selectedPrices.includes(price)}
+                            onChange={() => handlePriceChange(price)}
+                            //description="Esse exame exige preparo" 
+                            label={price.exam.title} 
+                            id={price.exam.id}
+                          />
+                          <span>R$ {formatValueWo$(price.price)}</span>
+                        </div>
+                      )
+                    })}
+                  </ExamContainer>
+                </div>
+              )}
+            </div>
+            <div className="total-price-bag-container">
+              <span>Valor Total:</span>
+              <div className="content-price">
+                <span>À vista R${formatValueWo$(totalValue)} ou</span>
+                <h2>12x de R$ {formatValueWo$((totalValue / 12))}</h2>
+              </div>
+            </div>
+            <div className="footer-bag-container">
+              <Button onClick={() => handlePriceSelection()}>
+                <img src={bagIcon} alt="Ícone de Carrinho"/>
+                Adicionar ao Carrinho
+              </Button>
+            </div>
+          </BagContainer>
+        </Container>
+        <Modal isOpen={displayMap} setIsOpen={() => setDisplayMap(false)}>
+          <ModalMapContent>
+            <ModalMapHeader>
+              <span>Localização</span>
+              <MdClose onClick={() => setDisplayMap(false)}/>
+            </ModalMapHeader>
+            <GoogleMap
+              lat={Number(data.lab.latitude)}
+              lng={Number(data.lab.longitude)}
+            />
+          </ModalMapContent>
+        </Modal>
+        <MapsScript />
+      <Footer />
+    </>
+  ) : (<> </>)
+}
