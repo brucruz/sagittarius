@@ -83,15 +83,9 @@ const SignUpPage = () => {
 
         formRef.current?.setErrors({});
 
-        const phoneRegExp = /^([0-9]{2})([0-9]{4,5})([0-9]{4})$/;
-
         const schema = Yup.object().shape({
           first_name: Yup.string().required('Nome obrigatório.'),
           last_name: Yup.string().required('Sobrenome obrigatório.'),
-          phone_whatsapp: Yup.string().matches(
-            phoneRegExp,
-            'Digite o celular com DDD (somente números).',
-          ).nullable(),
           email: Yup.string()
             .email('Digite um e-mail válido.'),
           birth_date: Yup
