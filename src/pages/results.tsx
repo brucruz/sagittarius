@@ -62,7 +62,7 @@ const LabResultCard = ({ result, resultsSearchUrl }: LabResultCardProp) => {
   );
 }
 
-export default function LabResults({ labResults, examsIds, lat, lng }: LabResultsProps) {
+export default function LabResults({ labResults, examsIds, lat, lng, resultsSearchUrl }: LabResultsProps) {
   const labsLocation = useMemo(() => {
     const locations = labResults.map(result => {
       const { lab } = result;
