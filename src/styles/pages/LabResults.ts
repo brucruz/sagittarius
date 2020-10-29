@@ -15,13 +15,36 @@ export const Container = styled.div`
     justify-content: space-between;
     margin-top: 128px;
     padding: 0 8.3%;
+
+    h1 {
+      font-size: 32px;
+    }
   }
 `;
 
 export const Content = styled.div`
+  h3 {
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 24px;
+    /* identical to box height, or 150% */
+
+    letter-spacing: 0.192941px;
+
+    /* Paragrafo */
+
+    color: #3C4759;
+
+    margin-bottom: 16px;
+  }
+
   @media ${device.laptop} {
     max-width: 49%;
     width: 100%;
+
+    h3 {
+      font-size: 20px;
+    }
   }
 `;
 
@@ -43,7 +66,7 @@ export const CardHeader = styled.div`
   padding: 8px 16px;
   background: #fff;
   height: 100px;
-  
+
   img {
     max-width: 80px;
   }
@@ -70,11 +93,17 @@ export const CardHeader = styled.div`
 
 export const HeaderInfo = styled.div`
   margin-left: 16px;
+  width: 100%;
 
   h2 {
     font-size: 14px;
     line-height: 18px;
-    width: 150px;
+    /* width: 150px; */
+
+    font-weight: 800;
+    letter-spacing: 0.192941px;
+
+    color: #2F2C77;
   }
 
   @media ${device.laptop} {
@@ -83,9 +112,13 @@ export const HeaderInfo = styled.div`
     margin: auto 0;
 
     h2 {
-      max-width: 280px;
+      /* max-width: 280px; */
       width: 100%;
       margin-left: 8px;
+
+      font-weight: bold;
+      font-size: 20px;
+      line-height: 24px;
     }
   }
 `;
@@ -112,8 +145,13 @@ export const CardFooter = styled.div`
   padding: 8px 16px;
 
   .amount-exams {
+    font-weight: bold;
     font-size: 12px;
-    font-weight: 700;
+    line-height: 16px;
+
+    @media ${device.laptop} {
+      line-height: 24px;
+    }
   }
 
   button {
@@ -166,4 +204,5 @@ export const LabResultList = styled.div`
     }
   }
 `;
+
 
