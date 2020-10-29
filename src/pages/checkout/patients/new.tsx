@@ -147,7 +147,7 @@ const SignUpPage = () => {
         });
       }
     },
-    [addToast, birthDate, selectedSex, selectedIdType],
+    [addToast, router, birthDate, selectedSex, selectedIdType],
   );
 
   const errors = useMemo(() => {

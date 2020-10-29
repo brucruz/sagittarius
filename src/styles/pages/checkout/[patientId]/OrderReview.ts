@@ -1,3 +1,4 @@
+import device from "@/utils/devices";
 import styled from "styled-components";
 
 export const Header = styled.section`
@@ -43,3 +44,66 @@ export const HeaderContent = styled.article`
     margin-top: 10px;
   }
 `;
+
+export const ModalHeader = styled.header`
+  padding-top: 18px;
+  padding-left: 18px;
+  padding-right: 18px;
+
+  @media ${device.tablet} {
+    padding-left: 75px;
+    padding-right: 75px;
+  }
+
+  h3 {
+    font-weight: bold;
+    font-size: 24px;
+    line-height: 32px;
+    /* or 133% */
+
+    text-align: center;
+    letter-spacing: 0.192941px;
+
+    /* Azul Heali */
+
+    color: #2F2C77;
+
+    margin-bottom: 20px;
+  }
+
+  h5 {
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 24px;
+    /* or 150% */
+
+    text-align: center;
+    letter-spacing: 0.192941px;
+
+    /* Paragrafo */
+
+    color: #3C4759;
+  }
+`;
+
+export const CloseButton = styled.button`
+  svg {
+      margin-left: calc(100% - 18px);
+    }
+`;
+
+export const ModalFooter = styled.footer`
+  border-top: 1px solid #BCC3D4;
+
+  div {
+    padding-top: 16px;
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-bottom: 15px;
+
+    @media ${device.tablet} {
+    padding-left: 81px;
+    padding-right: 81px;
+  }
+  }
+`

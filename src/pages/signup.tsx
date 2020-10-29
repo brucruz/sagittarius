@@ -61,7 +61,7 @@ const SignUpPage = () => {
     const searchQueries = buildSearchQuery(address, exams);
 
     if (params.isBeforeSchedule && bagItems.length > 0) {
-      router.push('/checkout/patient');
+      router.push('/checkout/patients');
     } else if (searchQueries && exams.length > 0 && address) {
       router.push({
         pathname: '/results',
@@ -81,7 +81,7 @@ const SignUpPage = () => {
 
         const schema = Yup.object().shape({
           first_name: Yup.string().required('Nome obrigatório.'),
-          last_name: Yup.string(),
+          last_name: Yup.string().required('Sobrenome obrigatório.'),
           phone_whatsapp: Yup.string().matches(
             phoneRegExp,
             'Digite o celular com DDD (somente números.)',
@@ -170,7 +170,7 @@ const SignUpPage = () => {
         <InputGroupTitle>Dados Pessoais</InputGroupTitle>
 
         <Input name='first_name' label='Nome *' icon={MdPerson} isSubmit />
-        <Input name='last_name' label='Sobrenome' icon={MdPerson}isSubmit />
+        <Input name='last_name' label='Sobrenome *' icon={MdPerson}isSubmit />
 
         <InputGroupTitle>Contato</InputGroupTitle>
 
