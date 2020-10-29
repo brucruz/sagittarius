@@ -53,12 +53,16 @@ interface FormData {
 }
 
 const AskingRemainingInfo = ({ openModal = false }: ModalData) => {
-  const [displayModal, setDisplayModal] = useState(openModal);
+  const [displayModal, setDisplayModal] = useState(false);
+
+  useEffect(() => {
+    setDisplayModal(openModal);
+  }, [openModal]);
 
   const formRef = useRef<FormHandles>(null);
 
   const router = useRouter();
-  const { token, user } = useAuth();
+  const { token, user, updateUser } = useAuth();
   const { addToast } = useToast();
 
   const { patientId } = router.query;
@@ -90,6 +94,8 @@ const AskingRemainingInfo = ({ openModal = false }: ModalData) => {
       const { data: updatedUser} = await api.put<User>('/profile/update', updateUserData, {
         headers: { Authorization: `Bearer: ${token}` },
       });
+
+      updateUser(updatedUser);
 
       user && mixpanel.identify(user.id);
 
@@ -217,8 +223,6 @@ const OrderReview = () => {
   const formattedPreferredFromDate = preferredDateFrom ? format(preferredDateFrom,'dd/MM/yyyy') : '';
   const formattedPreferredToDate = preferredDateTo ? format(preferredDateTo, 'dd/MM/yyyy') : '';
 
-  console.log(formattedPreferredFromDate);
-
   const quote = useMemo((): Quote | undefined => {
     if (patient && prices.length >= 0) {
       return {
@@ -258,7 +262,7 @@ const OrderReview = () => {
         user && mixpanel.identify(user.id);
         mixpanel.track('Request Schedule');
 
-        if (user.phone_whatsapp === null) {
+        if (!user.phone_whatsapp) {
           setModalOpen(true);
 
           return;
