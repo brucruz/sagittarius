@@ -9,10 +9,15 @@ import { DateRange, HourSelection } from "@/styles/pages/DateSelectionPage";
 import { useDates } from '@/hooks/dates';
 import { parse } from "date-fns";
 
+interface DateErrors {
+  fromDate?: string;
+  toDate?: string;
+}
+
 const DateSelectionPage = () => {
   const [fromDate, setFromDate] = useState<Date>(null);
   const [toDate, setToDate] = useState<Date>(null);
-  const [errors, setErrors] = useState(null)
+  const [errors, setErrors] = useState<DateErrors>(null);
 
   const { selectPreferredFromDate, selectPreferredToDate } = useDates();
 
@@ -33,16 +38,42 @@ const DateSelectionPage = () => {
   const getFromTypedDate = useCallback((date: string) => {
     const parsedDate = parse(date, 'dd/MM/yyyy', new Date());
 
-    console.log(parsedDate);
-
+    setFromDate(parsedDate);
   }, []);
 
   const getToTypedDate = useCallback((date: string) => {
     const parsedDate = parse(date, 'dd/MM/yyyy', new Date());
 
-    console.log(parsedDate);
-
+    setToDate(parsedDate);
   }, []);
+
+  const checkIfToDateIsTrue = useCallback(() => {
+    if (fromDate.toString() === 'Invalid Date') {
+      setErrors({
+        fromDate: 'Data de Nascimento obrigatória. Você deve digitar o endereço no formato: DD/MM/AAAA',
+      });
+    } else {
+      setErrors({
+        fromDate: null,
+      });
+
+      selectPreferredFromDate(fromDate);
+    }
+  }, [fromDate]);
+
+  const checkIfFromDateIsTrue = useCallback(() => {
+    if (toDate.toString() === 'Invalid Date') {
+      setErrors({
+        toDate: 'Data de Nascimento obrigatória. Você deve digitar o endereço no formato: DD/MM/AAAA',
+      });
+    } else {
+      setErrors({
+        toDate: null,
+      });
+
+      selectPreferredToDate(toDate);
+    }
+  }, [toDate]);
 
   return (
     <PageTemplate
@@ -63,7 +94,8 @@ const DateSelectionPage = () => {
           startDate={new Date()}
           getSelectedDate={getFromDate}
           getTypedDate={getFromTypedDate}
-          error='Data de Nascimento obrigatória. Você deve digitar o endereço no formato: DD/MM/AAAA'
+          error={errors?.fromDate && errors.fromDate}
+          onBlur={checkIfToDateIsTrue}
         />
 
         <DateSelector
@@ -72,7 +104,8 @@ const DateSelectionPage = () => {
           startDate={toStartDate}
           getSelectedDate={getToDate}
           getTypedDate={getToTypedDate}
-          error='Data de Nascimento obrigatória. Você deve digitar o endereço no formato: DD/MM/AAAA'
+          error={errors?.toDate && errors.toDate}
+          onBlur={checkIfFromDateIsTrue}
         />
       </DateRange>
 

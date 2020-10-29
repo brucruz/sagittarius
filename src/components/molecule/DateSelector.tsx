@@ -1,5 +1,5 @@
 import { Calendar, DateInput, DateSelectorContainer, ErrorMessage } from "@/styles/components/molecules/DateSelector";
-import { useCallback, useRef, useState } from "react";
+import { InputHTMLAttributes, useCallback, useRef, useState } from "react";
 import DayPicker from "react-day-picker";
 import 'react-day-picker/lib/style.css';
 
@@ -7,7 +7,7 @@ import { format } from 'date-fns'
 
 import { MdDateRange } from "react-icons/md";
 
-interface DateSelectorProps {
+interface DateSelectorProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   name: string;
   startDate: Date;
@@ -17,7 +17,7 @@ interface DateSelectorProps {
   error?: string,
 }
 
-const DateSelector = ({ name, label, startDate, getSelectedDate, getTypedDate, calendar = true, error }: DateSelectorProps) => {
+const DateSelector = ({ name, label, startDate, getSelectedDate, getTypedDate, calendar = true, error, ...rest }: DateSelectorProps) => {
   const [isActive, setIsActive] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date>(null)
 
@@ -53,6 +53,7 @@ const DateSelector = ({ name, label, startDate, getSelectedDate, getTypedDate, c
 
   return (
     <DateSelectorContainer
+      {...rest}
     >
       {label && (<label htmlFor={name}>{label}</label>)}
 

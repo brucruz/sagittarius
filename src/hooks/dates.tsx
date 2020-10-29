@@ -1,11 +1,6 @@
 import { createContext, useCallback, useState, useContext, useEffect } from 'react';
 import mixpanel from 'mixpanel-browser';
 
-export interface DatePeriod {
-  from: Date;
-  to: Date;
-}
-
 interface DatesContextData {
   preferredDateFrom: Date;
   preferredDateTo: Date;
@@ -18,6 +13,8 @@ const DatesContext = createContext<DatesContextData>({} as DatesContextData);
 const DatesProvider = ({ children }) => {
   const [preferredDateFrom, setPreferredDateFrom] = useState<Date>(null);
   const [preferredDateTo, setPreferredDateTo] = useState<Date>(null);
+
+  // const [preferredHours, setPreferredHours] = useState(null);
 
   useEffect(() => {
     const from = localStorage.getItem('@Heali:preferredDateFrom');
@@ -74,7 +71,7 @@ function useDates(): DatesContextData {
   const context = useContext(DatesContext);
 
   if (!context) {
-    throw new Error('useDates must be used within an authProvider');
+    throw new Error('useDates must be used within an datesProvider');
   }
 
   return context;
