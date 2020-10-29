@@ -44,8 +44,6 @@ const DateSelector = ({ name, label, startDate, getSelectedDate, getTypedDate, c
 
     inputRef.current.value = format(date, 'dd/MM/yyyy');
 
-    getTypedDate(inputRef.current.value);
-
     getSelectedDate(date);
 
     setSelectedDate(date);

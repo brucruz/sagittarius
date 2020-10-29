@@ -9,7 +9,7 @@ import { useBag } from "@/hooks/bag";
 import formatValueWo$ from "@/utils/formatValueWo$";
 import { useAuth } from '@/hooks/auth';
 
-export default function Cart() {
+const OrderReview = () => {
 
   const { bagItems, bagTotalPrice, bagPriceCount, removeBagItem } = useBag();
   const { user } = useAuth();
@@ -20,7 +20,7 @@ export default function Cart() {
       buttonType={{
         type: 'go_back_button',
       }}
-      titleMain={{ title: 'Meu carrinho' }}
+      titleMain={{ title: 'Meu Pedido' }}
     >
       <BagContent>
         <ItemsContainer>
@@ -70,7 +70,7 @@ export default function Cart() {
                 }
               }}
             >
-              Agendar Exames
+              Confirmar Pedido
             </Button>
           </div>
         </ConfirmOrder>
@@ -78,3 +78,5 @@ export default function Cart() {
     </PageTemplate>
   );
 }
+
+export default OrderReview;
