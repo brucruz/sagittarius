@@ -53,7 +53,7 @@ const LabResultCard = ({ result, resultsSearchUrl }: LabResultCardProp) => {
       </CardHeader>
       <CardFooter>
         <div>
-          <span className="amount-exams">{result?.total_exams} exames encontrados por:</span>
+          <span className="amount-exams">{result?.exams_found} exames encontrados por:</span>
           <Price>
             <h2>12x de R$ {((result?.total_price)/12).toFixed(2)}</h2>
             <span>ou {result?.totalPriceFormatted}</span>
