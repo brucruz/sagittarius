@@ -76,7 +76,7 @@ const SignUpPage = () => {
           sex: selectedSex,
           document_type: selectedIdType,
           document_id,
-          phone_whatsapp: user.phone_whatsapp,
+          phone_whatsapp: user.phone_whatsapp ? user.phone_whatsapp : '',
           email: user.email,
           relationship: 'self',
         }
