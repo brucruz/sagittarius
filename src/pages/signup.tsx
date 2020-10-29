@@ -157,7 +157,7 @@ const SignUpPage = () => {
       buttonType={{
         type: 'link',
         backLinkUrl: {
-          pathname: '/signup',
+          pathname: '/login',
           query: { isBeforeSchedule: params.isBeforeSchedule && params.isBeforeSchedule.valueOf.toString() }
         }
       }}
