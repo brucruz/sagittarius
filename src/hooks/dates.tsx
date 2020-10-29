@@ -19,24 +19,24 @@ const DatesProvider = ({ children }) => {
   const [preferredHours, setPreferredHours] = useState<string[]>([] as string[]);
 
   useEffect(() => {
-    const from = localStorage.getItem('@Heali:preferredDateFrom');
-    const to = localStorage.getItem('@Heali:preferredDateTo');
+    // const from = localStorage.getItem('@Heali:preferredDateFrom');
+    // const to = localStorage.getItem('@Heali:preferredDateTo');
 
     const hours = localStorage.getItem('@Heali:preferredHours');
 
-    if (from && to && hours) {
-      setPreferredDateFrom(JSON.parse(from));
-      setPreferredDateTo(JSON.parse(to));
+    if (/*from && to &&*/ hours) {
+      // setPreferredDateFrom(JSON.parse(from));
+      // setPreferredDateTo(JSON.parse(to));
       setPreferredHours(JSON.parse(hours));
     } else {
-      setPreferredDateFrom(null);
-      setPreferredDateTo(null);
+      // setPreferredDateFrom(null);
+      // setPreferredDateTo(null);
       setPreferredHours([] as string[]);
     }
   }, []);
 
   const selectPreferredFromDate = useCallback((from: Date): void => {
-    localStorage.setItem('@Heali:preferredDateFrom', JSON.stringify(from));
+    // localStorage.setItem('@Heali:preferredDateFrom', JSON.stringify(from));
 
     mixpanel.register({
         'Preferred Date: from': from,
@@ -48,7 +48,7 @@ const DatesProvider = ({ children }) => {
   }, []);
 
   const selectPreferredToDate = useCallback((to: Date): void => {
-    localStorage.setItem('@Heali:preferredDateTo', JSON.stringify(to));
+    // localStorage.setItem('@Heali:preferredDateTo', JSON.stringify(to));
 
     mixpanel.register({
         'Preferred Date: to': to,

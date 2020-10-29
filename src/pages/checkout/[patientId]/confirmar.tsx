@@ -83,8 +83,10 @@ const OrderReview = () => {
     return labsPrices;
   }, [bagItems]);
 
-  const formattedPreferredFromDate = format(preferredDateFrom, 'dd/MM/yyyy');
-  const formattedPreferredToDate = format(preferredDateTo, 'dd/MM/yyyy');
+  const formattedPreferredFromDate = preferredDateFrom ? format(preferredDateFrom,'dd/MM/yyyy') : '';
+  const formattedPreferredToDate = preferredDateTo ? format(preferredDateTo, 'dd/MM/yyyy') : '';
+
+  console.log(formattedPreferredFromDate);
 
   const quote = useMemo((): Quote | undefined => {
     if (patient && prices.length >= 0) {
@@ -137,7 +139,7 @@ const OrderReview = () => {
             'Ocorreu um erro ao tentar receber a solicitação de agendamento, tente novamente',
         });
       });
-  }, [token, quote, addToast, patient, history, user, prices]);
+  }, [token, quote, addToast, patient, router, user, prices]);
 
   return (
     <PageTemplate
@@ -157,8 +159,8 @@ const OrderReview = () => {
         {preferredDateFrom && preferredDateTo && preferredHours && (
           <HeaderContent>
             <h4>Datas selecionadas: <span>{`${formattedPreferredFromDate} à ${formattedPreferredToDate}`}</span></h4>
-        <h4>Horários selecionados: {preferredHours.map(hour => (
-          <p>{hour}</p>
+            <h4>Horários selecionados: {preferredHours.map(hour => (
+              <p>{hour}</p>
         ))}</h4>
           </HeaderContent>
         )}
