@@ -53,8 +53,8 @@ const DateSelectionPage = () => {
     setToDate(parsedDate);
   }, []);
 
-  const checkIfToDateIsTrue = useCallback(() => {
-    if (fromDate.toString() === 'Invalid Date') {
+  const checkIfFromDateIsTrue = useCallback(() => {
+    if (fromDate?.toString() === 'Invalid Date') {
       setErrors({
         fromDate: 'Data de Nascimento obrigatória. Você deve digitar o endereço no formato: DD/MM/AAAA',
       });
@@ -67,8 +67,8 @@ const DateSelectionPage = () => {
     }
   }, [fromDate]);
 
-  const checkIfFromDateIsTrue = useCallback(() => {
-    if (toDate.toString() === 'Invalid Date') {
+  const checkIfToDateIsTrue = useCallback(() => {
+    if (toDate?.toString() === 'Invalid Date') {
       setErrors({
         toDate: 'Data de Nascimento obrigatória. Você deve digitar o endereço no formato: DD/MM/AAAA',
       });

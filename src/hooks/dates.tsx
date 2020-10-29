@@ -88,8 +88,6 @@ const DatesProvider = ({ children }) => {
     }
   }, [preferredHours]);
 
-  console.log(preferredHours);
-
   return (
     <DatesContext.Provider
       value={{
