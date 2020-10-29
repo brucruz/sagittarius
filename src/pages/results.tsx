@@ -12,6 +12,7 @@ import api from '@/services/api';
 import formatDistance from '@/utils/formatDistance';
 import formatValue from '@/utils/formatValue';
 import LabResultFromAPI from '@/@types/LabResultFromAPI';
+import { useRouter } from 'next/router';
 
 interface QueryParamsProps {
   ids?: string[];
@@ -34,6 +35,8 @@ interface LabResultsProps {
 }
 
 const LabResultCard = ({ result, resultsSearchUrl }: LabResultCardProp) => {
+  const router = useRouter();
+
   return (
     <Card className="card">
       <CardHeader>
@@ -56,7 +59,7 @@ const LabResultCard = ({ result, resultsSearchUrl }: LabResultCardProp) => {
             <span>ou {result?.totalPriceFormatted}</span>
           </Price>
         </div>
-        <button onClick={() => router.push({ pathname: `${data.lab.id}/detail`, search: resultsSearchUrl })}>Ver detalhes</button>
+        <button onClick={() => router.push({ pathname: `${result.lab.id}/detail`, search: resultsSearchUrl })}>Ver detalhes</button>
       </CardFooter>
     </Card>
   );
@@ -93,7 +96,7 @@ export default function LabResults({ labResults, examsIds, lat, lng, resultsSear
             <LabResultList>
               {labResults.map((result) => {
                 return (
-                  <LabResultCard data={result} searchQuery={resultsSearchUrl}/>
+                  <LabResultCard result={result} resultsSearchUrl={resultsSearchUrl}/>
                 );
               })}
             </LabResultList>
@@ -119,7 +122,7 @@ export const getServerSideProps: GetServerSideProps<LabResultsProps> = async (co
   const address = queryParams.add;
   const latitude = Number(queryParams.lat);
   const longitude = Number(queryParams.lng);
-  
+
   const addQuery = `add=${address}`;
   const latQuery = `lat=${latitude}`;
   const lngQuery = `lng=${longitude}`;
@@ -134,7 +137,7 @@ export const getServerSideProps: GetServerSideProps<LabResultsProps> = async (co
 
   const idsQuery = idsQueryWithComma.replace(/,/g, '&');
 
-  const resultsSearchUrl = `?${idsQuery}&${addQuery}&${latQuery}&${lngQuery}`;              
+  const resultsSearchUrl = `?${idsQuery}&${addQuery}&${latQuery}&${lngQuery}`;
 
   try {
     const { data } = await api.get<LabResultFromAPI[]>('/search/results', {
