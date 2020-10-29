@@ -119,8 +119,7 @@ export const BagBadgeLabSummary = styled.section`
       img {
         width: 40px;
         height: 40px;
-        /* contain */
-      }
+        object-fit: contain;      }
     }
 
     div:last-child {

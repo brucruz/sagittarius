@@ -91,7 +91,7 @@ export default function Patients() {
       }}
       buttonType={{
         type: 'link',
-        backLinkUrl: '/checkout/bag',
+        backLinkUrl: '/carrinho',
       }}
     >
       <Content>

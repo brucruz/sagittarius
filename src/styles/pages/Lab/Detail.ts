@@ -36,8 +36,9 @@ export const CompanyTitle = styled.div`
   align-items: center;
 
   img {
-    width: 70px; 
+    width: 70px;
     height: 70px;
+    object-fit: contain;
   }
 
   h1 {
@@ -49,8 +50,8 @@ export const CompanyTitle = styled.div`
 
   @media ${device.laptop} {
     border-bottom: none;
-  } 
-  
+  }
+
   & > div {
     margin-left: 12px;
 
@@ -119,21 +120,21 @@ export const BagContainer = styled.div`
 
     button {
       background: rgba(188,195,212,0.3);
-  
+
       height: 32px;
       width: 32px;
-  
+
       border-radius: 50%;
       border: 0;
-  
+
       margin-right: 12px;
       margin-top: 8px;
       margin-bottom: 8px;
-  
+
       display: flex;
       align-items: center;
       justify-content: center;
-  
+
       svg {
         color: #4D49C4;
         height: 20px;
@@ -275,7 +276,7 @@ export const ModalMapContent = styled.div`
       max-width: 100% !important;
     }
   }
-`;  
+`;
 
 export const ModalMapHeader = styled.header`
   display: flex;
@@ -283,7 +284,7 @@ export const ModalMapHeader = styled.header`
   align-items: center;
   padding: 12px 20px;
   border: 1px solid #BCC3D4;
-  
+
   span {
     font-size: 20px;
     font-weight: 700;
@@ -291,7 +292,7 @@ export const ModalMapHeader = styled.header`
     letter-spacing: 0.192941px;
     color: #4D49C4;
   }
-  
+
   svg {
     fill: #BCC3D4;
     height: 20px;
