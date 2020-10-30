@@ -58,10 +58,10 @@ export default function Login() {
     const searchQueries = buildSearchQuery(address, exams);
 
     if (params.isBeforeSchedule && bagItems.length > 0) {
-      router.push('/checkout/patient');
+      router.push('/checkout/paciente');
     } else if (searchQueries && exams.length > 0 && address) {
       router.push({
-        pathname: '/results',
+        pathname: '/resultado',
         search: searchQueries || '',
       });
     } else {
@@ -208,7 +208,7 @@ export default function Login() {
           />
         </SocialButtonsContainer>
         <Link href={{
-          pathname: '/signup',
+          pathname: '/cadastro',
           query: { isBeforeSchedule: !!params.isBeforeSchedule }
         }}>
           <RegisterLink>Não tem uma conta? <span>Cadastre-se</span></RegisterLink>

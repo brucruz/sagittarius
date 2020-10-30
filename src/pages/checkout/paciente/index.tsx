@@ -58,7 +58,7 @@ export default function Patients() {
 
         mixpanel.track('Select Patient');
 
-        router.push(`/checkout/patients/self`);
+        router.push(`/checkout/paciente/eu-mesmo`);
 
         return;
       } else {
@@ -77,7 +77,7 @@ export default function Patients() {
 
         mixpanel.track('Select Patient');
 
-        router.push(`/checkout/${patient.id}/date`);
+        router.push(`/checkout/${patient.id}/data`);
       }
     },
     [user, selectedPatient, patients],
@@ -129,7 +129,7 @@ export default function Patients() {
 
         <Schedule>
           <span>Quer agendar para outra pessoa?</span>
-          <span>Você pode <Link href='/checkout/patients/new'><a>cadastrar amigos e parentes</a></Link></span>
+          <span>Você pode <Link href='/checkout/paciente/novo'><a>cadastrar amigos e parentes</a></Link></span>
         </Schedule>
 
         <ButtonNext text="Continuar" onClick={handlePatientSelection}/>

@@ -60,37 +60,36 @@ const SignUpPage = () => {
   const handleSubmit = useCallback(
     async (data: SigUpFormData) => {
       try {
-        const { document_id } = data;
+        const { document_id, email, first_name, last_name, phone_whatsapp } = data;
 
         const createPatientData = {
-          first_name: user.first_name,
-          last_name: user.last_name,
+          first_name,
+          last_name,
           birth_date: parse(birthDate, 'dd/MM/yyyy', new Date()),
           sex: selectedSex,
           document_type: selectedIdType,
           document_id,
-          email: user.email,
-          relationship: 'self',
-        }
-
-        if (user.phone_whatsapp) {
-          createPatientData['phone_whatsapp'] = user.phone_whatsapp;
+          phone_whatsapp,
+          email,
         }
 
         formRef.current?.setErrors({});
 
+        const phoneRegExp = /^([0-9]{2})([0-9]{4,5})([0-9]{4})$/;
+
         const schema = Yup.object().shape({
           first_name: Yup.string().required('Nome obrigatório.'),
           last_name: Yup.string().required('Sobrenome obrigatório.'),
+          phone_whatsapp: Yup.string().matches(
+            phoneRegExp,
+            'Digite o celular com DDD (somente números).',
+          ),
           email: Yup.string()
             .email('Digite um e-mail válido.'),
-          birth_date: Yup
-            .date()
-            .required('Data de Nascimento obrigatória. Você deve digitar o endereço no formato: DD/MM/AAAA'),
+          birth_date: Yup.date().required('Data de Nascimento obrigatória. Você deve digitar o endereço no formato: DD/MM/AAAA'),
           sex: Yup.string().oneOf(['male', 'female']).required('Sexo é obrigatório'),
           document_type: Yup.string().oneOf(['RG', 'CPF', 'Passaporte', 'RNE']).required('Tipo de documento é obrigatório.'),
           document_id: Yup.string().required('Documento é obrigatório.'),
-          relationship: Yup.string(),
         });
 
         await schema.validate(createPatientData, {
@@ -107,7 +106,7 @@ const SignUpPage = () => {
           {
             'Selected Patient': `${patient.first_name} ${patient.last_name}`,
             'New Patient': true,
-            Self: true,
+            Self: false,
           },
           1,
         );
@@ -115,7 +114,7 @@ const SignUpPage = () => {
         mixpanel.track('Select Patient');
 
         router.push({
-          pathname: `/checkout/${patient.id}/date`,
+          pathname: `/checkout/${patient.id}/data`,
         });
 
         addToast({
@@ -133,7 +132,7 @@ const SignUpPage = () => {
           return;
         }
 
-        console.log(err.response?.data);
+        console.log(err.response.data);
 
         addToast({
           type: 'error',
@@ -142,7 +141,7 @@ const SignUpPage = () => {
         });
       }
     },
-    [addToast, router, birthDate, selectedSex, selectedIdType, formRef],
+    [addToast, router, birthDate, selectedSex, selectedIdType],
   );
 
   const errors = useMemo(() => {
@@ -154,15 +153,20 @@ const SignUpPage = () => {
       buttonType={{
         type: 'link',
         backLinkUrl: {
-          pathname: '/checkout/patients',
+          pathname: '/checkout/paciente',
         }
       }}
       titleMain={{
         title: 'Cadastrar Paciente',
-        subTitle:  'Insira seus dados abaixo'
+        subTitle:  'Digite os dados do paciente para continuar'
       }}
     >
-      <Form ref={formRef} onSubmit={handleSubmit} >
+      <Form ref={formRef} onSubmit={handleSubmit}>
+        <InputGroupTitle>Dados Pessoais</InputGroupTitle>
+
+        <Input name='first_name' label='Nome *' icon={MdPerson} isSubmit />
+        <Input name='last_name' label='Sobrenome *' icon={MdPerson}isSubmit />
+
         <DateSelector name='birth_date' startDate={new Date} calendar={false} getTypedDate={handleGetBirthDate} label='Data de nascimento' error={errors?.birth_date}/>
 
         <InputGroupTitle>Sexo *</InputGroupTitle>
@@ -194,6 +198,11 @@ const SignUpPage = () => {
         </RadioButtonGroup>
 
         <Input name='document_id' label='Número de Documento *' icon={MdVerifiedUser} isSubmit />
+
+        <InputGroupTitle>Contato</InputGroupTitle>
+
+        <Input name='email' label='E-mail *' icon={MdMail} isSubmit />
+        <Input name='phone_whatsapp' label='WhatsApp *' icon={FaWhatsapp} isSubmit />
 
         <Button
           type='submit'

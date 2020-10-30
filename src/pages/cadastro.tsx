@@ -54,10 +54,10 @@ const SignUpPage = () => {
     const searchQueries = buildSearchQuery(address, exams);
 
     if (params.isBeforeSchedule && bagItems.length > 0) {
-      router.push('/checkout/patients');
+      router.push('/checkout/paciente');
     } else if (searchQueries && exams.length > 0 && address) {
       router.push({
-        pathname: '/results',
+        pathname: '/resultado',
         search: searchQueries || '',
       });
     } else {

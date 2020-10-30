@@ -60,7 +60,7 @@ const LabResultCard = ({
         Lab: lab.title,
       });
 
-      router.push({ pathname: `${result.lab.id}/detail`, search: resultsSearchUrl })
+      router.push({ pathname: `${result.lab.id}/detalhe`, search: resultsSearchUrl })
     },
     [user, router, resultsSearchUrl],
   );

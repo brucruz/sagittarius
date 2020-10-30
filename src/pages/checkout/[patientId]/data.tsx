@@ -98,7 +98,7 @@ const DateSelectionPage = () => {
       }}
       buttonType={{
         type: 'link',
-        backLinkUrl: '/checkout/patients'
+        backLinkUrl: '/checkout/paciente'
       }}
     >
 
