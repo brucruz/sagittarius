@@ -295,7 +295,6 @@ const OrderReview = () => {
         type: 'go_back_button',
       }}
       titleMain={{ title: 'Meu Pedido' }}
-      containerStyle={{ maxWidth: 900 }}
     >
       <Header>
         {patient && (
