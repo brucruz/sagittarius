@@ -89,6 +89,9 @@ export const ModalHeader = styled.header`
 export const CloseButton = styled.button`
   svg {
       margin-left: calc(100% - 18px);
+      color: #BCC3D4;
+      height: 20px;
+      width: 20px;
     }
 `;
 

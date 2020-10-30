@@ -12,16 +12,16 @@ interface PageTemplateProps extends HTMLAttributes<HTMLDivElement>{
   };
   // backLinkUrl: UrlObject | string;
   buttonType: GoBackProps;
+  containerStyle?: object;
 }
 
-const PageTemplate = ({ children, titleMain, buttonType }: PageTemplateProps) => {
-
+const PageTemplate = ({ children, titleMain, buttonType, containerStyle = { maxWidth: 400 } }: PageTemplateProps) => {
   const router = useRouter();
 
   return (
     <>
       <Navbar />
-        <Container className={router.pathname === '/carrinho' && 'cart-width'}>
+        <Container className={router.pathname === '/carrinho' && 'cart-width'} style={containerStyle} >
           <PageHeader buttonType={buttonType} />
 
           {titleMain && <TitleMain title={titleMain.title} subtitle={titleMain.subTitle}/> }
