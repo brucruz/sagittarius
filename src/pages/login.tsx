@@ -61,7 +61,7 @@ export default function Login() {
       router.push('/checkout/paciente');
     } else if (searchQueries && exams.length > 0 && address) {
       router.push({
-        pathname: '/resultados',
+        pathname: '/resultado',
         search: searchQueries || '',
       });
     } else {

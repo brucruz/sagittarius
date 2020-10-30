@@ -153,7 +153,7 @@ const SearchExam = () => {
     });
 
     router.push({
-      pathname: '/resultados',
+      pathname: '/resultado',
       search: resultsSearchUrl,
     });
   }, [router, user, addToast, resultsSearchUrl, exams, address, examsTitles]);
