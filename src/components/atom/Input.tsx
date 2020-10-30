@@ -64,8 +64,8 @@ const Input = ({
 
   if(isSubmit) {
     const { fieldName, registerField } = useField(name);
-
     useEffect(() => {
+
       registerField({
         name: fieldName,
         ref: inputRef.current,
