@@ -15,6 +15,9 @@ import mastercardImg from '@/assets/pages/Home/master-card.svg';
 import visaImg from '@/assets/pages/Home/visa-card.svg';
 import dinnerImg from '@/assets/pages/Home/dinner-card.svg';
 import picpayImg from '@/assets/pages/Home/picpay-card.svg';
+import { useEffect } from 'react';
+import mixpanel from 'mixpanel-browser';
+import { useAuth } from '@/hooks/auth';
 
 const SearchExam = dynamic(
   () => import("@/components/organisms/SearchExam"),
@@ -25,6 +28,15 @@ const SearchExam = dynamic(
 );
 
 const Home = () => {
+  const { user } = useAuth();
+
+  useEffect(() => {
+    user && mixpanel.identify(user.id);
+    mixpanel.track('Page View', {
+      'Page Title': 'Home',
+    });
+  }, [user]);
+
   return (
     <>
       <MapsScript />
