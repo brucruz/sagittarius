@@ -17,7 +17,7 @@ export default function ThankYou() {
           Solicitação de Agendamento!
         </Title>
         <Subtitle>Em instantes você receberá as orientações <br />em seu E-mail e WhatsApp.</Subtitle>
-        <Link href="/">
+        <Link href='/'>
           <ButtonNext text="Continuar navegando" />
         </Link>
       </Content>
