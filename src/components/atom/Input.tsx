@@ -152,20 +152,7 @@ const Input = ({
 
     inputRef.current.value = '';
     setIsFilled(false);
-
-    // ReactGA.event({
-    //   category: 'search',
-    //   action: 'click',
-    //   label: user
-    //     ? `UserId ${user.id} - Added ${clickedExam.title} to search params`
-    //     : `Unknown user - Added ${clickedExam.title} to search params`,
-    // });
-
-    user && mixpanel.identify(user.id);
-    mixpanel.track('Add Exam To Search', {
-      Exam: exam.title,
-    });
-  }, [suggestions, addExam, user]);
+  }, [suggestions, addExam]);
 
   const handleExamRemove = useCallback((exam: Exam) => {
     exams.length === 0 && setIsOpenSelectedExams(false);
