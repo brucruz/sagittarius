@@ -193,12 +193,13 @@ export const getServerSideProps: GetServerSideProps<LabDetailProps> = async (con
   const queryParams: QueryParamsProps = context.query;
 
   const { data } = await api.get<LabPricesResultFromAPI>(`/search/${queryParams.lab_id}/results`, {
-    params: {
-      ids: queryParams && queryParams['ids[]'],
-      add: queryParams && encodeURIComponent(queryParams.add),
-      lat: queryParams && encodeURIComponent(queryParams.lat),
-      lng: queryParams && encodeURIComponent(queryParams.lng),
-    },
+    params: queryParams,
+    // params: {
+    //   ids: queryParams && queryParams['ids[]'],
+    //   add: queryParams && encodeURIComponent(queryParams.add),
+    //   lat: queryParams && encodeURIComponent(queryParams.lat),
+    //   lng: queryParams && encodeURIComponent(queryParams.lng),
+    // },
   });
 
   return {
