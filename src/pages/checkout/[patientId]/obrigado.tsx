@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import PageTemplate from '@/components/templates/PageTemplate';
 import { Smile, Title, Subtitle, Content, ModalContainer } from '@/styles/pages/checkout/[patientId]/ThankYou';
 import Button from '@/components/atom/Button';
@@ -9,6 +9,8 @@ import Modal from '@/components/organisms/Modal';
 import starUnfilled from '@/assets/pages/ThankYou/star-unfilled.svg';
 import starFilled from '@/assets/pages/ThankYou/star-filled.svg';
 import { useAuth } from '@/hooks/auth';
+import { useRouter } from 'next/router';
+import mixpanel from 'mixpanel-browser';
 
 interface star {
   id: number,
@@ -18,6 +20,14 @@ interface star {
 export default function ThankYou() {
 
   const { user } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    user && mixpanel.identify(user.id);
+    mixpanel.track('Page View', {
+      'Page Title': 'Thank Yoy Page',
+    });
+  }, [user]);
 
   const [rateStars, setRateStart] = useState<star[]>([
     {
@@ -75,6 +85,16 @@ export default function ThankYou() {
     }));
   }
 
+  const handleTrackStarSubmit = useCallback(() => {
+    user && mixpanel.identify(user.id);
+
+    mixpanel.register({
+      'Last NPS Rating': userRate,
+    });
+
+    mixpanel.track_links('#nps-redirect', 'NPS - Research Button Click');
+  }, [user, router]);
+
   return (
     <PageTemplate
       buttonType={{
@@ -106,12 +126,12 @@ export default function ThankYou() {
               {rateStars.map((star: star) => {
                 return (
                   <div key={star.id}>
-                    <img 
+                    <img
                       onClick={() => {
                         setUserRate(star.id);
                         handleChangeStar(star.id);
                       }}
-                      src={star.isFilled ? starFilled : starUnfilled} 
+                      src={star.isFilled ? starFilled : starUnfilled}
                       alt="Ícone de estrela"
                     />
                     {star.id}
@@ -122,9 +142,11 @@ export default function ThankYou() {
           </div>
           <div>
             <Button type="button">
-              <a 
+              <a
                 href={`https://airtable.com/shrGy6kCQJwvozf2T?prefill_Name=${user?.first_name}%20${user?.last_name}&prefill_Email=${user?.email}&prefill_NPS Score=${userRate}`}
                 target="blank"
+                id='nps-redirect'
+                onClick={handleTrackStarSubmit}
               >
                 Enviar avaliação
               </a>
