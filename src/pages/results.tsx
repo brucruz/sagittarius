@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import NavBar from '@/components/organisms/Navbar';
 import Footer from '@/components/organisms/Footer';
 import { Content, Container, Card, CardHeader, CardFooter, HeaderInfo, Stars, Price, LabResultList } from '@/styles/pages/LabResults';
@@ -13,6 +13,9 @@ import formatDistance from '@/utils/formatDistance';
 import formatValue from '@/utils/formatValue';
 import LabResultFromAPI from '@/@types/LabResultFromAPI';
 import { useRouter } from 'next/router';
+import { useAuth } from '@/hooks/auth';
+import mixpanel from 'mixpanel-browser';
+import Lab from '@/@types/Lab';
 import isArray from '@/utils/isArray';
 
 interface QueryParamsProps {
@@ -40,6 +43,27 @@ const LabResultCard = ({
   resultsSearchUrl
 }: LabResultCardProp) => {
   const router = useRouter();
+  const { user } = useAuth();
+
+  useEffect(() => {
+    user && mixpanel.identify(user.id);
+    mixpanel.track('Page View', {
+      'Page Title': 'Lab Results',
+    });
+  }, [user]);
+
+  const handleTrackLabClick = useCallback(
+    (lab: Lab): void => {
+      user && mixpanel.identify(user.id);
+      mixpanel.track('Select Lab', {
+        Company: lab.company.title,
+        Lab: lab.title,
+      });
+
+      router.push({ pathname: `${result.lab.id}/detail`, search: resultsSearchUrl })
+    },
+    [user, router, resultsSearchUrl],
+  );
 
   return (
     <Card className="card">
@@ -63,11 +87,7 @@ const LabResultCard = ({
             <span>ou {result?.totalPriceFormatted}</span>
           </Price>
         </div>
-        <button onClick={() => router.push({
-            pathname: `${result.lab.id}/detail`,
-            search: resultsSearchUrl,
-          })}
-        >Ver detalhes</button>
+        <button onClick={() => handleTrackLabClick(result.lab)}>Ver detalhes</button>
       </CardFooter>
     </Card>
   );

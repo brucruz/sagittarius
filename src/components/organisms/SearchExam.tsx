@@ -180,7 +180,12 @@ const SearchExam = () => {
 
   const handleExamSelection = useCallback((exam: Exam): void => {
     addExam(exam);
-  }, []);
+
+    user && mixpanel.identify(user.id);
+    mixpanel.track('Add Exam To Search', {
+      Exam: exam.title,
+    });
+  }, [user]);
 
   const handleClearExamSuggestions = useCallback(() => {
     setExamResults([]);

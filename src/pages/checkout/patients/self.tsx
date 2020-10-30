@@ -45,14 +45,7 @@ const SignUpPage = () => {
   const [selectedSex, setSelectedSex] = useState<string>(null);
   const [selectedIdType, setSelectedIdType] = useState<string>(null);
 
-  // const sendPageView = (currentLocation: any): void => {
-  //   ReactGA.set({ page: currentLocation.pathname });
-  //   ReactGA.pageview(currentLocation?.pathname + currentLocation?.search);
-  // };
-
   useEffect(() => {
-    // sendPageView(location);
-
     user && mixpanel.identify(user.id);
     mixpanel.track('Page View', {
       'Page Title': 'Patient Creation',
@@ -76,9 +69,12 @@ const SignUpPage = () => {
           sex: selectedSex,
           document_type: selectedIdType,
           document_id,
-          phone_whatsapp: user.phone_whatsapp ? user.phone_whatsapp : '',
           email: user.email,
           relationship: 'self',
+        }
+
+        if (user.phone_whatsapp) {
+          createPatientData['phone_whatsapp'] = user.phone_whatsapp;
         }
 
         formRef.current?.setErrors({});
@@ -111,6 +107,7 @@ const SignUpPage = () => {
           {
             'Selected Patient': `${patient.first_name} ${patient.last_name}`,
             'New Patient': true,
+            Self: true,
           },
           1,
         );

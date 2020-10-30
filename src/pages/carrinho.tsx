@@ -8,12 +8,45 @@ import { ItemsContainer, ConfirmOrder, BagContent } from '@/styles/pages/Cart';
 import { useBag } from "@/hooks/bag";
 import formatValueWo$ from "@/utils/formatValueWo$";
 import { useAuth } from '@/hooks/auth';
+import { useCallback } from 'react';
+import mixpanel from 'mixpanel-browser';
 
 export default function Cart() {
 
-  const { bagItems, bagTotalPrice, bagPriceCount, removeBagItem } = useBag();
+  const { bagItems, bagTotalPrice, bagPriceCount, removeBagItem, bagCompanyLabTitles, bagExamsTitles, bagLabCount } = useBag();
   const { user } = useAuth();
   const router = useRouter();
+
+  const handleCheckoutInitiation = useCallback(() => {
+    user && mixpanel.identify(user.id);
+
+    mixpanel.register(
+      {
+        'Selected Labs': bagCompanyLabTitles,
+        'Selected Exams': bagExamsTitles,
+        'Total Price': bagTotalPrice,
+        'Price Count': bagPriceCount,
+        'Lab Count': bagLabCount,
+      },
+      1,
+    );
+
+    mixpanel.track('Initiate Checkout');
+
+    if (!user) {
+      router.push('/login')
+    } else {
+      router.push('/checkout/patients');
+    }
+  }, [
+    user,
+    router,
+    bagCompanyLabTitles,
+    bagExamsTitles,
+    bagTotalPrice,
+    bagPriceCount,
+    bagLabCount,
+  ]);
 
   return (
     <PageTemplate
@@ -62,13 +95,7 @@ export default function Cart() {
           <TotalPriceBagContainer totalPrice={bagTotalPrice}/>
           <div>
             <Button
-              onClick={() => {
-                if (!user) {
-                  router.push('/login')
-                } else {
-                  router.push('/checkout/patients');
-                }
-              }}
+              onClick={handleCheckoutInitiation}
             >
               Agendar Exames
             </Button>

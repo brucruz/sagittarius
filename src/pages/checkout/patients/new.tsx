@@ -45,14 +45,7 @@ const SignUpPage = () => {
   const [selectedSex, setSelectedSex] = useState<string>(null);
   const [selectedIdType, setSelectedIdType] = useState<string>(null);
 
-  // const sendPageView = (currentLocation: any): void => {
-  //   ReactGA.set({ page: currentLocation.pathname });
-  //   ReactGA.pageview(currentLocation?.pathname + currentLocation?.search);
-  // };
-
   useEffect(() => {
-    // sendPageView(location);
-
     user && mixpanel.identify(user.id);
     mixpanel.track('Page View', {
       'Page Title': 'Patient Creation',
@@ -113,6 +106,7 @@ const SignUpPage = () => {
           {
             'Selected Patient': `${patient.first_name} ${patient.last_name}`,
             'New Patient': true,
+            Self: false,
           },
           1,
         );

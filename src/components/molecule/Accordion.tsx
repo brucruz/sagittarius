@@ -1,9 +1,9 @@
 import { useCallback, useState } from 'react';
 import htmlParser from 'html-react-parser';
-// import mixpanel from 'mixpanel-browser';
 import { AccordionButton, AccordionPanel } from '@/styles/components/molecules/Accordion';
 import accordionArrow from '@/assets/components/molecules/Accordion/accordion-arrow.svg';
-// import { useAuth } from '../../hooks/auth';
+import { useAuth } from '@/hooks/auth';
+import mixpanel from 'mixpanel-browser';
 
 interface AccordionProps {
   text: {
@@ -16,19 +16,19 @@ interface AccordionProps {
 const Accordion = ({ text, index }: AccordionProps) => {
   const [isActive, setIsActive] = useState(false);
 
-  // const { user } = useAuth();
+  const { user } = useAuth();
 
   const toggleAccordion = useCallback(
     (question: string) => {
       setIsActive(!isActive);
 
-      // user && mixpanel.identify(user.id);
-      // mixpanel.track('Toggle FAQ Question', {
-      //   Question: question,
-      // });
+      user && mixpanel.identify(user.id);
+      mixpanel.track('Toggle FAQ Question', {
+        Question: question,
+      });
     },
     [
-      // user,
+      user,
       isActive,
     ],
   );
