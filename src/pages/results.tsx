@@ -13,6 +13,7 @@ import formatDistance from '@/utils/formatDistance';
 import formatValue from '@/utils/formatValue';
 import LabResultFromAPI from '@/@types/LabResultFromAPI';
 import { useRouter } from 'next/router';
+import isArray from '@/utils/isArray';
 
 interface QueryParamsProps {
   ids?: string[];
@@ -28,13 +29,16 @@ interface LabResultCardProp {
 
 interface LabResultsProps {
   labResults: LabResultFromAPIFormatted[];
-  examsIds: string[];
+  examsIds: string[] | string;
+  address: string;
   lat: string;
   lng: string;
-  resultsSearchUrl: string;
 }
 
-const LabResultCard = ({ result, resultsSearchUrl }: LabResultCardProp) => {
+const LabResultCard = ({
+  result,
+  resultsSearchUrl
+}: LabResultCardProp) => {
   const router = useRouter();
 
   return (
@@ -59,13 +63,24 @@ const LabResultCard = ({ result, resultsSearchUrl }: LabResultCardProp) => {
             <span>ou {result?.totalPriceFormatted}</span>
           </Price>
         </div>
-        <button onClick={() => router.push({ pathname: `${result.lab.id}/detail`, search: resultsSearchUrl })}>Ver detalhes</button>
+        <button onClick={() => router.push({
+            pathname: `${result.lab.id}/detail`,
+            search: resultsSearchUrl,
+          })}
+        >Ver detalhes</button>
       </CardFooter>
     </Card>
   );
 }
 
-export default function LabResults({ labResults, examsIds, lat, lng, resultsSearchUrl }: LabResultsProps) {
+export default function LabResults({
+  labResults,
+  examsIds,
+  address,
+  lat: latitude,
+  lng: longitude,
+  // resultsSearchUrl
+}: LabResultsProps) {
   const labsLocation = useMemo(() => {
     const locations = labResults.map(result => {
       const { lab } = result;
@@ -79,6 +94,25 @@ export default function LabResults({ labResults, examsIds, lat, lng, resultsSear
     });
     return locations;
   }, [labResults]);
+
+  const addQuery = `add=${address}`;
+  const latQuery = `lat=${latitude}`;
+  const lngQuery = `lng=${longitude}`;
+
+  const idsQueryArray =
+    typeof examsIds === 'string' ?
+    `ids[]=${examsIds}` :
+      examsIds.map(id => {
+        const idFormatted = `ids[]=${id.toString()}`;
+
+        return idFormatted;
+      });
+
+  const idsQueryWithComma = idsQueryArray.toString();
+
+  const idsQuery = idsQueryWithComma.replace(/,/g, '&');
+
+  const resultsSearchUrl = `?${idsQuery}&${addQuery}&${latQuery}&${lngQuery}`;
 
   return (
     <>
@@ -101,10 +135,10 @@ export default function LabResults({ labResults, examsIds, lat, lng, resultsSear
               })}
             </LabResultList>
           </Content>
-          {lat && lng && (
+          {latitude && longitude && (
             <GoogleMap
-              lat={Number(lat)}
-              lng={Number(lng)}
+              lat={Number(latitude)}
+              lng={Number(longitude)}
               markers={labsLocation}
             />
           )}
@@ -118,38 +152,10 @@ export default function LabResults({ labResults, examsIds, lat, lng, resultsSear
 export const getServerSideProps: GetServerSideProps<LabResultsProps> = async (context) => {
   const queryParams: QueryParamsProps = context.query;
 
-  const examsIds = queryParams['ids[]'];
-  const address = queryParams.add;
-  const latitude = Number(queryParams.lat);
-  const longitude = Number(queryParams.lng);
-
-  const addQuery = `add=${address}`;
-  const latQuery = `lat=${latitude}`;
-  const lngQuery = `lng=${longitude}`;
-
-  const idsQueryArray = examsIds.map(id => {
-    const idFormatted = `ids[]=${id.toString()}`;
-
-    return idFormatted;
-  });
-
-  const idsQueryWithComma = idsQueryArray.toString();
-
-  const idsQuery = idsQueryWithComma.replace(/,/g, '&');
-
-  const resultsSearchUrl = `?${idsQuery}&${addQuery}&${latQuery}&${lngQuery}`;
-
+  const examsIds = isArray(queryParams['ids[]']) ? queryParams['ids[]'] : [queryParams['ids[]'] ];
   try {
-    const { data } = await api.get<LabResultFromAPI[]>('/search/results', {
-      params: {
-        ids: examsIds,
-        add: address,
-        lat: latitude,
-        lng: longitude,
-        // completeOnly: options?.onlyExamsCompleteLabs,
-        // dist: options?.maxDistance,
-        // brands: options?.brands,
-      },
+    const { data } = await api.get<LabResultFromAPI[]>(`/search/results`, {
+      params: context.query,
     });
     const ApiResults = data;
 
@@ -165,10 +171,10 @@ export const getServerSideProps: GetServerSideProps<LabResultsProps> = async (co
       props: {
         labResults: resultsFormatted,
         examsIds,
+        address: queryParams.add,
         lat: queryParams.lat,
         lng: queryParams.lng,
-        resultsSearchUrl,
-      }
+      },
     }
   } catch (err) {
     console.log(err);
