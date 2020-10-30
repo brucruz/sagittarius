@@ -3,7 +3,7 @@ import * as Yup from 'yup';
 import { FormHandles } from '@unform/core';
 import { Form } from '@unform/web';
 import { useRouter } from 'next/router';
-import { FormEvent, useCallback, useRef, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { GoogleLogin, GoogleLoginResponse } from 'react-google-login';
 import FacebookLogin, { ReactFacebookLoginInfo } from 'react-facebook-login/dist/facebook-login-render-props';
 import { MdEmail, MdLock } from 'react-icons/md';
@@ -23,13 +23,20 @@ interface RouterQueryParams {
   isBeforeSchedule?: boolean;
 }
 
+interface FormProps {
+  email?: string;
+  password?: string;
+}
+
 export default function Login() {
 
   const router = useRouter();
   const formRef = useRef<FormHandles>(null);
 
-  const [emailValue, setEmailValue] = useState('');
-  const [passwordValue, setPasswordValue] = useState('');
+  const [formState, setFormState] = useState<FormProps>({
+    email: '',
+    password: ''
+  });
 
   const { signIn, socialNetworkSignIn } = useAuth();
   const { addToast } = useToast();
@@ -52,14 +59,6 @@ export default function Login() {
       router.push('/');
     }
   }, [address, exams, router, bagItems, params]);
-
-  const handlePasswordChange = useCallback((value: string) => {
-    setPasswordValue(value);
-  }, []);
-
-  const handleEmailChange = useCallback((value: string) => {
-    setEmailValue(value);
-  }, []);
 
   function saveUserAuthenticated(data: AuthState) {
     socialNetworkSignIn(data);
@@ -87,7 +86,7 @@ export default function Login() {
   }
 
   const handleSubmit = useCallback(async (data) => {
-
+  
     try {
 
       formRef.current?.setErrors({});
@@ -139,6 +138,13 @@ export default function Login() {
     }
   }, [authRedirect])
 
+  const handleFormChange = useCallback(() => {
+    setFormState({
+      email: formRef.current.getFieldValue('email'),
+      password: formRef.current.getFieldValue('password')
+    });
+  }, []);
+
   return (
     <PageTemplate
       buttonType={{
@@ -149,15 +155,13 @@ export default function Login() {
         subTitle: 'Digite seus dados para continuar'
       }}
     >
-      <Form ref={formRef} onSubmit={handleSubmit}>
+      <Form ref={formRef} onSubmit={handleSubmit} onChange={handleFormChange}>
         <Input
           name="email"
           label="E-mail"
           type="email"
           icon={MdEmail}
           isSubmit
-          value={emailValue}
-          getInputValue={handleEmailChange}
         />
         <Input
           name="password"
@@ -165,15 +169,13 @@ export default function Login() {
           type="password"
           icon={MdLock}
           isSubmit
-          value={passwordValue}
-          getInputValue={handlePasswordChange}
         />
         <Link href="">
           <ForgotPassword>Esqueci minha senha</ForgotPassword>
         </Link>
         <Button
           type="submit"
-          disabled={!emailValue || !passwordValue}
+          disabled={!formState.password || !formState.email}
         >
           Entrar
         </Button>
