@@ -76,9 +76,12 @@ const SignUpPage = () => {
           sex: selectedSex,
           document_type: selectedIdType,
           document_id,
-          phone_whatsapp: user.phone_whatsapp ? user.phone_whatsapp : '',
           email: user.email,
           relationship: 'self',
+        }
+
+        if (user.phone_whatsapp) {
+          createPatientData['phone_whatsapp'] = user.phone_whatsapp;
         }
 
         formRef.current?.setErrors({});
