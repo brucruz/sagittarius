@@ -8,8 +8,6 @@ import * as gtag from "@/services/analytics";
 import AppProvider from '@/hooks';
 import GlobalStyle from "../styles/GlobalStyle";
 
-
-
 export default function MyApp({ Component, pageProps }) {
   const router = useRouter();
 
@@ -26,6 +24,7 @@ export default function MyApp({ Component, pageProps }) {
     const handleRouteChange = (url: URL) => {
       gtag.pageview(url);
     };
+
     router.events.on("routeChangeComplete", handleRouteChange);
     return () => {
       router.events.off("routeChangeComplete", handleRouteChange);
