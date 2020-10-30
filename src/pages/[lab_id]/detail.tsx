@@ -61,31 +61,41 @@ export default function Detail({ labDetail }: LabDetailProps) {
   const [selectedPrices, setSelectedPrices] = useState<PriceFormatted[]>([]);
 
   const router = useRouter();
-  // const queryParams: QueryParamsProps = router.query;
 
-  const { addBagItems, bagItems } = useBag();
+  const { addBagItems } = useBag();
   const { user } = useAuth();
 
-  // const { data } = useFetch<LabPricesResultFromAPI>(`/search/${queryParams.lab_id}/results`, {
-  //   params: {
-  //     ids: queryParams && queryParams['ids[]'],
-  //     add: queryParams && encodeURIComponent(queryParams.add),
-  //     lat: queryParams && encodeURIComponent(queryParams.lat),
-  //     lng: queryParams && encodeURIComponent(queryParams.lng),
-  //   },
-  // });
+  useEffect(() => {
+    user && mixpanel.identify(user.id);
+    mixpanel.track('Page View', {
+      'Page Title': 'Lab Detail',
+    });
+  }, [user]);
 
   useEffect(() => {
     if (!labDetail) return;
     setSelectedPrices(labDetail.prices.map(price => price));
   }, [labDetail]);
 
+  const selectedExamsTitles = selectedPrices.map(price => price.exam.title);
+  const selectedPricesValues = selectedPrices.map(price => price.price);
+  const selectedTotalPrice = selectedPricesValues.reduce((total, price) => total + price, 0);
+
   const handlePriceSelection = useCallback(
     (): void => {
-      addBagItems(selectedPrices, labDetail.lab)
+      addBagItems(selectedPrices, labDetail.lab);
+
+      user && mixpanel.identify(user.id);
+      mixpanel.track('Add Exam To Bag', {
+        Lab: labDetail.lab.title,
+        Company: labDetail.lab.company.title,
+        Exams: selectedExamsTitles,
+        Prices: selectedPricesValues,
+        'Total Price': selectedTotalPrice,
+      });
 
       router.push('/carrinho');
-    }, [addBagItems, selectedPrices],
+    }, [addBagItems, selectedPrices, user],
   );
 
   function handlePriceChange(price: PriceFormatted) {

@@ -67,6 +67,13 @@ const AskingRemainingInfo = ({ openModal = false }: ModalData) => {
 
   const { patientId } = router.query;
 
+  useEffect(() => {
+    user && mixpanel.identify(user.id);
+    mixpanel.track('Page View', {
+      'Page Title': 'Order Review',
+    });
+  }, [user]);
+
   const handleSubmit = useCallback(async ({ phone_whatsapp }: FormData) => {
     try {
       const updateUserData = {

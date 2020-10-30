@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import NavBar from '@/components/organisms/Navbar';
 import Footer from '@/components/organisms/Footer';
 import { Content, Container, Card, CardHeader, CardFooter, HeaderInfo, Stars, Price, LabResultList } from '@/styles/pages/LabResults';
@@ -40,6 +40,13 @@ interface LabResultsProps {
 const LabResultCard = ({ result, resultsSearchUrl }: LabResultCardProp) => {
   const router = useRouter();
   const { user } = useAuth();
+
+  useEffect(() => {
+    user && mixpanel.identify(user.id);
+    mixpanel.track('Page View', {
+      'Page Title': 'Lab Results',
+    });
+  }, [user]);
 
   const handleTrackLabClick = useCallback(
     (lab: Lab): void => {

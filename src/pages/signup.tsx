@@ -43,14 +43,7 @@ const SignUpPage = () => {
 
   const params: RouterQueryParams = router.query;
 
-  // const sendPageView = (currentLocation: any): void => {
-  //   ReactGA.set({ page: currentLocation.pathname });
-  //   ReactGA.pageview(currentLocation?.pathname + currentLocation?.search);
-  // };
-
   useEffect(() => {
-    // sendPageView(location);
-
     user && mixpanel.identify(user.id);
     mixpanel.track('Page View', {
       'Page Title': 'Sign Up',

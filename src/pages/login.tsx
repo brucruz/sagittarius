@@ -3,7 +3,7 @@ import * as Yup from 'yup';
 import { FormHandles } from '@unform/core';
 import { Form } from '@unform/web';
 import { useRouter } from 'next/router';
-import { FormEvent, useCallback, useRef, useState } from 'react';
+import { FormEvent, useCallback, useEffect, useRef, useState } from 'react';
 import { GoogleLogin, GoogleLoginResponse } from 'react-google-login';
 import FacebookLogin, { ReactFacebookLoginInfo } from 'react-facebook-login/dist/facebook-login-render-props';
 import { MdEmail, MdLock } from 'react-icons/md';
@@ -18,6 +18,7 @@ import api from '@/services/api';
 import { buildSearchQuery } from '@/helpers/searchExams';
 import { useSearchExam } from '@/hooks/searchExam';
 import { useBag } from '@/hooks/bag';
+import mixpanel from 'mixpanel-browser';
 
 interface RouterQueryParams {
   isBeforeSchedule?: boolean;
@@ -35,8 +36,16 @@ export default function Login() {
   const { addToast } = useToast();
   const { address, exams } = useSearchExam();
   const { bagItems } = useBag();
+  const { user } = useAuth();
 
   const params: RouterQueryParams = router.query;
+
+  useEffect(() => {
+    user && mixpanel.identify(user.id);
+    mixpanel.track('Page View', {
+      'Page Title': 'Sign In',
+    });
+  }, [user]);
 
   const authRedirect = useCallback(() => {
     const searchQueries = buildSearchQuery(address, exams);
