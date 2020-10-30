@@ -54,6 +54,7 @@ export default function Cart() {
         type: 'go_back_button',
       }}
       titleMain={{ title: 'Meu carrinho' }}
+      containerStyle={{ maxWidth: 900 }}
     >
       <BagContent>
         <ItemsContainer>
