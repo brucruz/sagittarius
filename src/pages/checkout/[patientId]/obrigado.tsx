@@ -1,6 +1,7 @@
 import PageTemplate from '@/components/templates/PageTemplate';
 import { Smile, Title, Subtitle, Content } from '@/styles/pages/checkout/[patientId]/ThankYou';
 import ButtonNext from '@/components/atom/ButtonNext';
+import Link from 'next/link';
 
 export default function ThankYou() {
   return (
@@ -16,7 +17,9 @@ export default function ThankYou() {
           Solicitação de Agendamento!
         </Title>
         <Subtitle>Em instantes você receberá as orientações <br />em seu E-mail e WhatsApp.</Subtitle>
-        <ButtonNext text="Continuar navegando" />
+        <Link href='/'>
+          <ButtonNext text="Continuar navegando" />
+        </Link>
       </Content>
     </PageTemplate>
   );
