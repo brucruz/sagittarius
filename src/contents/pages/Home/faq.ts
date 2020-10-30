@@ -157,16 +157,4 @@ export const faqQuestions: FaqQuestionsType[] = [
       href="https://api.whatsapp.com/send?phone=5511936186364"
       >whatsapp</a>.`,
   },
-  {
-    id: 12,
-    question: 'Tive uma má experiência no dia do exame, o que fazer?',
-    answer: `Sentimos muito por isso. Queremos registrar o ocorrido
-      para que o laboratório possa melhorar o atendimento no futuro. Além disso,
-      colhemos a avaliação dos nossos usuários para que a nota dos laboratórios
-      possa ser um critério de escolha de onde fazer exames.
-      <br>
-      Caso, ainda assim, queira falar com a gente, nos mande um
-      email relatando o ocorrido <a href="mailto:ola@heali.me">ola@heali.me</a>.
-    `,
-  },
 ];
