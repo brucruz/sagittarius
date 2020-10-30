@@ -36,7 +36,7 @@ export default function Cart() {
     if (!user) {
       router.push('/login')
     } else {
-      router.push('/checkout/patients');
+      router.push('/checkout/paciente');
     }
   }, [
     user,
@@ -54,7 +54,6 @@ export default function Cart() {
         type: 'go_back_button',
       }}
       titleMain={{ title: 'Meu carrinho' }}
-      containerStyle={{ maxWidth: 900 }}
     >
       <BagContent>
         <ItemsContainer>
