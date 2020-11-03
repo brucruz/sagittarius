@@ -37,6 +37,7 @@ import { useAuth } from '@/hooks/auth';
 import MapsScript from '@/services/components/MapsScript';
 import { GetServerSideProps } from 'next';
 import api from '@/services/api';
+import SEO from '@/components/atom/SEO';
 
 interface QueryParamsProps {
   ids?: string[];
@@ -110,8 +111,15 @@ export default function Detail({ labDetail }: LabDetailProps) {
 
   const totalValue = selectedPrices.length > 0 && selectedPrices.map((price) => price.price)?.reduce((acc, cur)=> acc + cur);
 
+  const examsTitles = labDetail.prices.map(price => price.exam.title);
+
   return labDetail ? (
     <>
+      <SEO
+        title={`${examsTitles.length === 1 ? `${examsTitles[0]}` : 'Exames'} em ${labDetail.lab.company.title} - ${labDetail.lab.title}`}
+        description={`Agende aqui ${examsTitles.length === 1 ? `o exame de ${examsTitles[0]}` : `os exames de ${examsTitles.join(', ')}`} no laboratório ${labDetail.lab.company.title} - ${labDetail.lab.title}`}
+      />
+
       <Navbar />
         <Container>
           <Content>
@@ -209,7 +217,6 @@ export const getServerSideProps: GetServerSideProps<LabDetailProps> = async (con
   return {
     props: {
       labDetail: data,
-
     },
   }
 };

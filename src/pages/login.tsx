@@ -19,6 +19,7 @@ import { buildSearchQuery } from '@/helpers/searchExams';
 import { useSearchExam } from '@/hooks/searchExam';
 import { useBag } from '@/hooks/bag';
 import mixpanel from 'mixpanel-browser';
+import SEO from '@/components/atom/SEO';
 
 interface RouterQueryParams {
   isBeforeSchedule?: boolean;
@@ -95,7 +96,7 @@ export default function Login() {
   }
 
   const handleSubmit = useCallback(async (data) => {
-  
+
     try {
 
       formRef.current?.setErrors({});
@@ -164,6 +165,11 @@ export default function Login() {
         subTitle: 'Digite seus dados para continuar'
       }}
     >
+      <SEO
+        title='Acesse'
+        description='Faça seu login para agendar seus exames médicos de forma rápida, simples e segura'
+      />
+
       <Form ref={formRef} onSubmit={handleSubmit} onChange={handleFormChange}>
         <Input
           name="email"

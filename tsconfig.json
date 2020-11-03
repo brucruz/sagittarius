@@ -20,7 +20,8 @@
     "baseUrl": "./src",
     "paths": {
       "@/*": ["./*"]
-    }
+    },
+    "types": ["googlemaps"]
   },
   "include": [
     "next-env.d.ts",

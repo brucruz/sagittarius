@@ -16,7 +16,7 @@ const SEO =({
   shouldIndexPage = true,
 }: SEOProps) => {
   const pageTitle = `${title} ${!shouldExcludeTitleSuffix && '| Heali'}`
-  const pageImage = image ? `${process.env.NEXT_PUBLIC_SITE_URL}/${image}` : null;
+  const pageImage = image ? `/${image}` : null;
 
   return (
     <Head>
@@ -29,8 +29,8 @@ const SEO =({
       <meta httpEquiv="x-ua-compatible" content="IE=edge,chrome=1" />
       <meta name="MobileOptimized" content="320" />
       <meta name="HandheldFriendly" content="True" />
-      <meta name="theme-color" content="#121214" />
-      <meta name="msapplication-TileColor" content="#121214" />
+      <meta name="theme-color" content="#2F2C77" />
+      <meta name="msapplication-TileColor" content="#2F2C77" />
       <meta name="referrer" content="no-referrer-when-downgrade" />
       <meta name="google" content="notranslate" />
 
@@ -48,8 +48,8 @@ const SEO =({
 
       <meta name="twitter:title" content={pageTitle} />
       <meta name="twitter:card" content="summary_large_image" />
-      <meta name="twitter:site" content="@rocketseat" />
-      <meta name="twitter:creator" content="@rocketseat" />
+      <meta name="twitter:site" content="@heali.me" />
+      <meta name="twitter:creator" content="@heali.me" />
       <meta name="twitter:image" content={pageImage} />
       <meta name="twitter:image:src" content={pageImage} />
       <meta name="twitter:image:alt" content="Thumbnail" />

@@ -10,6 +10,7 @@ import formatValueWo$ from "@/utils/formatValueWo$";
 import { useAuth } from '@/hooks/auth';
 import { useCallback } from 'react';
 import mixpanel from 'mixpanel-browser';
+import SEO from '@/components/atom/SEO';
 
 export default function Cart() {
 
@@ -55,6 +56,11 @@ export default function Cart() {
       }}
       titleMain={{ title: 'Meu carrinho' }}
     >
+      <SEO
+        title='Carrinho'
+        description='Agende seus exames médicos de forma rápida, simples e segura'
+      />
+
       <BagContent>
         <ItemsContainer>
           <div className="header-items-container">

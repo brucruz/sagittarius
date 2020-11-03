@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import NavBar from '@/components/organisms/Navbar';
 import Footer from '@/components/organisms/Footer';
 import { Content, Container, Card, CardHeader, CardFooter, HeaderInfo, Stars, Price, LabResultList } from '@/styles/pages/LabResults';
@@ -17,6 +17,9 @@ import { useAuth } from '@/hooks/auth';
 import mixpanel from 'mixpanel-browser';
 import Lab from '@/@types/Lab';
 import isArray from '@/utils/isArray';
+import SEO from '@/components/atom/SEO';
+import Exam from '@/@types/Exam';
+import { loadMapApi } from '@/utils/GoogleMapsUtils';
 
 interface QueryParamsProps {
   ids?: string[];
@@ -33,9 +36,11 @@ interface LabResultCardProp {
 interface LabResultsProps {
   labResults: LabResultFromAPIFormatted[];
   examsIds: string[] | string;
+  exams: Exam[];
   address: string;
   lat: string;
   lng: string;
+  // title: string;
 }
 
 const LabResultCard = ({
@@ -96,11 +101,21 @@ const LabResultCard = ({
 export default function LabResults({
   labResults,
   examsIds,
+  exams,
   address,
   lat: latitude,
   lng: longitude,
-  // resultsSearchUrl
+  // title,
 }: LabResultsProps) {
+//   const [scriptLoaded, setScriptLoaded] = useState(false);
+
+//   useEffect(() => {
+//     const googleMapScript = loadMapApi();
+//     googleMapScript.addEventListener('load', function () {
+//         setScriptLoaded(true);
+//     });
+// }, []);
+
   const labsLocation = useMemo(() => {
     const locations = labResults.map(result => {
       const { lab } = result;
@@ -134,8 +149,37 @@ export default function LabResults({
 
   const resultsSearchUrl = `?${idsQuery}&${addQuery}&${latQuery}&${lngQuery}`;
 
+  const examsTitles = exams.map(exam => exam.title);
+
+  // const geocoder = scriptLoaded && new google.maps.Geocoder();
+
+  // scriptLoaded && geocoder.geocode({ address }, (results, status) => {
+  //   if (status === "OK") {
+  //     const firstResult = results[0];
+  //     const addressComponents = firstResult.address_components;
+
+  //     const neighbourhoodComponent = addressComponents.find(component => component.types.includes('sublocality'));
+  //     const neighbourhood = neighbourhoodComponent.long_name;
+
+  //     const cityComponent = addressComponents.find(component => component.types.includes('administrative_area_level_2'));
+  //     const city = cityComponent.long_name;
+
+  //     const stateComponent = addressComponents.find(component => component.types.includes('administrative_area_level_1'));
+  //     const state = stateComponent.short_name;
+  //   } else {
+  //     console.log("Geocode was not successful for the following reason: " + status);
+  //   }
+  // });
+
+  // console.log(title);
+
   return (
     <>
+      <SEO
+        title={`${examsTitles.length === 1 ? `${examsTitles[0]} próximo a` : 'Exames próximos a'} ${address}`}
+        description={`Escolha entre os ${labResults.length} laboratórios próximos a ${address} que oferecem ${examsTitles.length === 1 ? `${examsTitles[0]}` : `os ${examsTitles.length} exames buscados (${examsTitles.join(', ')})`}`}
+      />
+
       <NavBar />
         <Container>
           <Content>
@@ -150,7 +194,7 @@ export default function LabResults({
             <LabResultList>
               {labResults.map((result) => {
                 return (
-                  <LabResultCard result={result} resultsSearchUrl={resultsSearchUrl}/>
+                  <LabResultCard key={result.lab.id} result={result} resultsSearchUrl={resultsSearchUrl}/>
                 );
               })}
             </LabResultList>
@@ -187,13 +231,21 @@ export const getServerSideProps: GetServerSideProps<LabResultsProps> = async (co
       };
     });
 
+    const { data: exams } = await api.get<Exam[]>('exams/list', {
+      params: {
+        exam_ids: examsIds,
+      }
+    });
+
     return {
       props: {
         labResults: resultsFormatted,
         examsIds,
+        exams,
         address: queryParams.add,
         lat: queryParams.lat,
         lng: queryParams.lng,
+        // title: title,
       },
     }
   } catch (err) {
