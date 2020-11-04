@@ -24,9 +24,9 @@ export const Container = styled.div`
   }
 
   &.in-detail-page {
-    width: 83%;
-    margin-left: auto;
-    margin-right: auto;
+    width: calc(100% - 48px);
+    margin-left: 24px;
+    margin-right: 24px;
     margin-top: 88px !important;
   }
 `;

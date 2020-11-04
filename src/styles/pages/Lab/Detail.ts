@@ -20,7 +20,7 @@ export const LabInfoContainer = styled.div`
 
 export const Content = styled.div`
   min-height: calc(100vh);
-  padding: 0 8.3%;
+  padding: 0 24px;
 
   @media ${device.laptop} {
     min-height: fit-content;
