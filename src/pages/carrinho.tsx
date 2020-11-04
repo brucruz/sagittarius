@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 import { useRouter } from 'next/router';
-import { ReactElement, useCallback } from 'react';
+import { ReactElement, useCallback, useEffect } from 'react';
 import PageTemplate from '@/components/templates/PageTemplate';
 import Button from '@/components/atom/Button';
 import TotalPriceBagContainer from '@/components/molecule/TotalPriceBagContainer';
@@ -13,6 +13,8 @@ import formatValueWo$ from '@/utils/formatValueWo$';
 import { useAuth } from '@/hooks/auth';
 import SEO from '@/components/atom/SEO';
 import mixpanel from 'mixpanel-browser';
+import PriceFormatted from '@/@types/PriceFormatted';
+import PricesInBag from '@/@types/PricesInBag';
 
 export default function Cart(): ReactElement {
   const {
@@ -26,6 +28,13 @@ export default function Cart(): ReactElement {
   } = useBag();
   const { user } = useAuth();
   const router = useRouter();
+
+  useEffect(() => {
+    user && mixpanel.identify(user.id);
+    mixpanel.track('Page View', {
+      'Page Title': 'Cart',
+    });
+  }, [user]);
 
   const handleCheckoutInitiation = useCallback(() => {
     user && mixpanel.identify(user.id);
@@ -57,6 +66,22 @@ export default function Cart(): ReactElement {
     bagPriceCount,
     bagLabCount,
   ]);
+
+  const handleRemoveBagItem = useCallback(
+    (price: PriceFormatted, item: PricesInBag) => {
+      removeBagItem(price, item);
+
+      user && mixpanel.identify(user.id);
+      mixpanel.track('Remove Exam from Bag', {
+        Lab: item.title,
+        Company: item.company.title,
+        Exam: price.exam.title,
+        Price: price.price,
+        'Click Source': 'Cart Page',
+      });
+    },
+    [removeBagItem, user],
+  );
 
   return (
     <PageTemplate
@@ -96,7 +121,7 @@ export default function Cart(): ReactElement {
                         <div>
                           <span>R$ {formatValueWo$(price.price)}</span>
                           <img
-                            onClick={() => removeBagItem(price, item)}
+                            onClick={() => handleRemoveBagItem(price, item)}
                             src={deleteIcon}
                             alt="Ícone de deletar exame"
                           />

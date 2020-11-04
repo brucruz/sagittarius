@@ -6,7 +6,6 @@ import {
   ValueProposition,
 } from '@/styles/components/molecules/HomeInitialState';
 import banner from '@/assets/components/organisms/SearchExam/banner.svg';
-import ButtonNext from '../atom/ButtonNext';
 
 interface InitialState {
   beginButtonCallback?: () => void;

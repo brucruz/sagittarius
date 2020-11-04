@@ -71,7 +71,7 @@ const DateSelector = ({
 
       setIsActive(false);
     },
-    [selectedDate],
+    [getSelectedDate, getTypedDate],
   );
 
   return (

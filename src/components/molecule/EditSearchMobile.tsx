@@ -48,7 +48,7 @@ const EditSearch = (): ReactElement => {
 
   useEffect(() => {
     address && setValue(address.address);
-  }, [address]);
+  }, [address, setValue]);
 
   useEffect(() => {
     examTypedValue !== ''
@@ -77,13 +77,19 @@ const EditSearch = (): ReactElement => {
       : setExamResults([]);
   }, [examTypedValue, exams]);
 
-  const handleGetAddressInnerValue = useCallback((address: string) => {
-    setValue(address);
-  }, []);
+  const handleGetAddressInnerValue = useCallback(
+    (address: string) => {
+      setValue(address);
+    },
+    [setValue],
+  );
 
-  const handleExamSelection = useCallback((exam: Exam): void => {
-    addExam(exam);
-  }, []);
+  const handleExamSelection = useCallback(
+    (exam: Exam): void => {
+      addExam(exam);
+    },
+    [addExam],
+  );
 
   const handleClearExamSuggestions = useCallback(() => {
     setExamResults([]);
@@ -108,7 +114,7 @@ const EditSearch = (): ReactElement => {
         search: resultsSearchUrl,
       });
     }
-  }, [resultsSearchUrl]);
+  }, [resultsSearchUrl, router]);
 
   return (
     <Container

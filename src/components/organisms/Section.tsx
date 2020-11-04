@@ -1,4 +1,3 @@
-import { NextComponentType } from 'next';
 import {
   Container,
   SectionItem,

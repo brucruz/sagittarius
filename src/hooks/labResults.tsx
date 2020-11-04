@@ -9,7 +9,6 @@ import {
 import formatValue from '@/utils/formatValue';
 import formatDistance from '@/utils/formatDistance';
 import LabResultFromAPI from '@/@types/LabResultFromAPI';
-import useFetch from '@/services/hooks/useFetch';
 import api from '@/services/api';
 
 interface GetLabResultsOptions {

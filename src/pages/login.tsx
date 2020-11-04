@@ -152,7 +152,7 @@ export default function Login(): ReactElement {
         });
       }
     },
-    [authRedirect],
+    [authRedirect, addToast, signIn],
   );
 
   const handleFormChange = useCallback(() => {

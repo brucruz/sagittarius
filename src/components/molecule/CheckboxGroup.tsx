@@ -15,18 +15,15 @@ const CheckboxGroup = ({
     checkboxes,
   );
 
-  const handleCheckboxChange = useCallback(
-    (checkbox: CheckboxType) => {
-      // const modifiedItems = checkboxItems.map(item => {
-      //   item.id === checkbox.id ? item.isChecked = !checkbox.isChecked : item = item;
+  const handleCheckboxChange = useCallback((checkbox: CheckboxType) => {
+    // const modifiedItems = checkboxItems.map(item => {
+    //   item.id === checkbox.id ? item.isChecked = !checkbox.isChecked : item = item;
 
-      //   return item;
-      // });
+    //   return item;
+    // });
 
-      setCheckboxItems(markedCheckboxes => [...markedCheckboxes, checkbox]);
-    },
-    [checkboxItems],
-  );
+    setCheckboxItems(markedCheckboxes => [...markedCheckboxes, checkbox]);
+  }, []);
 
   return (
     <GroupContainer>
