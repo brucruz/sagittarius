@@ -5,10 +5,10 @@ import {
   MenuLinks,
 } from '@/styles/components/molecules/SidebarMenu';
 import Link from 'next/link';
-import { useState } from 'react';
+import { ReactElement, useState } from 'react';
 import { MdMenu } from 'react-icons/md';
 
-const SidebarMenu = () => {
+const SidebarMenu = (): ReactElement => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (

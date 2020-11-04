@@ -1,5 +1,5 @@
 import { GroupContainer } from '@/styles/components/molecules/CheckboxGroup';
-import { memo, useCallback, useState } from 'react';
+import { memo, ReactElement, useCallback, useState } from 'react';
 import Checkbox, { CheckboxType } from '../atom/Checkbox';
 
 interface CheckboxGroupProps {
@@ -7,7 +7,10 @@ interface CheckboxGroupProps {
   checkboxes: CheckboxType[];
 }
 
-const CheckboxGroup = ({ title, checkboxes }: CheckboxGroupProps) => {
+const CheckboxGroup = ({
+  title,
+  checkboxes,
+}: CheckboxGroupProps): ReactElement => {
   const [checkboxItems, setCheckboxItems] = useState<CheckboxType[]>(
     checkboxes,
   );

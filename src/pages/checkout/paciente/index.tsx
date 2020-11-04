@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { ReactElement, useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 
@@ -12,7 +12,7 @@ import { useAuth } from '@/hooks/auth';
 import api from '@/services/api';
 import Patient from '@/@types/Patient';
 
-export default function Patients() {
+export default function Patients(): ReactElement {
   const [patients, setPatients] = useState<Patient[]>([]);
   const [selectedPatient, setSelectedPatient] = useState<string>(null);
 
@@ -61,7 +61,9 @@ export default function Patients() {
     } else {
       user && mixpanel.identify(user.id);
 
-      const patient = patients.find(patient => patient.id === selectedPatient);
+      const patient = patients.find(
+        _patient => _patient.id === selectedPatient,
+      );
 
       mixpanel.register(
         {
@@ -121,6 +123,7 @@ export default function Patients() {
         {patients.map(patient => {
           if (patient.relationship === 'self') return;
 
+          // eslint-disable-next-line consistent-return
           return (
             <PatientSelector
               key={patient.id}

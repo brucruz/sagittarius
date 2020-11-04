@@ -18,9 +18,9 @@ const Checkbox = ({
   isChecked = false,
   label,
   id,
-  description,
+  description = '',
   ...rest
-}: CheckboxProps) => {
+}: CheckboxProps): ReactElement => {
   return (
     <CheckboxItem
       isChecked={isChecked}

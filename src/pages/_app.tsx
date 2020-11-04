@@ -8,6 +8,7 @@ import * as gtag from '@/services/analytics';
 import AppProvider from '@/hooks';
 import GlobalStyle from '../styles/GlobalStyle';
 
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export default function MyApp({ Component, pageProps }) {
   const router = useRouter();
 
@@ -21,7 +22,7 @@ export default function MyApp({ Component, pageProps }) {
   );
 
   useEffect(() => {
-    const handleRouteChange = (url: URL) => {
+    const handleRouteChange = (url: URL): void => {
       gtag.pageview(url);
     };
 

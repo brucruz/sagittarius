@@ -1,5 +1,6 @@
+import { ReactElement, HTMLAttributes } from 'react';
 import { useRouter } from 'next/router';
-import { HTMLAttributes } from 'react';
+
 import Navbar from '../organisms/Navbar';
 import Footer from '../organisms/Footer';
 import PageHeader, { GoBackProps } from '../molecule/PageHeader';
@@ -19,7 +20,7 @@ const PageTemplate = ({
   children,
   titleMain,
   buttonType,
-}: PageTemplateProps) => {
+}: PageTemplateProps): ReactElement => {
   const router = useRouter();
 
   console.log(router.pathname);

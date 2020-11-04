@@ -1,4 +1,10 @@
-import { createContext, useContext, useState, useCallback } from 'react';
+import {
+  createContext,
+  useContext,
+  useState,
+  useCallback,
+  ReactElement,
+} from 'react';
 
 import formatValue from '@/utils/formatValue';
 import formatDistance from '@/utils/formatDistance';
@@ -34,7 +40,7 @@ const LabResultsContext = createContext<LabResultsContextData>(
   {} as LabResultsContextData,
 );
 
-const LabResultsProvider = ({ children }) => {
+const LabResultsProvider = ({ children }): ReactElement => {
   const [results, setResults] = useState<LabResultFromAPIFormatted[]>([]);
 
   const getLabResults = useCallback(

@@ -4,6 +4,7 @@ import {
   useState,
   useContext,
   useEffect,
+  ReactElement,
 } from 'react';
 import mixpanel from 'mixpanel-browser';
 
@@ -18,7 +19,7 @@ interface DatesContextData {
 
 const DatesContext = createContext<DatesContextData>({} as DatesContextData);
 
-const DatesProvider = ({ children }) => {
+const DatesProvider = ({ children }): ReactElement => {
   const [preferredDateFrom, setPreferredDateFrom] = useState<Date>(null);
   const [preferredDateTo, setPreferredDateTo] = useState<Date>(null);
 
@@ -77,7 +78,7 @@ const DatesProvider = ({ children }) => {
         );
 
         const hours = preferredHours.filter(
-          (hour, index) => index !== hourIndex && hour,
+          (preferredHour, index) => index !== hourIndex && preferredHour,
         );
 
         setPreferredHours(hours);

@@ -3,7 +3,7 @@ import * as Yup from 'yup';
 import { FormHandles } from '@unform/core';
 import { Form } from '@unform/web';
 import { useRouter } from 'next/router';
-import { FormEvent, useCallback, useEffect, useRef, useState } from 'react';
+import { ReactElement, useCallback, useEffect, useRef, useState } from 'react';
 import { GoogleLogin, GoogleLoginResponse } from 'react-google-login';
 import FacebookLogin, {
   ReactFacebookLoginInfo,
@@ -36,7 +36,7 @@ interface FormProps {
   password?: string;
 }
 
-export default function Login() {
+export default function Login(): ReactElement {
   const router = useRouter();
   const formRef = useRef<FormHandles>(null);
 
@@ -75,12 +75,12 @@ export default function Login() {
     }
   }, [address, exams, router, bagItems, params]);
 
-  function saveUserAuthenticated(data: AuthState) {
+  function saveUserAuthenticated(data: AuthState): void {
     socialNetworkSignIn(data);
     authRedirect();
   }
 
-  async function handleGoogleLogin(response) {
+  async function handleGoogleLogin(response): void {
     const onlineResponse = response as GoogleLoginResponse;
 
     const { data } = await api.post('/sessions/google', {

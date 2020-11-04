@@ -4,6 +4,7 @@ import {
   useState,
   useContext,
   useEffect,
+  ReactElement,
 } from 'react';
 import Exam from '@/@types/Exam';
 import Address from '@/@types/Address';
@@ -21,7 +22,7 @@ const SearchExamContext = createContext<SearchExamContextData>(
   {} as SearchExamContextData,
 );
 
-const SearchExamProvider = ({ children }) => {
+const SearchExamProvider = ({ children }): ReactElement => {
   const [examsToQuote, setExamsToQuote] = useState<Exam[]>([] as Exam[]);
 
   useEffect(() => {

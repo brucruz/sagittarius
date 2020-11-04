@@ -1,5 +1,6 @@
+/* eslint-disable no-shadow */
 import { useRouter } from 'next/router';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState, ReactElement } from 'react';
 
 import { MdSearch, MdPlace } from 'react-icons/md';
 import mixpanel from 'mixpanel-browser';
@@ -25,7 +26,7 @@ import InitialState from '../molecule/HomeInitialState';
 
 type SearchDisplay = 'initial' | 'exam' | 'address';
 
-const SearchExam = () => {
+const SearchExam = (): ReactElement => {
   const [searchDisplay, setSearchDisplay] = useState<SearchDisplay>('initial');
   const [examTypedValue, setExamTypedValue] = useState('');
   const [examResults, setExamResults] = useState<Exam[]>([]);

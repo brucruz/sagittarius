@@ -5,6 +5,7 @@ import {
   useState,
   useCallback,
   useMemo,
+  ReactElement,
 } from 'react';
 import mixpanel from 'mixpanel-browser';
 import PriceFormatted from '@/@types/PriceFormatted';
@@ -33,7 +34,7 @@ interface BagContextData {
 
 const BagContext = createContext<BagContextData>({} as BagContextData);
 
-const BagProvider = ({ children }) => {
+const BagProvider = ({ children }): ReactElement => {
   const [isBagOpen, setIsBagOpen] = useState(false);
 
   const [bagItems, setBagItems] = useState<PricesInBag[]>([]);

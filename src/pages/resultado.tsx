@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo } from 'react';
+import { ReactElement, useCallback, useEffect, useMemo } from 'react';
 import NavBar from '@/components/organisms/Navbar';
 import Footer from '@/components/organisms/Footer';
 import {
@@ -47,7 +47,10 @@ interface LabResultsProps {
   lng: string;
 }
 
-const LabResultCard = ({ result, resultsSearchUrl }: LabResultCardProp) => {
+const LabResultCard = ({
+  result,
+  resultsSearchUrl,
+}: LabResultCardProp): ReactElement => {
   const router = useRouter();
   const { user } = useAuth();
 
@@ -98,7 +101,7 @@ const LabResultCard = ({ result, resultsSearchUrl }: LabResultCardProp) => {
             <span>ou {result?.totalPriceFormatted}</span>
           </Price>
         </div>
-        <button onClick={() => handleTrackLabClick(result.lab)}>
+        <button type="button" onClick={() => handleTrackLabClick(result.lab)}>
           Ver detalhes
         </button>
       </CardFooter>
@@ -113,7 +116,7 @@ export default function LabResults({
   lat: latitude,
   lng: longitude,
 }: // resultsSearchUrl
-LabResultsProps) {
+LabResultsProps): ReactElement {
   const labsLocation = useMemo(() => {
     const locations = labResults.map(result => {
       const { lab } = result;
@@ -164,6 +167,7 @@ LabResultsProps) {
             {labResults.map(result => {
               return (
                 <LabResultCard
+                  key={result.lab.id}
                   result={result}
                   resultsSearchUrl={resultsSearchUrl}
                 />
@@ -185,6 +189,7 @@ LabResultsProps) {
   );
 }
 
+// eslint-disable-next-line consistent-return
 export const getServerSideProps: GetServerSideProps<LabResultsProps> = async context => {
   const queryParams: QueryParamsProps = context.query;
 

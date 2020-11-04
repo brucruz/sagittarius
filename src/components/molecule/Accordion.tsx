@@ -16,7 +16,7 @@ interface AccordionProps {
   index: number;
 }
 
-const Accordion = ({ text, index }: AccordionProps) => {
+const Accordion = ({ text, index }: AccordionProps): ReactElement => {
   const [isActive, setIsActive] = useState(false);
 
   const { user } = useAuth();

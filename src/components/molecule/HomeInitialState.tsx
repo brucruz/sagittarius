@@ -1,3 +1,4 @@
+import { ReactElement } from 'react';
 import {
   InitialStateContainer,
   Banner,
@@ -11,7 +12,7 @@ interface InitialState {
   beginButtonCallback?: () => void;
 }
 
-const InitialState = ({ beginButtonCallback }: InitialState) => {
+const InitialState = ({ beginButtonCallback }: InitialState): ReactElement => {
   return (
     <InitialStateContainer>
       <Banner src={banner} alt="banner" />

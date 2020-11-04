@@ -5,7 +5,7 @@ import {
   SectionItemImg,
   SectionItemText,
 } from '@/styles/components/organisms/Section';
-import { HTMLAttributes } from 'react';
+import { HTMLAttributes, ReactElement } from 'react';
 
 interface SectionProps extends HTMLAttributes<HTMLDivElement> {
   title: string;
@@ -17,7 +17,7 @@ interface SectionProps extends HTMLAttributes<HTMLDivElement> {
   }[];
 }
 
-const Section = ({ title, articles, ...rest }: SectionProps) => {
+const Section = ({ title, articles, ...rest }: SectionProps): ReactElement => {
   return (
     <Container {...rest}>
       <h2>{title}</h2>

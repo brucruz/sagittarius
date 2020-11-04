@@ -20,17 +20,18 @@ import mastercardImg from '@/assets/pages/Home/master-card.svg';
 import visaImg from '@/assets/pages/Home/visa-card.svg';
 import dinnerImg from '@/assets/pages/Home/dinner-card.svg';
 import picpayImg from '@/assets/pages/Home/picpay-card.svg';
-import { useEffect } from 'react';
+import { ReactElement, useEffect } from 'react';
 import mixpanel from 'mixpanel-browser';
 import { useAuth } from '@/hooks/auth';
 import Navbar from '../components/organisms/Navbar';
 
 const SearchExam = dynamic(() => import('@/components/organisms/SearchExam'), {
+  // eslint-disable-next-line react/display-name
   loading: () => <InitialState />,
   ssr: true,
 });
 
-const Home = () => {
+const Home = (): ReactElement => {
   const { user } = useAuth();
 
   useEffect(() => {

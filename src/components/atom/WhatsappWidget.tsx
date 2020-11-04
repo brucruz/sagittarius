@@ -1,9 +1,10 @@
 import { useAuth } from '@/hooks/auth';
 import mixpanel from 'mixpanel-browser';
+import { ReactElement } from 'react';
 import { FaWhatsapp } from 'react-icons/fa';
 import { Container } from '../../styles/components/atom/WhatsappWidget';
 
-export default function WhatsappWidget() {
+export default function WhatsappWidget(): ReactElement {
   const { user } = useAuth();
 
   user && mixpanel.identify(user.id);

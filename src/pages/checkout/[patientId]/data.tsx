@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState, ReactElement } from 'react';
 
 import ButtonNext from '@/components/atom/ButtonNext';
 import DateSelector from '@/components/molecule/DateSelector';
@@ -21,7 +21,7 @@ interface DateErrors {
   toDate?: string;
 }
 
-const DateSelectionPage = () => {
+const DateSelectionPage = (): ReactElement => {
   const [fromDate, setFromDate] = useState<Date>(null);
   const [toDate, setToDate] = useState<Date>(null);
   const [errors, setErrors] = useState<DateErrors>(null);
@@ -144,12 +144,13 @@ const DateSelectionPage = () => {
             const { period, hours } = hour;
 
             return (
-              <Group>
+              <Group key={`${hour}-group`}>
                 <h4>{period}</h4>
 
                 <div>
                   {hours.map(checkbox => (
                     <Checkbox
+                      key={`${checkbox.id}-checkbox`}
                       isChecked={preferredHours.includes(checkbox.id)}
                       onChange={() => selectPreferredHour(checkbox.id)}
                       label={checkbox.label}

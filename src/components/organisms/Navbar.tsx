@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
-
+import { ReactElement } from 'react';
 import { useAuth } from '@/hooks/auth';
 import {
   Container,
@@ -17,7 +17,7 @@ const BagBadge = dynamic(() => import('@/components/molecule/BagBadge'), {
   ssr: true,
 });
 
-export default function Navbar() {
+export default function Navbar(): ReactElement {
   const { user } = useAuth();
 
   return (

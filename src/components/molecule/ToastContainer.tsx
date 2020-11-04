@@ -1,3 +1,4 @@
+/* eslint-disable import/no-cycle */
 import { useTransition } from 'react-spring';
 
 import { ToastMessage } from '@/hooks/toast';

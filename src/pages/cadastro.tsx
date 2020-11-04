@@ -10,7 +10,7 @@ import { useBag } from '@/hooks/bag';
 import { useSearchExam } from '@/hooks/searchExam';
 import { useToast } from '@/hooks/toast';
 import { useRouter } from 'next/router';
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef, ReactElement } from 'react';
 import api from '@/services/api';
 import getValidationErrors from '@/utils/getValidationErrors';
 import Input from '@/components/atom/Input';
@@ -32,7 +32,7 @@ interface SigUpFormData {
   password_confirmation: string;
 }
 
-const SignUpPage = () => {
+const SignUpPage = (): ReactElement => {
   const router = useRouter();
   const formRef = useRef<FormHandles>(null);
 

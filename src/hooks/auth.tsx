@@ -1,12 +1,14 @@
-import User from '@/@types/User';
-import mixpanel from 'mixpanel-browser';
 import {
+  ReactElement,
   createContext,
   useCallback,
   useState,
   useContext,
   useEffect,
 } from 'react';
+import User from '@/@types/User';
+import mixpanel from 'mixpanel-browser';
+
 import api from '../services/api';
 // import { Mixpanel } from '../mixpanel';
 
@@ -31,7 +33,7 @@ interface AuthContextData {
 
 const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 
-const AuthProvider = ({ children }) => {
+const AuthProvider = ({ children }): ReactElement => {
   const [data, setData] = useState<AuthState>({} as AuthState);
 
   useEffect(() => {

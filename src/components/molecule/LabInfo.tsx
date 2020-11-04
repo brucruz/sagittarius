@@ -1,4 +1,4 @@
-import { HTMLAttributes } from 'react';
+import { HTMLAttributes, ReactElement } from 'react';
 import {
   Container,
   Content,
@@ -9,23 +9,23 @@ interface LabInfo extends HTMLAttributes<HTMLDivElement> {
   icon: any;
 }
 
-const Title = ({ children }) => {
+const Title = ({ children }): ReactElement => {
   return <h2>{children}</h2>;
 };
 
-const Description = ({ children }) => {
+const Description = ({ children }): ReactElement => {
   return <p>{children}</p>;
 };
 
-const InlineContent = ({ children }) => {
+const InlineContent = ({ children }): ReactElement => {
   return <ContainerInline>{children}</ContainerInline>;
 };
 
-const LabInfo = ({ icon, children }: LabInfo) => {
+const LabInfo = ({ icon, children }: LabInfo): ReactElement => {
   return (
     <Container>
       <div>
-        <img src={icon} />
+        <img src={icon} alt="ícone" />
       </div>
       <Content>{children}</Content>
     </Container>

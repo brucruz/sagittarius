@@ -1,3 +1,4 @@
+import { ReactElement } from 'react';
 import { TitleMainContainer } from '@/styles/components/molecules/TitleMain';
 
 interface TitleMainProps {
@@ -5,7 +6,7 @@ interface TitleMainProps {
   subtitle?: string;
 }
 
-const TitleMain = ({ title, subtitle }: TitleMainProps) => {
+const TitleMain = ({ title, subtitle }: TitleMainProps): ReactElement => {
   return (
     <TitleMainContainer>
       <h1>{title}</h1>

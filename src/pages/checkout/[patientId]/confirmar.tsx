@@ -1,4 +1,13 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  ReactElement,
+} from 'react';
 import { useRouter } from 'next/router';
 import mixpanel from 'mixpanel-browser';
 import { format } from 'date-fns';
@@ -58,7 +67,9 @@ interface FormData {
   phone_whatsapp: string;
 }
 
-const AskingRemainingInfo = ({ openModal = false }: ModalData) => {
+const AskingRemainingInfo = ({
+  openModal = false,
+}: ModalData): ReactElement => {
   const [displayModal, setDisplayModal] = useState(false);
 
   useEffect(() => {
@@ -198,7 +209,7 @@ const AskingRemainingInfo = ({ openModal = false }: ModalData) => {
   );
 };
 
-const OrderReview = () => {
+const OrderReview = (): ReactElement => {
   const [patient, setPatient] = useState<Patient | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -260,6 +271,7 @@ const OrderReview = () => {
     ? format(preferredDateTo, 'dd/MM/yyyy')
     : '';
 
+  // eslint-disable-next-line consistent-return
   const quote = useMemo((): Quote | undefined => {
     if (patient && prices.length >= 0) {
       return {
@@ -345,7 +357,7 @@ const OrderReview = () => {
             <h4>
               Horários selecionados:{' '}
               {preferredHours.map(hour => (
-                <p>{hour}</p>
+                <p key={`${hour}-paragraph`}>{hour}</p>
               ))}
             </h4>
           </HeaderContent>
@@ -371,7 +383,7 @@ const OrderReview = () => {
                   </span>
                   {item.price.map(price => {
                     return (
-                      <div className="exam-lab-item">
+                      <div key={item.id} className="exam-lab-item">
                         <div>
                           <span>{price.exam.title}</span>
                         </div>

@@ -1,4 +1,6 @@
-import { useCallback, useEffect, useState } from 'react';
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
+import { ReactElement, useCallback, useEffect, useState } from 'react';
 import PageTemplate from '@/components/templates/PageTemplate';
 import {
   Smile,
@@ -23,7 +25,7 @@ interface star {
   isFilled: boolean;
 }
 
-export default function ThankYou() {
+export default function ThankYou(): ReactElement {
   const { user } = useAuth();
   const router = useRouter();
 
@@ -80,18 +82,18 @@ export default function ThankYou() {
   const [userRate, setUserRate] = useState(0);
   const [displayRateModal, setDisplayRateModal] = useState(false);
 
-  function handleChangeStar(starId: number) {
-    const starIndex = rateStars.findIndex(star => star.id === starId);
+  function handleChangeStar(starId: number): void {
+    const starIndex = rateStars.findIndex(rateStar => rateStar.id === starId);
 
     setRateStart(
-      rateStars.map((star, index) =>
+      rateStars.map((rateStar, index) =>
         index <= starIndex
           ? {
-              id: star.id,
+              id: rateStar.id,
               isFilled: true,
             }
           : {
-              id: star.id,
+              id: rateStar.id,
               isFilled: false,
             },
       ),
@@ -152,18 +154,18 @@ export default function ThankYou() {
               alguém da sua família ou amigo?
             </h3>
             <div className="stars-div">
-              {rateStars.map((star: star) => {
+              {rateStars.map((rateStar: star) => {
                 return (
-                  <div key={star.id}>
+                  <div key={rateStar.id}>
                     <img
                       onClick={() => {
-                        setUserRate(star.id);
-                        handleChangeStar(star.id);
+                        setUserRate(rateStar.id);
+                        handleChangeStar(rateStar.id);
                       }}
-                      src={star.isFilled ? starFilled : starUnfilled}
+                      src={rateStar.isFilled ? starFilled : starUnfilled}
                       alt="Ícone de estrela"
                     />
-                    {star.id}
+                    {rateStar.id}
                   </div>
                 );
               })}

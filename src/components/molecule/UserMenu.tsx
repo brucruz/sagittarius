@@ -11,10 +11,10 @@ import {
   UserMenuContainer,
 } from '@/styles/components/molecules/UserMenu';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, ReactElement } from 'react';
 import { MdPerson } from 'react-icons/md';
 
-const UserMenu = () => {
+const UserMenu = (): ReactElement => {
   const { user } = useAuth();
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);

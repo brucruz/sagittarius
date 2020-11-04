@@ -1,3 +1,4 @@
+import { ReactElement } from 'react';
 import formatValueWo$ from '@/utils/formatValueWo$';
 import { Container } from '@/styles/components/molecules/TotalPriceBagContainer';
 
@@ -7,7 +8,7 @@ interface TotalPriceBagContainerProps {
 
 const TotalPriceBagContainer = ({
   totalPrice,
-}: TotalPriceBagContainerProps) => {
+}: TotalPriceBagContainerProps): ReactElement => {
   return (
     <Container>
       <span>Valor Total:</span>

@@ -4,7 +4,13 @@ import {
   DateSelectorContainer,
   ErrorMessage,
 } from '@/styles/components/molecules/DateSelector';
-import { InputHTMLAttributes, useCallback, useRef, useState } from 'react';
+import {
+  InputHTMLAttributes,
+  ReactElement,
+  useCallback,
+  useRef,
+  useState,
+} from 'react';
 import DayPicker from 'react-day-picker';
 import 'react-day-picker/lib/style.css';
 
@@ -31,7 +37,7 @@ const DateSelector = ({
   calendar = true,
   error,
   ...rest
-}: DateSelectorProps) => {
+}: DateSelectorProps): ReactElement => {
   const [isActive, setIsActive] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date>(null);
 

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { GA_TRACKING_ID } from '@/services/analytics';
 import Document, {
   DocumentContext,

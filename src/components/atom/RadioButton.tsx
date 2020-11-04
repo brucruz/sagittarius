@@ -1,3 +1,4 @@
+import { ReactElement } from 'react';
 import { Base } from '@/styles/components/atom/RadioButton';
 
 interface RadioButtonProps {
@@ -7,7 +8,12 @@ interface RadioButtonProps {
   value?: string;
 }
 
-const RadioButton = ({ label, value, isChecked, name }: RadioButtonProps) => {
+const RadioButton = ({
+  label,
+  value,
+  isChecked,
+  name,
+}: RadioButtonProps): ReactElement => {
   return (
     <Base>
       <span className="text">{label}</span>

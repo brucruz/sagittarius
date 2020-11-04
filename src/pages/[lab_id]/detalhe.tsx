@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, ReactElement } from 'react';
 import { useRouter } from 'next/router';
 import mixpanel from 'mixpanel-browser';
 import LabResultFromAPI from '@/@types/LabResultFromAPI';
@@ -58,7 +58,7 @@ interface LabDetailProps {
   labDetail: LabPricesResultFromAPI;
 }
 
-export default function Detail({ labDetail }: LabDetailProps) {
+export default function Detail({ labDetail }: LabDetailProps): ReactElement {
   const [displayListExams, setDisplayListExams] = useState(true);
   const [displayMap, setDisplayMap] = useState(false);
   const [selectedPrices, setSelectedPrices] = useState<PriceFormatted[]>([]);
@@ -102,13 +102,13 @@ export default function Detail({ labDetail }: LabDetailProps) {
     router.push('/carrinho');
   }, [addBagItems, selectedPrices, user]);
 
-  function handlePriceChange(price: PriceFormatted) {
+  function handlePriceChange(price: PriceFormatted): void {
     if (selectedPrices.includes(price)) {
       const priceIndex = selectedPrices.findIndex(
         selectedPrice => price.id === selectedPrice.id,
       );
       const exams = selectedPrices.filter(
-        (price, index) => index !== priceIndex && price,
+        (examPrice, index) => index !== priceIndex && examPrice,
       );
       setSelectedPrices(exams);
     } else {

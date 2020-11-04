@@ -2,7 +2,7 @@ import { PageHeaderContainer } from '@/styles/components/molecules/PageHeader';
 
 import stepper1 from '@/assets/components/organisms/SearchExam/stepper1.svg';
 import stepper2 from '@/assets/components/organisms/SearchExam/stepper2.svg';
-import { useCallback } from 'react';
+import { ReactElement, useCallback } from 'react';
 import { UrlObject } from 'url';
 import { useRouter } from 'next/router';
 import LinkBack from '../atom/LinkBack';
@@ -27,7 +27,7 @@ interface PageHeaderProps {
   buttonType: GoBackProps;
 }
 
-const PageHeader = ({ buttonType }: PageHeaderProps) => {
+const PageHeader = ({ buttonType }: PageHeaderProps): ReactElement => {
   const router = useRouter();
 
   const handleBackButtonClick = useCallback(() => {

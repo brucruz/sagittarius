@@ -1,7 +1,12 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
+/* eslint-disable no-shadow */
+/* eslint-disable react-hooks/rules-of-hooks */
 import {
   InputHTMLAttributes,
   useCallback,
   useEffect,
+  ReactElement,
   useRef,
   useState,
 } from 'react';
@@ -66,7 +71,7 @@ const Input = ({
   getInputValue,
   value,
   isSubmit,
-}: InputProps) => {
+}: InputProps): ReactElement => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const [isFocused, setIsFocused] = useState(false);

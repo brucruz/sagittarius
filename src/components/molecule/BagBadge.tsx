@@ -20,8 +20,9 @@ import {
 
 import formatValue from '@/utils/formatValue';
 import { useAuth } from '@/hooks/auth';
+import { ReactElement } from 'react';
 
-const BagBadge = () => {
+const BagBadge = (): ReactElement => {
   const {
     isBagOpen,
     openBag,
@@ -109,7 +110,7 @@ const BagBadge = () => {
                   pathname: user ? '/checkout/paciente' : '/login',
                 }}
               >
-                <button>Fechar Pedido</button>
+                <button type="button">Fechar Pedido</button>
               </Link>
             </BagBadgeFooter>
           </BagBadgeMenu>

@@ -10,8 +10,9 @@ import {
 
 import instagram from '@/assets/components/organisms/Footer/instagram.svg';
 import facebook from '@/assets/components/organisms/Footer/facebook.svg';
+import { ReactElement } from 'react';
 
-const Footer = () => {
+const Footer = (): ReactElement => {
   return (
     <Container>
       <FooterHeader>

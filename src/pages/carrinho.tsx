@@ -1,4 +1,7 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 import { useRouter } from 'next/router';
+import { ReactElement, useCallback } from 'react';
 import PageTemplate from '@/components/templates/PageTemplate';
 import Button from '@/components/atom/Button';
 import TotalPriceBagContainer from '@/components/molecule/TotalPriceBagContainer';
@@ -8,10 +11,10 @@ import { ItemsContainer, ConfirmOrder, BagContent } from '@/styles/pages/Cart';
 import { useBag } from '@/hooks/bag';
 import formatValueWo$ from '@/utils/formatValueWo$';
 import { useAuth } from '@/hooks/auth';
-import { useCallback } from 'react';
+
 import mixpanel from 'mixpanel-browser';
 
-export default function Cart() {
+export default function Cart(): ReactElement {
   const {
     bagItems,
     bagTotalPrice,
