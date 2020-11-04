@@ -18,6 +18,7 @@ import picpayImg from '@/assets/pages/Home/picpay-card.svg';
 import { useEffect } from 'react';
 import mixpanel from 'mixpanel-browser';
 import { useAuth } from '@/hooks/auth';
+import SEO from '@/components/atom/SEO';
 
 const SearchExam = dynamic(
   () => import("@/components/organisms/SearchExam"),
@@ -39,6 +40,11 @@ const Home = () => {
 
   return (
     <>
+      <SEO
+        title='Exames médicos: compare preços e agende seus exames'
+        description='A Heali te conecta a uma rede de laboratórios parceiros. Você escolhe a melhorar opção para fazer seus exames médicos, pertinho do seu endereço. Compare preços e agende seus exames de forma rápida, simples e segura.'
+      />
+
       <MapsScript />
 
       <Navbar />

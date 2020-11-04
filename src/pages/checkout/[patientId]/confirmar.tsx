@@ -32,6 +32,7 @@ import { FaWhatsapp } from 'react-icons/fa';
 import Checkbox from '@/components/atom/Checkbox';
 import { MdClose } from 'react-icons/md';
 import getValidationErrors from '@/utils/getValidationErrors';
+import SEO from '@/components/atom/SEO';
 
 interface Quote {
   user: User;
@@ -296,6 +297,11 @@ const OrderReview = () => {
       }}
       titleMain={{ title: 'Meu Pedido' }}
     >
+      <SEO
+        title={`Confirmar pedido de agendamento de exames`}
+        description='Confira se as informações do pedido de agendamento de exames estão corretas.'
+      />
+
       <Header>
         {patient && (
           <HeaderContent>

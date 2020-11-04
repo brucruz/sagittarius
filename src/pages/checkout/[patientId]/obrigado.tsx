@@ -11,6 +11,7 @@ import starFilled from '@/assets/pages/ThankYou/star-filled.svg';
 import { useAuth } from '@/hooks/auth';
 import { useRouter } from 'next/router';
 import mixpanel from 'mixpanel-browser';
+import SEO from '@/components/atom/SEO';
 
 interface star {
   id: number,
@@ -101,6 +102,11 @@ export default function ThankYou() {
         type: 'go_back_button',
       }}
     >
+      <SEO
+        title={`Pedido de agendamento concluído`}
+        description='Obrigado! Recebemos seu pedido de agendamento de exames médicos e em breve um atendente entrará em contato contigo.'
+      />
+
       <Content>
         <Smile>;D</Smile>
         <Title>

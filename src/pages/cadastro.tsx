@@ -18,6 +18,7 @@ import { MdLock, MdMail, MdPerson } from "react-icons/md";
 import { FaWhatsapp } from "react-icons/fa";
 import { InputGroupTitle } from "@/styles/pages/SignUp";
 import Button from "@/components/atom/Button";
+import SEO from "@/components/atom/SEO";
 
 interface RouterQueryParams {
   isBeforeSchedule?: boolean;
@@ -159,6 +160,11 @@ const SignUpPage = () => {
         subTitle:  'Digite seus dados para continuar'
       }}
     >
+        <SEO
+          title='Cadastre-se'
+          description='Faça seu cadastro para agendar seus exames médicos de forma rápida, simples e segura'
+        />
+
       <Form ref={formRef} onSubmit={handleSubmit}>
         <InputGroupTitle>Dados Pessoais</InputGroupTitle>
 
