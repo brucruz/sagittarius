@@ -1,6 +1,9 @@
 import { useCallback, useState } from 'react';
 import htmlParser from 'html-react-parser';
-import { AccordionButton, AccordionPanel } from '@/styles/components/molecules/Accordion';
+import {
+  AccordionButton,
+  AccordionPanel,
+} from '@/styles/components/molecules/Accordion';
 import accordionArrow from '@/assets/components/molecules/Accordion/accordion-arrow.svg';
 import { useAuth } from '@/hooks/auth';
 import mixpanel from 'mixpanel-browser';
@@ -27,10 +30,7 @@ const Accordion = ({ text, index }: AccordionProps) => {
         Question: question,
       });
     },
-    [
-      user,
-      isActive,
-    ],
+    [user, isActive],
   );
 
   return (

@@ -1,5 +1,5 @@
-import device from "@/utils/devices";
-import styled from "styled-components";
+import device from '@/utils/devices';
+import styled from 'styled-components';
 
 export const Container = styled.header`
   z-index: 1000;
@@ -7,7 +7,7 @@ export const Container = styled.header`
   margin: 0;
   top: 0;
   width: 100%;
-  background: #FFFFFF;
+  background: #ffffff;
   box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.08);
 
   @media ${device.laptopL} {
@@ -28,7 +28,7 @@ export const SidebarAndLogo = styled.section`
 export const Logo = styled.h1`
   font-style: normal;
   font-weight: 900;
-  color: #4D49C4;
+  color: #4d49c4;
   letter-spacing: 0.07em;
 
   font-size: 22px;
@@ -71,7 +71,7 @@ export const NavLinks = styled.section`
 
     /* Titles */
 
-    color: #232B3B;
+    color: #232b3b;
 
     & + a {
       margin-left: 1.5rem;

@@ -11,12 +11,12 @@ export const PatientSelector = styled.div`
   padding: 24px 20px;
 
   &.isChecked {
-    background: #F0F6F9;
-    border: 2px solid #4D49C4;
+    background: #f0f6f9;
+    border: 2px solid #4d49c4;
   }
 
   &.notChecked {
-    border: 1px solid #247FA6;
+    border: 1px solid #247fa6;
   }
 `;
 

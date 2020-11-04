@@ -1,9 +1,18 @@
 import { useCallback, useEffect, useMemo } from 'react';
 import NavBar from '@/components/organisms/Navbar';
 import Footer from '@/components/organisms/Footer';
-import { Content, Container, Card, CardHeader, CardFooter, HeaderInfo, Stars, Price, LabResultList } from '@/styles/pages/LabResults';
+import {
+  Content,
+  Container,
+  Card,
+  CardHeader,
+  CardFooter,
+  HeaderInfo,
+  Stars,
+  Price,
+  LabResultList,
+} from '@/styles/pages/LabResults';
 import GoogleMap from '@/components/organisms/Map';
-import img from '@/assets/rect.svg';
 import star from '@/assets/pages/LabResults/star-image.svg';
 import { LabResultFromAPIFormatted } from '@/hooks/labResults';
 import MapsScript from '@/services/components/MapsScript';
@@ -26,7 +35,7 @@ interface QueryParamsProps {
 }
 
 interface LabResultCardProp {
-  result: LabResultFromAPIFormatted
+  result: LabResultFromAPIFormatted;
   resultsSearchUrl: string;
 }
 
@@ -38,10 +47,7 @@ interface LabResultsProps {
   lng: string;
 }
 
-const LabResultCard = ({
-  result,
-  resultsSearchUrl
-}: LabResultCardProp) => {
+const LabResultCard = ({ result, resultsSearchUrl }: LabResultCardProp) => {
   const router = useRouter();
   const { user } = useAuth();
 
@@ -60,7 +66,10 @@ const LabResultCard = ({
         Lab: lab.title,
       });
 
-      router.push({ pathname: `${result.lab.id}/detalhe`, search: resultsSearchUrl })
+      router.push({
+        pathname: `${result.lab.id}/detalhe`,
+        search: resultsSearchUrl,
+      });
     },
     [user, router, resultsSearchUrl],
   );
@@ -69,7 +78,7 @@ const LabResultCard = ({
     <Card className="card">
       <CardHeader>
         <div className="img-div">
-          <img src={result?.lab.company.logo} alt="Logo da companhia"/>
+          <img src={result?.lab.company.logo} alt="Logo da companhia" />
         </div>
         <HeaderInfo>
           <h2>{`${result?.lab.company.title} - ${result?.lab.title}`}</h2>
@@ -81,17 +90,21 @@ const LabResultCard = ({
       </CardHeader>
       <CardFooter>
         <div>
-          <span className="amount-exams">{result?.exams_found} exames encontrados por:</span>
+          <span className="amount-exams">
+            {result?.exams_found} exames encontrados por:
+          </span>
           <Price>
-            <h2>12x de R$ {((result?.total_price)/12).toFixed(2)}</h2>
+            <h2>12x de R$ {(result?.total_price / 12).toFixed(2)}</h2>
             <span>ou {result?.totalPriceFormatted}</span>
           </Price>
         </div>
-        <button onClick={() => handleTrackLabClick(result.lab)}>Ver detalhes</button>
+        <button onClick={() => handleTrackLabClick(result.lab)}>
+          Ver detalhes
+        </button>
       </CardFooter>
     </Card>
   );
-}
+};
 
 export default function LabResults({
   labResults,
@@ -99,8 +112,8 @@ export default function LabResults({
   address,
   lat: latitude,
   lng: longitude,
-  // resultsSearchUrl
-}: LabResultsProps) {
+}: // resultsSearchUrl
+LabResultsProps) {
   const labsLocation = useMemo(() => {
     const locations = labResults.map(result => {
       const { lab } = result;
@@ -120,13 +133,13 @@ export default function LabResults({
   const lngQuery = `lng=${longitude}`;
 
   const idsQueryArray =
-    typeof examsIds === 'string' ?
-    `ids[]=${examsIds}` :
-      examsIds.map(id => {
-        const idFormatted = `ids[]=${id.toString()}`;
+    typeof examsIds === 'string'
+      ? `ids[]=${examsIds}`
+      : examsIds.map(id => {
+          const idFormatted = `ids[]=${id.toString()}`;
 
-        return idFormatted;
-      });
+          return idFormatted;
+        });
 
   const idsQueryWithComma = idsQueryArray.toString();
 
@@ -137,42 +150,47 @@ export default function LabResults({
   return (
     <>
       <NavBar />
-        <Container>
-          <Content>
-            <h1>Buscando {examsIds.length} Exames</h1>
+      <Container>
+        <Content>
+          <h1>Buscando {examsIds.length} Exames</h1>
 
-            {labResults.length === 1 ? (
-              <h3>{labResults.length} Laboratório encontrado</h3>
-            ) : (
-              <h3>{labResults.length} Laboratórios encontrados</h3>
-            )}
-
-            <LabResultList>
-              {labResults.map((result) => {
-                return (
-                  <LabResultCard result={result} resultsSearchUrl={resultsSearchUrl}/>
-                );
-              })}
-            </LabResultList>
-          </Content>
-          {latitude && longitude && (
-            <GoogleMap
-              lat={Number(latitude)}
-              lng={Number(longitude)}
-              markers={labsLocation}
-            />
+          {labResults.length === 1 ? (
+            <h3>{labResults.length} Laboratório encontrado</h3>
+          ) : (
+            <h3>{labResults.length} Laboratórios encontrados</h3>
           )}
-        </Container>
-        <MapsScript />
+
+          <LabResultList>
+            {labResults.map(result => {
+              return (
+                <LabResultCard
+                  result={result}
+                  resultsSearchUrl={resultsSearchUrl}
+                />
+              );
+            })}
+          </LabResultList>
+        </Content>
+        {latitude && longitude && (
+          <GoogleMap
+            lat={Number(latitude)}
+            lng={Number(longitude)}
+            markers={labsLocation}
+          />
+        )}
+      </Container>
+      <MapsScript />
       <Footer />
     </>
   );
 }
 
-export const getServerSideProps: GetServerSideProps<LabResultsProps> = async (context) => {
+export const getServerSideProps: GetServerSideProps<LabResultsProps> = async context => {
   const queryParams: QueryParamsProps = context.query;
 
-  const examsIds = isArray(queryParams['ids[]']) ? queryParams['ids[]'] : [queryParams['ids[]'] ];
+  const examsIds = isArray(queryParams['ids[]'])
+    ? queryParams['ids[]']
+    : [queryParams['ids[]']];
   try {
     const { data } = await api.get<LabResultFromAPI[]>(`/search/results`, {
       params: context.query,
@@ -195,9 +213,8 @@ export const getServerSideProps: GetServerSideProps<LabResultsProps> = async (co
         lat: queryParams.lat,
         lng: queryParams.lng,
       },
-    }
+    };
   } catch (err) {
     console.log(err);
   }
-
-}
+};

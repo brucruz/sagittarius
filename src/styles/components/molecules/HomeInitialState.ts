@@ -1,5 +1,5 @@
-import device from "@/utils/devices";
-import styled from "styled-components";
+import device from '@/utils/devices';
+import styled from 'styled-components';
 
 export const InitialStateContainer = styled.section`
   display: flex;
@@ -33,14 +33,14 @@ export const InitialStateContent = styled.section`
     padding: 12px 60px;
     color: #fff;
     font-weight: 700;
-    background: linear-gradient(90deg, #4D49C4 0%, #7672DD 97.71%);
+    background: linear-gradient(90deg, #4d49c4 0%, #7672dd 97.71%);
     border-radius: 6px;
     filter: drop-shadow(0px 4px 16px rgba(0, 0, 0, 0.16));
   }
 
   @media ${device.tablet} {
     margin-left: 8.3%;
-    
+
     button {
       width: auto;
     }
@@ -51,7 +51,6 @@ export const InitialStateContent = styled.section`
       font-size: 20px;
     }
   }
-
 `;
 
 export const ValueProposition = styled.section`
@@ -61,9 +60,9 @@ export const ValueProposition = styled.section`
     margin-bottom: 16px;
     font-size: 24px;
     line-height: 40px;
-    
+
     /* Titles */
-    
+
     color: rgba(35, 43, 59, 0.96);
   }
 
@@ -88,5 +87,4 @@ export const ValueProposition = styled.section`
       line-height: 50px;
     }
   }
-
 `;

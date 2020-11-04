@@ -1,11 +1,16 @@
-import { Calendar, DateInput, DateSelectorContainer, ErrorMessage } from "@/styles/components/molecules/DateSelector";
-import { InputHTMLAttributes, useCallback, useRef, useState } from "react";
-import DayPicker from "react-day-picker";
+import {
+  Calendar,
+  DateInput,
+  DateSelectorContainer,
+  ErrorMessage,
+} from '@/styles/components/molecules/DateSelector';
+import { InputHTMLAttributes, useCallback, useRef, useState } from 'react';
+import DayPicker from 'react-day-picker';
 import 'react-day-picker/lib/style.css';
 
-import { format } from 'date-fns'
+import { format } from 'date-fns';
 
-import { MdDateRange } from "react-icons/md";
+import { MdDateRange } from 'react-icons/md';
 
 interface DateSelectorProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
@@ -14,12 +19,21 @@ interface DateSelectorProps extends InputHTMLAttributes<HTMLInputElement> {
   getSelectedDate?: (date: Date) => void;
   getTypedDate?: (date: string) => void;
   calendar?: boolean;
-  error?: string,
+  error?: string;
 }
 
-const DateSelector = ({ name, label, startDate, getSelectedDate, getTypedDate, calendar = true, error, ...rest }: DateSelectorProps) => {
+const DateSelector = ({
+  name,
+  label,
+  startDate,
+  getSelectedDate,
+  getTypedDate,
+  calendar = true,
+  error,
+  ...rest
+}: DateSelectorProps) => {
   const [isActive, setIsActive] = useState(false);
-  const [selectedDate, setSelectedDate] = useState<Date>(null)
+  const [selectedDate, setSelectedDate] = useState<Date>(null);
 
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -27,35 +41,36 @@ const DateSelector = ({ name, label, startDate, getSelectedDate, getTypedDate, c
     setIsActive(!isActive);
   }, [isActive]);
 
-  const handleDayClick = useCallback((date: Date, { selected, disabled }) => {
-    if (disabled) {
-      return;
-    }
+  const handleDayClick = useCallback(
+    (date: Date, { selected, disabled }) => {
+      if (disabled) {
+        return;
+      }
 
-    if (selected) {
-      setSelectedDate(null);
-      getSelectedDate(null);
-      getTypedDate(null);
+      if (selected) {
+        setSelectedDate(null);
+        getSelectedDate(null);
+        getTypedDate(null);
 
-      inputRef.current.value = null;
+        inputRef.current.value = null;
 
-      return;
-    }
+        return;
+      }
 
-    inputRef.current.value = format(date, 'dd/MM/yyyy');
+      inputRef.current.value = format(date, 'dd/MM/yyyy');
 
-    getSelectedDate(date);
+      getSelectedDate(date);
 
-    setSelectedDate(date);
+      setSelectedDate(date);
 
-    setIsActive(false);
-  }, [selectedDate]);
+      setIsActive(false);
+    },
+    [selectedDate],
+  );
 
   return (
-    <DateSelectorContainer
-      {...rest}
-    >
-      {label && (<label htmlFor={name}>{label}</label>)}
+    <DateSelectorContainer {...rest}>
+      {label && <label htmlFor={name}>{label}</label>}
 
       <DateInput
         isFocused={isActive}
@@ -64,7 +79,13 @@ const DateSelector = ({ name, label, startDate, getSelectedDate, getTypedDate, c
         fullWidth={!calendar}
       >
         <MdDateRange />
-        <input type="text" id={name} ref={inputRef} placeholder='dd/mm/aaaa' onChange={() => getTypedDate(inputRef.current?.value)}/>
+        <input
+          type="text"
+          id={name}
+          ref={inputRef}
+          placeholder="dd/mm/aaaa"
+          onChange={() => getTypedDate(inputRef.current?.value)}
+        />
       </DateInput>
 
       {isActive && calendar && (
@@ -96,13 +117,16 @@ const DateSelector = ({ name, label, startDate, getSelectedDate, getTypedDate, c
         </Calendar>
       )}
 
-    {error && (
-      <ErrorMessage>
-        <p>O formato deve ser como em '01/01/1990'. <span>Tente novamente.</span></p>
-      </ErrorMessage>
-    )}
+      {error && (
+        <ErrorMessage>
+          <p>
+            O formato deve ser como em '01/01/1990'.{' '}
+            <span>Tente novamente.</span>
+          </p>
+        </ErrorMessage>
+      )}
     </DateSelectorContainer>
-  )
+  );
 };
 
 export default DateSelector;

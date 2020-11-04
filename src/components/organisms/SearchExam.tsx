@@ -1,22 +1,26 @@
 import { useRouter } from 'next/router';
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
-import ButtonNext from "../atom/ButtonNext";
 import { MdSearch, MdPlace } from 'react-icons/md';
 import mixpanel from 'mixpanel-browser';
-import { AddressState, Container, ExamState } from "@/styles/components/organisms/SearchExam";
-import TitleMain from "../molecule/TitleMain";
-import { HeaderSpaceContent } from "@/styles/components/atom/HeaderSpace";
-import PageHeader from "../molecule/PageHeader";
-import Input from "../atom/Input";
-import Exam from "@/@types/Exam";
-import usePlacesAutocomplete from "use-places-autocomplete";
-import { useSearchExam } from "@/hooks/searchExam";
-import { useAuth } from "@/hooks/auth";
-import { useToast } from "@/hooks/toast";
-import ExamSearchResult from "@/@types/ExamSearchResult";
-import examIndex from "@/services/search";
-import { buildSearchQuery } from "@/helpers/searchExams";
+import {
+  AddressState,
+  Container,
+  ExamState,
+} from '@/styles/components/organisms/SearchExam';
+import { HeaderSpaceContent } from '@/styles/components/atom/HeaderSpace';
+import Exam from '@/@types/Exam';
+import usePlacesAutocomplete from 'use-places-autocomplete';
+import { useSearchExam } from '@/hooks/searchExam';
+import { useAuth } from '@/hooks/auth';
+import { useToast } from '@/hooks/toast';
+import ExamSearchResult from '@/@types/ExamSearchResult';
+import examIndex from '@/services/search';
+import { buildSearchQuery } from '@/helpers/searchExams';
+import Input from '../atom/Input';
+import PageHeader from '../molecule/PageHeader';
+import TitleMain from '../molecule/TitleMain';
+import ButtonNext from '../atom/ButtonNext';
 import InitialState from '../molecule/HomeInitialState';
 
 type SearchDisplay = 'initial' | 'exam' | 'address';
@@ -178,14 +182,17 @@ const SearchExam = () => {
     setExamTypedValue(exam);
   }, []);
 
-  const handleExamSelection = useCallback((exam: Exam): void => {
-    addExam(exam);
+  const handleExamSelection = useCallback(
+    (exam: Exam): void => {
+      addExam(exam);
 
-    user && mixpanel.identify(user.id);
-    mixpanel.track('Add Exam To Search', {
-      Exam: exam.title,
-    });
-  }, [user]);
+      user && mixpanel.identify(user.id);
+      mixpanel.track('Add Exam To Search', {
+        Exam: exam.title,
+      });
+    },
+    [user],
+  );
 
   const handleClearExamSuggestions = useCallback(() => {
     setExamResults([]);
@@ -204,16 +211,19 @@ const SearchExam = () => {
           <PageHeader
             buttonType={{
               type: 'change_state_button',
-              backButtonNewState: "initial",
+              backButtonNewState: 'initial',
               backButtonStateCallback: handleReturnButtonClick,
               stepper: '1/2',
             }}
           />
 
-          <TitleMain title="Quais exames está buscando?" subtitle="Digite e adicione os exames que quer agendar."/>
+          <TitleMain
+            title="Quais exames está buscando?"
+            subtitle="Digite e adicione os exames que quer agendar."
+          />
           <Input
-            name='exam'
-            label='Seus Exames'
+            name="exam"
+            label="Seus Exames"
             icon={MdSearch}
             suggestions={{
               type: 'exams',
@@ -224,7 +234,11 @@ const SearchExam = () => {
             getInputValue={handleGetExamInnerValue}
           />
 
-          <ButtonNext text="Continuar" onClick={handleExamSubmit} disabled={exams.length < 1}/>
+          <ButtonNext
+            text="Continuar"
+            onClick={handleExamSubmit}
+            disabled={exams.length < 1}
+          />
         </ExamState>
       )}
 
@@ -239,11 +253,14 @@ const SearchExam = () => {
             }}
           />
 
-          <TitleMain title="Onde quer fazer os exames?" subtitle="Digite o endereço, bairro ou cidade de onde quer fazer o exame."/>
+          <TitleMain
+            title="Onde quer fazer os exames?"
+            subtitle="Digite o endereço, bairro ou cidade de onde quer fazer o exame."
+          />
 
           <Input
-            name='location'
-            label='Sua Localização'
+            name="location"
+            label="Sua Localização"
             icon={MdPlace}
             suggestions={{
               type: 'address',
@@ -255,12 +272,15 @@ const SearchExam = () => {
             value={addressValue}
           />
 
-          <ButtonNext text="Continuar" disabled={!address.address} onClick={handleSubmit}/>
+          <ButtonNext
+            text="Continuar"
+            disabled={!address.address}
+            onClick={handleSubmit}
+          />
         </AddressState>
       )}
-
     </Container>
-  )
-}
+  );
+};
 
 export default SearchExam;

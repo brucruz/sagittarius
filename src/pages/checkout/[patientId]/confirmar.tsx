@@ -4,11 +4,11 @@ import mixpanel from 'mixpanel-browser';
 import { format } from 'date-fns';
 import { FormHandles } from '@unform/core';
 import { Form } from '@unform/web';
-import *  as Yup from 'yup';
+import * as Yup from 'yup';
 
 import api from '@/services/api';
 
-import PageTemplate from "@/components/templates/PageTemplate";
+import PageTemplate from '@/components/templates/PageTemplate';
 import Button from '@/components/atom/Button';
 import TotalPriceBagContainer from '@/components/molecule/TotalPriceBagContainer';
 import deleteIcon from '@/assets/pages/Cart/delete-icon.svg';
@@ -16,9 +16,15 @@ import Modal from '@/components/organisms/Modal';
 import Input from '@/components/atom/Input';
 
 import { ItemsContainer, ConfirmOrder, BagContent } from '@/styles/pages/Cart';
-import { CloseButton, Header, HeaderContent, ModalFooter, ModalHeader } from '@/styles/pages/checkout/[patientId]/OrderReview';
+import {
+  CloseButton,
+  Header,
+  HeaderContent,
+  ModalFooter,
+  ModalHeader,
+} from '@/styles/pages/checkout/[patientId]/OrderReview';
 
-import { useBag } from "@/hooks/bag";
+import { useBag } from '@/hooks/bag';
 import { useAuth } from '@/hooks/auth';
 import { useDates } from '@/hooks/dates';
 import { useToast } from '@/hooks/toast';
@@ -27,7 +33,7 @@ import Patient from '@/@types/Patient';
 import Price from '@/@types/Price';
 import User from '@/@types/User';
 
-import formatValueWo$ from "@/utils/formatValueWo$";
+import formatValueWo$ from '@/utils/formatValueWo$';
 import { FaWhatsapp } from 'react-icons/fa';
 import Checkbox from '@/components/atom/Checkbox';
 import { MdClose } from 'react-icons/md';
@@ -74,89 +80,108 @@ const AskingRemainingInfo = ({ openModal = false }: ModalData) => {
     });
   }, [user]);
 
-  const handleSubmit = useCallback(async ({ phone_whatsapp }: FormData) => {
-    try {
-      const updateUserData = {
-        first_name: user.first_name,
-        last_name: user.last_name,
-        email: user.email,
-        phone_whatsapp,
+  const handleSubmit = useCallback(
+    async ({ phone_whatsapp }: FormData) => {
+      try {
+        const updateUserData = {
+          first_name: user.first_name,
+          last_name: user.last_name,
+          email: user.email,
+          phone_whatsapp,
+        };
+
+        formRef.current?.setErrors({});
+
+        const phoneRegExp = /^([0-9]{2})([0-9]{4,5})([0-9]{4})$/;
+
+        const schema = Yup.object().shape({
+          phone_whatsapp: Yup.string().matches(
+            phoneRegExp,
+            'Digite o celular com DDD (somente números).',
+          ),
+        });
+
+        await schema.validate(updateUserData, {
+          abortEarly: false,
+        });
+
+        const { data: updatedUser } = await api.put<User>(
+          '/profile/update',
+          updateUserData,
+          {
+            headers: { Authorization: `Bearer: ${token}` },
+          },
+        );
+
+        updateUser(updatedUser);
+
+        user && mixpanel.identify(user.id);
+
+        mixpanel.register(
+          {
+            whatsapp: updatedUser.phone_whatsapp,
+          },
+          1,
+        );
+
+        mixpanel.track('Updated Whatsapp');
+
+        router.push({
+          pathname: `/checkout/${patientId}/obrigado`,
+        });
+
+        addToast({
+          type: 'success',
+          title: 'Solicitação recebida',
+        });
+      } catch (err) {
+        if (err instanceof Yup.ValidationError) {
+          const errors = getValidationErrors(err);
+
+          console.log(errors);
+
+          formRef.current?.setErrors(errors);
+
+          return;
+        }
+
+        console.log(err.response.data);
+
+        addToast({
+          type: 'error',
+          title: 'Erro no cadastro',
+          description:
+            'Ocorreu um erro ao completar seu cadastro, tente novamente.',
+        });
       }
-
-      formRef.current?.setErrors({});
-
-      const phoneRegExp = /^([0-9]{2})([0-9]{4,5})([0-9]{4})$/;
-
-      const schema = Yup.object().shape({
-        phone_whatsapp: Yup.string().matches(
-          phoneRegExp,
-          'Digite o celular com DDD (somente números).',
-        ),
-      });
-
-      await schema.validate(updateUserData, {
-        abortEarly: false,
-      });
-
-      const { data: updatedUser} = await api.put<User>('/profile/update', updateUserData, {
-        headers: { Authorization: `Bearer: ${token}` },
-      });
-
-      updateUser(updatedUser);
-
-      user && mixpanel.identify(user.id);
-
-      mixpanel.register(
-        {
-          'whatsapp': updatedUser.phone_whatsapp,
-        },
-        1,
-      );
-
-      mixpanel.track('Updated Whatsapp');
-
-      router.push({
-        pathname: `/checkout/${patientId}/obrigado`,
-      });
-
-      addToast({
-        type: 'success',
-        title: 'Solicitação recebida',
-      });
-    } catch (err) {
-      if (err instanceof Yup.ValidationError) {
-        const errors = getValidationErrors(err);
-
-        console.log(errors);
-
-        formRef.current?.setErrors(errors);
-
-        return;
-      }
-
-      console.log(err.response.data);
-
-      addToast({
-        type: 'error',
-        title: 'Erro no cadastro',
-        description: 'Ocorreu um erro ao completar seu cadastro, tente novamente.',
-      });
-    }
-  }, [addToast, router]);
+    },
+    [addToast, router],
+  );
 
   return (
     <Modal isOpen={displayModal} setIsOpen={() => setDisplayModal(false)}>
-      <Form ref={formRef} onSubmit={handleSubmit} >
+      <Form ref={formRef} onSubmit={handleSubmit}>
         <ModalHeader>
           <CloseButton onClick={() => setDisplayModal(false)}>
             <MdClose />
           </CloseButton>
 
-          <h3>Ops!<br/> Complete seu cadastro.</h3>
+          <h3>
+            Ops!
+            <br /> Complete seu cadastro.
+          </h3>
 
-          <h5>Para continuarmos, precisamos que complete os dados faltantes abaixo:</h5>
+          <h5>
+            Para continuarmos, precisamos que complete os dados faltantes
+            abaixo:
+          </h5>
 
-          <Input name='phone_whatsapp' label='Whatsapp' icon={FaWhatsapp} isSubmit />
+          <Input
+            name="phone_whatsapp"
+            label="Whatsapp"
+            icon={FaWhatsapp}
+            isSubmit
+          />
 
           {/* <p>Termos de  política de privacidade</p>
 
@@ -165,12 +190,12 @@ const AskingRemainingInfo = ({ openModal = false }: ModalData) => {
 
         <ModalFooter>
           <div>
-            <Button type='submit'>Atualizar Cadastro</Button>
+            <Button type="submit">Atualizar Cadastro</Button>
           </div>
         </ModalFooter>
       </Form>
     </Modal>
-  )
+  );
 };
 
 const OrderReview = () => {
@@ -193,7 +218,8 @@ const OrderReview = () => {
         const patientInApi = response.data;
 
         setPatient(patientInApi);
-      }).catch(err => console.log(err));
+      })
+      .catch(err => console.log(err));
   }, [patientId, token]);
 
   const prices = useMemo(() => {
@@ -227,8 +253,12 @@ const OrderReview = () => {
     return labsPrices;
   }, [bagItems]);
 
-  const formattedPreferredFromDate = preferredDateFrom ? format(preferredDateFrom,'dd/MM/yyyy') : '';
-  const formattedPreferredToDate = preferredDateTo ? format(preferredDateTo, 'dd/MM/yyyy') : '';
+  const formattedPreferredFromDate = preferredDateFrom
+    ? format(preferredDateFrom, 'dd/MM/yyyy')
+    : '';
+  const formattedPreferredToDate = preferredDateTo
+    ? format(preferredDateTo, 'dd/MM/yyyy')
+    : '';
 
   const quote = useMemo((): Quote | undefined => {
     if (patient && prices.length >= 0) {
@@ -299,17 +329,25 @@ const OrderReview = () => {
       <Header>
         {patient && (
           <HeaderContent>
-            <h4>Paciente: <span>{`${patient.first_name} ${patient.last_name}`}</span></h4>
-
+            <h4>
+              Paciente:{' '}
+              <span>{`${patient.first_name} ${patient.last_name}`}</span>
+            </h4>
           </HeaderContent>
         )}
 
         {preferredDateFrom && preferredDateTo && preferredHours && (
           <HeaderContent>
-            <h4>Datas selecionadas: <span>{`${formattedPreferredFromDate} à ${formattedPreferredToDate}`}</span></h4>
-            <h4>Horários selecionados: {preferredHours.map(hour => (
-              <p>{hour}</p>
-        ))}</h4>
+            <h4>
+              Datas selecionadas:{' '}
+              <span>{`${formattedPreferredFromDate} à ${formattedPreferredToDate}`}</span>
+            </h4>
+            <h4>
+              Horários selecionados:{' '}
+              {preferredHours.map(hour => (
+                <p>{hour}</p>
+              ))}
+            </h4>
           </HeaderContent>
         )}
       </Header>
@@ -326,38 +364,40 @@ const OrderReview = () => {
           </div>
           <div className="content-items-container">
             {bagItems.map(item => {
-              return(
+              return (
                 <div className="lab-item" key={item.id}>
-                  <span className="title-lab-item">{item.company.title} - {item.title}</span>
+                  <span className="title-lab-item">
+                    {item.company.title} - {item.title}
+                  </span>
                   {item.price.map(price => {
-                    return(
+                    return (
                       <div className="exam-lab-item">
                         <div>
                           <span>{price.exam.title}</span>
                         </div>
                         <div>
                           <span>R$ {formatValueWo$(price.price)}</span>
-                          <img onClick={() => removeBagItem(price, item)} src={deleteIcon} alt="Ícone de deletar exame"/>
+                          <img
+                            onClick={() => removeBagItem(price, item)}
+                            src={deleteIcon}
+                            alt="Ícone de deletar exame"
+                          />
                         </div>
                       </div>
-                    )
+                    );
                   })}
                 </div>
-              )
+              );
             })}
           </div>
           <div className="desktop-footer">
-            <TotalPriceBagContainer totalPrice={bagTotalPrice}/>
+            <TotalPriceBagContainer totalPrice={bagTotalPrice} />
           </div>
         </ItemsContainer>
         <ConfirmOrder>
-          <TotalPriceBagContainer totalPrice={bagTotalPrice}/>
+          <TotalPriceBagContainer totalPrice={bagTotalPrice} />
           <div>
-            <Button
-              onClick={handleSubmitQuote}
-            >
-              Confirmar Pedido
-            </Button>
+            <Button onClick={handleSubmitQuote}>Confirmar Pedido</Button>
           </div>
         </ConfirmOrder>
       </BagContent>
@@ -365,6 +405,6 @@ const OrderReview = () => {
       <AskingRemainingInfo openModal={modalOpen} />
     </PageTemplate>
   );
-}
+};
 
 export default OrderReview;

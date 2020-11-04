@@ -1,4 +1,10 @@
-import { createContext, useCallback, useState, useContext, useEffect } from 'react';
+import {
+  createContext,
+  useCallback,
+  useState,
+  useContext,
+  useEffect,
+} from 'react';
 import Exam from '@/@types/Exam';
 import Address from '@/@types/Address';
 
@@ -22,7 +28,7 @@ const SearchExamProvider = ({ children }) => {
     const exams = sessionStorage.getItem('@Heali:lastExamsSearched');
 
     if (exams) {
-       setExamsToQuote(JSON.parse(exams));
+      setExamsToQuote(JSON.parse(exams));
     } else {
       setExamsToQuote([] as Exam[]);
     }

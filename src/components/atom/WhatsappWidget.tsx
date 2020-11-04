@@ -4,7 +4,6 @@ import { FaWhatsapp } from 'react-icons/fa';
 import { Container } from '../../styles/components/atom/WhatsappWidget';
 
 export default function WhatsappWidget() {
-
   const { user } = useAuth();
 
   user && mixpanel.identify(user.id);

@@ -1,5 +1,5 @@
-import device from "@/utils/devices";
-import styled from "styled-components";
+import device from '@/utils/devices';
+import styled from 'styled-components';
 
 export const BagContent = styled.div`
   display: flex;
@@ -12,8 +12,8 @@ export const BagContent = styled.div`
 
 export const ItemsContainer = styled.div`
   margin-top: 16px;
-  background: #FFFFFF;
-  border: 1px solid #BCC3D4;
+  background: #ffffff;
+  border: 1px solid #bcc3d4;
   box-sizing: border-box;
   border-radius: 6px;
 
@@ -33,14 +33,13 @@ export const ItemsContainer = styled.div`
     div:last-child {
       width: 120px;
 
-      span { 
+      span {
         width: 120px;
       }
     }
   }
 
   .content-items-container {
-
     max-height: 210px;
     overflow-y: scroll;
 
@@ -49,7 +48,7 @@ export const ItemsContainer = styled.div`
     }
 
     &::-webkit-scrollbar-thumb {
-      background-color: #4D49C4;
+      background-color: #4d49c4;
     }
 
     &::-webkit-scrollbar {
@@ -57,7 +56,7 @@ export const ItemsContainer = styled.div`
     }
 
     .lab-item {
-      border-top: 1px solid #BCC3D4;
+      border-top: 1px solid #bcc3d4;
       display: flex;
       flex-direction: column;
       padding: 16px 8px 16px 24px;
@@ -86,7 +85,6 @@ export const ItemsContainer = styled.div`
           span {
             width: 100%;
           }
-
         }
 
         div:last-child {
@@ -94,17 +92,16 @@ export const ItemsContainer = styled.div`
           align-items: center;
           width: 120px;
 
-          span { 
+          span {
             width: 120px;
           }
         }
 
         @media ${device.tablet} {
-
           & > div:first-child {
             width: 65%;
           }
-          
+
           div:last-child {
             width: 125px;
           }
@@ -118,13 +115,13 @@ export const ItemsContainer = styled.div`
 
     @media ${device.tablet} {
       display: block;
-      
+
       & > div:first-child {
         border-bottom: none;
         background: #fff;
 
         & > span:first-child {
-          color: #2F2C77;
+          color: #2f2c77;
         }
       }
     }
@@ -153,7 +150,7 @@ export const ConfirmOrder = styled.div`
   @media ${device.tablet} {
     margin: 16px 0 0 16px;
     width: 60%;
-    border: 1px solid #BCC3D4;
+    border: 1px solid #bcc3d4;
     border-radius: 6px 6px 0px 0px;
     border-top: none;
     height: fit-content;

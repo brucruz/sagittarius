@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const TitleMainContainer = styled.header`
   margin-top: 28px;

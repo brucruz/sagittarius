@@ -7,14 +7,14 @@ interface LinkBackProps {
   url: UrlObject | string;
 }
 
-const LinkBack = ({url}: LinkBackProps) => {
+const LinkBack = ({ url }: LinkBackProps) => {
   return (
     <Link href={url}>
       <LinkBackContainer>
-        <img src={leftArrow} alt="voltar"/>
+        <img src={leftArrow} alt="voltar" />
       </LinkBackContainer>
     </Link>
-  )
-}
+  );
+};
 
 export default LinkBack;

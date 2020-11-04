@@ -1,4 +1,4 @@
-import { CheckboxType } from "@/components/atom/Checkbox";
+import { CheckboxType } from '@/components/atom/Checkbox';
 
 const sexRadio: CheckboxType[] = [
   {

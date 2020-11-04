@@ -22,7 +22,7 @@ export const Base = styled.label`
 
   span.text {
     margin-left: 6px;
-    color: #3C4759;
+    color: #3c4759;
   }
 
   .checkmark {
@@ -33,7 +33,7 @@ export const Base = styled.label`
     height: 16px;
     width: 16px;
     background-color: #fff;
-    border: 1px solid #BCC3D4;
+    border: 1px solid #bcc3d4;
     box-sizing: border-box;
     border-radius: 50%;
   }
@@ -45,6 +45,6 @@ export const Base = styled.label`
   }
 
   input:checked ~ .checkmark span {
-    background: #4D49C4;
+    background: #4d49c4;
   }
 `;

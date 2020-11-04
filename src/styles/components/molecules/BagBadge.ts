@@ -1,5 +1,5 @@
-import device from "@/utils/devices";
-import styled from "styled-components";
+import device from '@/utils/devices';
+import styled from 'styled-components';
 
 export const BagBadgeContainer = styled.section`
   margin-right: 16.5px;
@@ -11,12 +11,12 @@ export const BagBadgeContainer = styled.section`
 
 export const BagBadgeButton = styled.button`
   border-radius: 50px;
-  background-color: rgba(188,195,212,0.3);
+  background-color: rgba(188, 195, 212, 0.3);
 
   display: flex;
 
   svg:first-child {
-    color: #4D49C4;
+    color: #4d49c4;
     height: 20px;
     width: 20px;
 
@@ -47,7 +47,7 @@ export const BagBadgeButton = styled.button`
   }
 
   svg:last-child {
-    color: #4D49C4;
+    color: #4d49c4;
 
     height: 20px;
     width: 20px;
@@ -64,14 +64,13 @@ export const BagBadgeMenuContainer = styled.section`
 
   top: 40px;
   left: calc(-266px + 100%);
-
 `;
 
 export const MenuArrow = styled.div`
   display: block;
   height: 20px;
   width: 20px;
-  background-color: #EBEDF2;
+  background-color: #ebedf2;
   border: inherit;
   position: absolute;
   top: -3px;
@@ -82,7 +81,7 @@ export const MenuArrow = styled.div`
 `;
 
 export const BagBadgeMenu = styled.section`
-  background: #EBEDF2;
+  background: #ebedf2;
   box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.08);
   border-radius: 6px;
   width: 266px;
@@ -97,7 +96,7 @@ export const BagBadgeLabSummary = styled.section`
 
   width: 100%;
 
-  border-bottom: 1px solid rgba(35,43,59,0.16);
+  border-bottom: 1px solid rgba(35, 43, 59, 0.16);
 
   article {
     display: flex;
@@ -108,7 +107,7 @@ export const BagBadgeLabSummary = styled.section`
     margin-bottom: 12px;
 
     div:first-child {
-      background: #FFFFFF;
+      background: #ffffff;
       border-radius: 4px;
 
       width: 40px;
@@ -119,7 +118,8 @@ export const BagBadgeLabSummary = styled.section`
       img {
         width: 40px;
         height: 40px;
-        object-fit: contain;      }
+        object-fit: contain;
+      }
     }
 
     div:last-child {
@@ -132,7 +132,7 @@ export const BagBadgeLabSummary = styled.section`
 
         /* roxo */
 
-        color: #4D49C4;
+        color: #4d49c4;
       }
 
       div {
@@ -151,7 +151,7 @@ export const BagBadgeLabSummary = styled.section`
 
           /* Paragrafo */
 
-          color: rgba(60,71,89,0.8);
+          color: rgba(60, 71, 89, 0.8);
         }
       }
     }
@@ -166,7 +166,7 @@ export const EmptyBagContent = styled.div`
   text-align: center;
   margin-bottom: 12px;
   svg {
-    color: #247FA6;
+    color: #247fa6;
     height: 36px;
     width: 36px;
   }
@@ -183,7 +183,7 @@ export const BagBadgeSummary = styled.section`
 
   text-align: right;
 
-  border-bottom: 1px solid rgba(35,43,59,0.16);
+  border-bottom: 1px solid rgba(35, 43, 59, 0.16);
 
   h6 {
     font-style: normal;
@@ -194,7 +194,7 @@ export const BagBadgeSummary = styled.section`
 
     /* Paragrafo */
 
-    color: #3C4759;
+    color: #3c4759;
 
     strong {
       font-weight: bold;
@@ -212,7 +212,7 @@ export const BagBadgeFooter = styled.footer`
     line-height: 16px;
     text-decoration-line: underline;
 
-    color: #3C4759;
+    color: #3c4759;
 
     margin-left: 33px;
     margin-top: 12px;
@@ -222,7 +222,7 @@ export const BagBadgeFooter = styled.footer`
   }
 
   button {
-    background: #247FA6;
+    background: #247fa6;
     border-radius: 6px;
 
     padding: 4px 12px;
@@ -238,6 +238,6 @@ export const BagBadgeFooter = styled.footer`
 
     /* BG */
 
-    color: #F2F5FB;
+    color: #f2f5fb;
   }
 `;

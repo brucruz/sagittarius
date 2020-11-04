@@ -1,5 +1,5 @@
-import device from "@/utils/devices";
-import styled from "styled-components";
+import device from '@/utils/devices';
+import styled from 'styled-components';
 
 export const DateRange = styled.section`
   display: flex;
@@ -28,7 +28,7 @@ export const HourSelection = styled.section`
   h3 {
     margin-bottom: 24px;
   }
-`
+`;
 
 export const Group = styled.article`
   margin-bottom: 24px;
@@ -43,7 +43,7 @@ export const Group = styled.article`
 
     /* Paragrafo */
 
-    color: #3C4759;
+    color: #3c4759;
 
     margin-bottom: 8px;
   }

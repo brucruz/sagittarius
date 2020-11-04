@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 import device from '@/utils/devices';
 
 export const Container = styled.footer`
@@ -53,7 +53,7 @@ export const SocialButtons = styled.section`
   justify-content: center;
 
   img {
-    &+img {
+    & + img {
       margin-left: 24px;
     }
   }

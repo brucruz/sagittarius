@@ -1,5 +1,10 @@
-import { NextComponentType } from 'next'
-import { Container, SectionItem, SectionItemImg, SectionItemText } from "@/styles/components/organisms/Section";
+import { NextComponentType } from 'next';
+import {
+  Container,
+  SectionItem,
+  SectionItemImg,
+  SectionItemText,
+} from '@/styles/components/organisms/Section';
 import { HTMLAttributes } from 'react';
 
 interface SectionProps extends HTMLAttributes<HTMLDivElement> {
@@ -9,19 +14,19 @@ interface SectionProps extends HTMLAttributes<HTMLDivElement> {
     image: any;
     title: string;
     text: string;
-  }[]
+  }[];
 }
 
 const Section = ({ title, articles, ...rest }: SectionProps) => {
   return (
-    <Container {...rest} >
+    <Container {...rest}>
       <h2>{title}</h2>
 
       <div className="items-div">
         {articles.map(article => (
           <SectionItem key={article.id}>
             <SectionItemImg>
-              <img src={article.image} alt=""/>
+              <img src={article.image} alt="" />
             </SectionItemImg>
 
             <SectionItemText>
@@ -33,7 +38,7 @@ const Section = ({ title, articles, ...rest }: SectionProps) => {
         ))}
       </div>
     </Container>
-  )
-}
+  );
+};
 
 export default Section;

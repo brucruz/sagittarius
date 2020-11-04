@@ -4,8 +4,8 @@ const MapsScript = () => {
   return (
     <script
       src={`https://maps.googleapis.com/maps/api/js?key=${mapsAPIkey}&libraries=places`}
-    ></script>
-  )
+    />
+  );
 };
 
 export default MapsScript;

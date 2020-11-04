@@ -6,17 +6,14 @@ type ButtonNextProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   text: string;
 };
 
-const ButtonNext = ({text, disabled, ...rest}: ButtonNextProps) => {
+const ButtonNext = ({ text, disabled, ...rest }: ButtonNextProps) => {
   return (
-    <Container
-      disabled={disabled}
-      {...rest}
-    >
+    <Container disabled={disabled} {...rest}>
       <p>{text}</p>
 
-      <img src={next} alt=""/>
+      <img src={next} alt="" />
     </Container>
-  )
-}
+  );
+};
 
 export default ButtonNext;

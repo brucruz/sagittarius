@@ -1,4 +1,4 @@
-import { HeaderSpaceContent } from "@/styles/components/atom/HeaderSpace";
+import { HeaderSpaceContent } from '@/styles/components/atom/HeaderSpace';
 
 const HeaderSpace = () => {
   return <HeaderSpaceContent />;

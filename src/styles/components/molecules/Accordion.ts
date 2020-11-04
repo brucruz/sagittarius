@@ -24,8 +24,8 @@ export const AccordionButton = styled.button`
   }
 
   &.active {
-    background: #F2F5FB;
-    color: #2F2C77;
+    background: #f2f5fb;
+    color: #2f2c77;
   }
 `;
 

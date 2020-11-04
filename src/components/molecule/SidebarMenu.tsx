@@ -1,4 +1,9 @@
-import { Container, HamburguerButton, Menu, MenuLinks } from '@/styles/components/molecules/SidebarMenu';
+import {
+  Container,
+  HamburguerButton,
+  Menu,
+  MenuLinks,
+} from '@/styles/components/molecules/SidebarMenu';
 import Link from 'next/link';
 import { useState } from 'react';
 import { MdMenu } from 'react-icons/md';
@@ -8,16 +13,11 @@ const SidebarMenu = () => {
 
   return (
     <Container>
-      <HamburguerButton
-        isOpen={isOpen}
-        onClick={() => setIsOpen(!isOpen)}
-      >
+      <HamburguerButton isOpen={isOpen} onClick={() => setIsOpen(!isOpen)}>
         <MdMenu />
       </HamburguerButton>
 
-      <Menu
-        isOpen={isOpen}
-      >
+      <Menu isOpen={isOpen}>
         <MenuLinks>
           <Link href="/#sobre">
             <a>
@@ -38,14 +38,14 @@ const SidebarMenu = () => {
           </Link>
 
           {/* <Link href=""> */}
-            {/* <a> */}
-              <p>Para Laboratórios</p>
-            {/* </a> */}
+          {/* <a> */}
+          <p>Para Laboratórios</p>
+          {/* </a> */}
           {/* </Link> */}
         </MenuLinks>
       </Menu>
     </Container>
-  )
-}
+  );
+};
 
 export default SidebarMenu;

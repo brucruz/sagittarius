@@ -1,9 +1,9 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const Container = styled.div`
-  background: #F0F6F9;
-  border-top: 1px solid #BCC3D4;
-  border-bottom: 1px solid #BCC3D4;
+  background: #f0f6f9;
+  border-top: 1px solid #bcc3d4;
+  border-bottom: 1px solid #bcc3d4;
   padding: 8px 24px;
   display: flex;
   justify-content: space-between;
@@ -24,7 +24,7 @@ export const Container = styled.div`
     h2 {
       font-size: 16px;
       margin-top: -8px;
-      color: #4D49C4;
+      color: #4d49c4;
     }
   }
 `;

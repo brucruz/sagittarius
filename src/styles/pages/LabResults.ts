@@ -33,7 +33,7 @@ export const Content = styled.div`
 
     /* Paragrafo */
 
-    color: #3C4759;
+    color: #3c4759;
 
     margin-bottom: 16px;
   }
@@ -49,7 +49,7 @@ export const Content = styled.div`
 `;
 
 export const Card = styled.div`
-  border: 1px solid #BCC3D4;
+  border: 1px solid #bcc3d4;
   box-sizing: border-box;
   border-radius: 6px;
   background: #f2f3f6;
@@ -89,7 +89,7 @@ export const CardHeader = styled.div`
       }
     }
   }
-`
+`;
 
 export const HeaderInfo = styled.div`
   margin-left: 16px;
@@ -103,7 +103,7 @@ export const HeaderInfo = styled.div`
     font-weight: 800;
     letter-spacing: 0.192941px;
 
-    color: #2F2C77;
+    color: #2f2c77;
   }
 
   @media ${device.laptop} {
@@ -156,8 +156,8 @@ export const CardFooter = styled.div`
 
   button {
     text-transform: uppercase;
-    background: #4D49C4;
-    border: 1px solid #7773FF;
+    background: #4d49c4;
+    border: 1px solid #7773ff;
     box-sizing: border-box;
     border-radius: 4px;
     color: #fff;
@@ -181,13 +181,12 @@ export const Price = styled.div`
 
   span {
     display: flex;
-    color: #247FA6;
+    color: #247fa6;
     font-size: 13px;
     font-weight: 700;
     margin-top: -6px;
     margin-bottom: 8px;
   }
-
 `;
 
 export const LabResultList = styled.div`
@@ -204,5 +203,3 @@ export const LabResultList = styled.div`
     }
   }
 `;
-
-

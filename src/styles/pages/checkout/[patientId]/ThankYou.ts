@@ -15,21 +15,21 @@ export const Content = styled.div`
 
   a {
     text-decoration: none;
-    color: #4D49C4;
+    color: #4d49c4;
   }
-`;  
+`;
 
 export const Smile = styled.h3`
   margin-bottom: 40px;
   font-size: 72px;
   text-align: center;
-  color: #4D49C4;
+  color: #4d49c4;
 `;
 
 export const Title = styled.h1`
   font-size: 24px;
   text-align: center;
-  color: #2F2C77;
+  color: #2f2c77;
 `;
 
 export const Subtitle = styled.h3`
@@ -39,7 +39,7 @@ export const Subtitle = styled.h3`
   font-weight: 400;
   text-align: center;
   letter-spacing: 0.192941px;
-  color: #3C4759;
+  color: #3c4759;
   margin-bottom: 32px;
 `;
 
@@ -55,7 +55,7 @@ export const ModalContainer = styled.div`
     padding: 16px;
 
     svg {
-      fill: #BCC3D4;
+      fill: #bcc3d4;
       height: 24px;
       width: 24px;
     }
@@ -76,7 +76,7 @@ export const ModalContainer = styled.div`
     h3 {
       font-size: 16px;
     }
-    
+
     @media ${device.tablet} {
       padding: 48px !important;
 
@@ -97,11 +97,10 @@ export const ModalContainer = styled.div`
   }
 
   & > div:last-child {
-
     display: flex;
     justify-content: center;
     padding: 24px 0;
-    border-top: 1px solid #BCC3D4;
+    border-top: 1px solid #bcc3d4;
 
     button {
       width: 75%;
@@ -136,7 +135,6 @@ export const ModalContainer = styled.div`
       }
 
       @media ${device.tablet} {
-
         font-size: 16px;
 
         img {

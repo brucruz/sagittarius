@@ -1,5 +1,5 @@
-import device from "@/utils/devices";
-import styled from "styled-components";
+import device from '@/utils/devices';
+import styled from 'styled-components';
 
 export const Header = styled.section`
   margin-top: 20px;
@@ -17,7 +17,7 @@ export const HeaderContent = styled.article`
 
     /* Paragrafo */
 
-    color: #3C4759;
+    color: #3c4759;
 
     span {
       margin-left: 16px;
@@ -66,7 +66,7 @@ export const ModalHeader = styled.header`
 
     /* Azul Heali */
 
-    color: #2F2C77;
+    color: #2f2c77;
 
     margin-bottom: 20px;
   }
@@ -82,21 +82,21 @@ export const ModalHeader = styled.header`
 
     /* Paragrafo */
 
-    color: #3C4759;
+    color: #3c4759;
   }
 `;
 
 export const CloseButton = styled.button`
   svg {
-      margin-left: calc(100% - 18px);
-      color: #BCC3D4;
-      height: 20px;
-      width: 20px;
-    }
+    margin-left: calc(100% - 18px);
+    color: #bcc3d4;
+    height: 20px;
+    width: 20px;
+  }
 `;
 
 export const ModalFooter = styled.footer`
-  border-top: 1px solid #BCC3D4;
+  border-top: 1px solid #bcc3d4;
 
   div {
     padding-top: 16px;
@@ -105,8 +105,8 @@ export const ModalFooter = styled.footer`
     padding-bottom: 15px;
 
     @media ${device.tablet} {
-    padding-left: 81px;
-    padding-right: 81px;
+      padding-left: 81px;
+      padding-right: 81px;
+    }
   }
-  }
-`
+`;

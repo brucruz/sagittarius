@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const GroupContainer = styled.section`
   h4 {
@@ -11,7 +11,7 @@ export const GroupContainer = styled.section`
 
     /* Paragrafo */
 
-    color: #3C4759;
+    color: #3c4759;
 
     margin-bottom: 8px;
   }

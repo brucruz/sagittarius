@@ -3,7 +3,7 @@ import device from '../../../utils/devices';
 
 export const Container = styled.div`
   color: #fff;
-  background-color: #24A648;
+  background-color: #24a648;
 
   position: fixed;
   bottom: 10px;

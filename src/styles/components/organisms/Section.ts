@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 import devices from '@/utils/devices';
 
 export const Container = styled.section`

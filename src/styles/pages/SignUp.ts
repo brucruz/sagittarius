@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const InputGroupTitle = styled.h4`
   font-weight: bold;
@@ -10,7 +10,7 @@ export const InputGroupTitle = styled.h4`
 
   /* Paragrafo */
 
-  color: #3C4759;
+  color: #3c4759;
 
   margin-top: 16.5px;
-`
+`;

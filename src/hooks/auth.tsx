@@ -1,6 +1,12 @@
 import User from '@/@types/User';
 import mixpanel from 'mixpanel-browser';
-import { createContext, useCallback, useState, useContext, useEffect } from 'react';
+import {
+  createContext,
+  useCallback,
+  useState,
+  useContext,
+  useEffect,
+} from 'react';
 import api from '../services/api';
 // import { Mixpanel } from '../mixpanel';
 

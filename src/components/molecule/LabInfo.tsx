@@ -1,29 +1,25 @@
-import { HTMLAttributes } from "react";
-import { Container, Content, ContainerInline } from '@/styles/components/molecules/LabInfo';
+import { HTMLAttributes } from 'react';
+import {
+  Container,
+  Content,
+  ContainerInline,
+} from '@/styles/components/molecules/LabInfo';
 
 interface LabInfo extends HTMLAttributes<HTMLDivElement> {
   icon: any;
 }
 
 const Title = ({ children }) => {
-  return (
-    <h2>{ children }</h2>
-  );
-}
+  return <h2>{children}</h2>;
+};
 
 const Description = ({ children }) => {
-  return (
-    <p>{ children }</p>
-  );
-}
+  return <p>{children}</p>;
+};
 
 const InlineContent = ({ children }) => {
-  return (
-    <ContainerInline>
-      { children }
-    </ContainerInline>
-  );
-}
+  return <ContainerInline>{children}</ContainerInline>;
+};
 
 const LabInfo = ({ icon, children }: LabInfo) => {
   return (
@@ -31,12 +27,10 @@ const LabInfo = ({ icon, children }: LabInfo) => {
       <div>
         <img src={icon} />
       </div>
-      <Content>
-        { children }
-      </Content>
+      <Content>{children}</Content>
     </Container>
   );
-}
+};
 
 LabInfo.Title = Title;
 LabInfo.Description = Description;

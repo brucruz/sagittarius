@@ -9,9 +9,9 @@ import {
 import mixpanel from 'mixpanel-browser';
 import PriceFormatted from '@/@types/PriceFormatted';
 import PricesInBag from '@/@types/PricesInBag';
+import formatValue from '@/utils/formatValue';
 import Lab from '../@types/Lab';
 import { useAuth } from './auth';
-import formatValue from '@/utils/formatValue';
 
 interface BagContextData {
   isBagOpen: boolean;
@@ -111,7 +111,7 @@ const BagProvider = ({ children }) => {
         open_hour: currentLab.open_hour,
         company: currentLab.company,
         company_id: currentLab.company_id,
-        price: items.map((item) => {
+        price: items.map(item => {
           return {
             id: item.id,
             price: item.price,
@@ -121,7 +121,7 @@ const BagProvider = ({ children }) => {
             exam_id: item.exam_id,
             lab_id: item.lab_id,
             lab: item.lab,
-          }
+          };
         }),
       };
 
@@ -130,7 +130,11 @@ const BagProvider = ({ children }) => {
       } else {
         const labIndex = bagItems.findIndex(item => item.id === itemToAdd.id);
         if (labIndex >= 0) {
-          setBagItems([...bagItems.map((item, index) => index === labIndex ? itemToAdd : item)])
+          setBagItems([
+            ...bagItems.map((item, index) =>
+              index === labIndex ? itemToAdd : item,
+            ),
+          ]);
         } else {
           setBagItems(currentBagItem => [...currentBagItem, itemToAdd]);
         }
@@ -145,8 +149,8 @@ const BagProvider = ({ children }) => {
           Price: price.price,
         });
       });
-
-    }, [bagItems, setBagItems, user]
+    },
+    [bagItems, setBagItems, user],
   );
 
   const removeBagItem = useCallback(
@@ -232,8 +236,6 @@ const BagProvider = ({ children }) => {
 
     return labCount;
   }, [bagItems]);
-
-
 
   return (
     <BagContext.Provider
