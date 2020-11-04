@@ -80,7 +80,7 @@ export default function Login(): ReactElement {
     authRedirect();
   }
 
-  async function handleGoogleLogin(response): void {
+  async function handleGoogleLogin(response): Promise<void> {
     const onlineResponse = response as GoogleLoginResponse;
 
     const { data } = await api.post('/sessions/google', {
