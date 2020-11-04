@@ -1,5 +1,5 @@
 import { CheckboxItem } from '@/styles/components/atom/Checkbox';
-import { LabelHTMLAttributes } from 'react';
+import { LabelHTMLAttributes, ReactElement } from 'react';
 import { MdCheck } from 'react-icons/md';
 
 export interface CheckboxType {
