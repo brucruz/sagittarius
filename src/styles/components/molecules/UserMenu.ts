@@ -1,6 +1,6 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 import devices from '@/utils/devices';
-import device from "@/utils/devices";
+import device from '@/utils/devices';
 
 interface OnlineUserMenuProps {
   isMenuOpen: boolean;
@@ -30,7 +30,7 @@ export const OfflineUser = styled.button`
 
     /* azul CTA */
 
-    color: #4D49C4;
+    color: #4d49c4;
 
     margin-left: 8.5px;
     margin-top: 12px;
@@ -39,7 +39,7 @@ export const OfflineUser = styled.button`
 `;
 
 export const UserAvatar = styled.div`
-  background-color: rgba(188,195,212,0.3);
+  background-color: rgba(188, 195, 212, 0.3);
 
   border-radius: 50%;
 
@@ -54,7 +54,7 @@ export const UserAvatar = styled.div`
   width: 32px;
 
   svg {
-    color: #4D49C4;
+    color: #4d49c4;
     height: 20px;
     width: 20px;
   }
@@ -94,14 +94,14 @@ export const UserMenuContainer = styled.section`
   position: absolute;
 
   top: 40px;
-  left: calc(-106px/2 + 32px/2);
+  left: calc(-106px / 2 + 32px / 2);
 `;
 
 export const MenuArrow = styled.div`
   display: block;
   height: 20px;
   width: 20px;
-  background-color: #EBEDF2;
+  background-color: #ebedf2;
   border: inherit;
   position: absolute;
   top: 5px;
@@ -112,19 +112,18 @@ export const MenuArrow = styled.div`
 `;
 
 export const MenuItems = styled.section`
-  background: #EBEDF2;
+  background: #ebedf2;
   box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.08);
   border-radius: 6px;
 
   position: absolute;
   top: 11px;
 
-
   width: 106px;
 
   @media ${device.tablet} {
-      width: 140px;
-    }
+    width: 140px;
+  }
 
   padding-top: 16px;
   padding-bottom: 11.5px;
@@ -146,7 +145,7 @@ export const MenuHelloItem = styled.article`
 
     /* roxo */
 
-    color: #4D49C4;
+    color: #4d49c4;
   }
 `;
 
@@ -169,4 +168,3 @@ export const MenuItem = styled.article`
     }
   }
 `;
-

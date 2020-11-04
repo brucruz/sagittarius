@@ -1,4 +1,11 @@
-import { createContext, useCallback, useContext, useState } from 'react';
+/* eslint-disable import/no-cycle */
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useState,
+  ReactElement,
+} from 'react';
 import { uuid } from 'uuidv4';
 
 import ToastContainer from '@/components/molecule/ToastContainer';
@@ -17,7 +24,7 @@ interface ToastContextData {
 
 const ToastContext = createContext<ToastContextData>({} as ToastContextData);
 
-const ToastProvider = ({ children }) => {
+const ToastProvider = ({ children }): ReactElement => {
   const [messages, setMessages] = useState<ToastMessage[]>([]);
 
   const addToast = useCallback(

@@ -1,16 +1,10 @@
 import { Base } from '@/styles/components/atom/Button';
-import { ButtonHTMLAttributes } from 'react';
+import { ButtonHTMLAttributes, ReactElement } from 'react';
 
-interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement>;
 
-}
-
-const Button = ({ children, ...rest }: ButtonProps) => {
-  return (
-    <Base { ...rest }>
-      { children }
-    </Base>
-  );
-}
+const Button = ({ children, ...rest }: ButtonProps): ReactElement => {
+  return <Base {...rest}>{children}</Base>;
+};
 
 export default Button;

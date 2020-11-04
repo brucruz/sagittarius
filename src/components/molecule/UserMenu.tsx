@@ -1,19 +1,28 @@
-import { useAuth } from "@/hooks/auth";
-import { Container, MenuArrow, MenuHelloItem, MenuItem, MenuItems, OfflineUser, OnlineUserMenu, UserAvatar, UserMenuContainer } from "@/styles/components/molecules/UserMenu";
-import Link from "next/link";
-import { useState } from "react";
-import { MdPerson } from "react-icons/md";
+import { useAuth } from '@/hooks/auth';
+import {
+  Container,
+  MenuArrow,
+  MenuHelloItem,
+  MenuItem,
+  MenuItems,
+  OfflineUser,
+  OnlineUserMenu,
+  UserAvatar,
+  UserMenuContainer,
+} from '@/styles/components/molecules/UserMenu';
+import Link from 'next/link';
+import { useState, ReactElement } from 'react';
+import { MdPerson } from 'react-icons/md';
 
-const UserMenu = () => {
-
+const UserMenu = (): ReactElement => {
   const { user } = useAuth();
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
     <Container>
-      { !user && (
-        <Link href='/login'>
+      {!user && (
+        <Link href="/login">
           <OfflineUser>
             <UserAvatar>
               <MdPerson />
@@ -22,23 +31,17 @@ const UserMenu = () => {
             <p>Acessar</p>
           </OfflineUser>
         </Link>
-      )
-      }
+      )}
 
-      { !!user && (
-        <OnlineUserMenu
-          onBlur={() => setIsMenuOpen(false)}
-        >
+      {!!user && (
+        <OnlineUserMenu onBlur={() => setIsMenuOpen(false)}>
           <div>
-            <UserAvatar
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-            >
+            <UserAvatar onClick={() => setIsMenuOpen(!isMenuOpen)}>
               {user.avatar_url ? (
-                  <img src={user.avatar_url} alt={user.first_name}/>
-                ) : (
-                  <MdPerson />
-                )
-              }
+                <img src={user.avatar_url} alt={user.first_name} />
+              ) : (
+                <MdPerson />
+              )}
             </UserAvatar>
 
             <p>Olá, {user.first_name}</p>
@@ -46,7 +49,7 @@ const UserMenu = () => {
 
           {isMenuOpen && (
             <UserMenuContainer>
-              <MenuArrow/>
+              <MenuArrow />
 
               <MenuItems>
                 <MenuHelloItem>
@@ -76,7 +79,7 @@ const UserMenu = () => {
         </OnlineUserMenu>
       )}
     </Container>
-  )
-}
+  );
+};
 
 export default UserMenu;

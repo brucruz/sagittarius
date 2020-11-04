@@ -1,5 +1,5 @@
-import device from "@/utils/devices";
-import styled from "styled-components";
+import device from '@/utils/devices';
+import styled from 'styled-components';
 
 export const Container = styled.main``;
 
@@ -26,5 +26,3 @@ export const AddressState = styled.section`
     margin: 64px auto;
   }
 `;
-
-

@@ -1,6 +1,9 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useState, ReactElement } from 'react';
 import htmlParser from 'html-react-parser';
-import { AccordionButton, AccordionPanel } from '@/styles/components/molecules/Accordion';
+import {
+  AccordionButton,
+  AccordionPanel,
+} from '@/styles/components/molecules/Accordion';
 import accordionArrow from '@/assets/components/molecules/Accordion/accordion-arrow.svg';
 import { useAuth } from '@/hooks/auth';
 import mixpanel from 'mixpanel-browser';
@@ -13,7 +16,7 @@ interface AccordionProps {
   index: number;
 }
 
-const Accordion = ({ text, index }: AccordionProps) => {
+const Accordion = ({ text, index }: AccordionProps): ReactElement => {
   const [isActive, setIsActive] = useState(false);
 
   const { user } = useAuth();
@@ -27,10 +30,7 @@ const Accordion = ({ text, index }: AccordionProps) => {
         Question: question,
       });
     },
-    [
-      user,
-      isActive,
-    ],
+    [user, isActive],
   );
 
   return (

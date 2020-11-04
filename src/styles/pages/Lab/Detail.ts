@@ -16,7 +16,7 @@ export const LabInfoContainer = styled.div`
   & > div:last-child {
     border: none;
   }
-`
+`;
 
 export const Content = styled.div`
   min-height: calc(100vh);
@@ -45,7 +45,7 @@ export const CompanyTitle = styled.div`
   }
 
   padding: 12px 0;
-  border-bottom: 1px solid #BCC3D4;
+  border-bottom: 1px solid #bcc3d4;
 
   @media ${device.laptop} {
     border-bottom: none;
@@ -64,7 +64,7 @@ export const CompanyTitle = styled.div`
 
     @media ${device.laptop} {
       padding: 12px 0;
-      border-bottom: 1px solid #BCC3D4;
+      border-bottom: 1px solid #bcc3d4;
     }
   }
 `;
@@ -75,7 +75,7 @@ export const BagContainer = styled.div`
   background: #fff;
   bottom: 32px;
 
-  border: 1px solid #BCC3D4;
+  border: 1px solid #bcc3d4;
   box-sizing: border-box;
   border-radius: 6px;
   padding: 12px 0;
@@ -87,16 +87,16 @@ export const BagContainer = styled.div`
     margin-left: 32px;
     bottom: 0;
     height: fit-content;
-    background: #F0F6F9;
+    background: #f0f6f9;
     padding: 0;
   }
 
-  .total-price-bag-container, .footer-bag-container {
+  .total-price-bag-container,
+  .footer-bag-container {
     padding: 0 16px !important;
   }
 
   .content-bag-container {
-
     .header-content-bag-container {
       display: flex;
       align-items: center;
@@ -105,20 +105,19 @@ export const BagContainer = styled.div`
 
       @media ${device.laptop} {
         padding: 12px 16px;
-        border-bottom: 1px solid #BCC3D4;
+        border-bottom: 1px solid #bcc3d4;
       }
-
     }
 
     span {
       font-weight: 700;
       font-size: 20px;
       line-height: 24px;
-      color: #3C4759;
+      color: #3c4759;
     }
 
     button {
-      background: rgba(188,195,212,0.3);
+      background: rgba(188, 195, 212, 0.3);
 
       height: 32px;
       width: 32px;
@@ -135,7 +134,7 @@ export const BagContainer = styled.div`
       justify-content: center;
 
       svg {
-        color: #4D49C4;
+        color: #4d49c4;
         height: 20px;
         width: 20px;
       }
@@ -160,7 +159,7 @@ export const BagContainer = styled.div`
     }
 
     .list-exams::-webkit-scrollbar-thumb {
-      background-color: #4D49C4;
+      background-color: #4d49c4;
     }
 
     .list-exams::-webkit-scrollbar {
@@ -169,9 +168,9 @@ export const BagContainer = styled.div`
   }
 
   .total-price-bag-container {
-    background: #F0F6F9;
-    border-top: 1px solid #BCC3D4;
-    border-bottom: 1px solid #BCC3D4;
+    background: #f0f6f9;
+    border-top: 1px solid #bcc3d4;
+    border-bottom: 1px solid #bcc3d4;
     padding-top: 8px !important;
     padding-bottom: 8px !important;
     display: flex;
@@ -197,7 +196,6 @@ export const BagContainer = styled.div`
   }
 
   .footer-bag-container {
-
     padding-top: 12px !important;
 
     button {
@@ -218,15 +216,14 @@ export const BagContainer = styled.div`
       padding: 12px 16px !important;
     }
   }
-`
+`;
 
 export const ExamContainer = styled.div`
-
   & > div {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    border-bottom: 1px solid #BCC3D4;
+    border-bottom: 1px solid #bcc3d4;
     padding: 8px 16px 0 16px;
 
     span {
@@ -282,18 +279,18 @@ export const ModalMapHeader = styled.header`
   justify-content: space-between;
   align-items: center;
   padding: 12px 20px;
-  border: 1px solid #BCC3D4;
+  border: 1px solid #bcc3d4;
 
   span {
     font-size: 20px;
     font-weight: 700;
     line-height: 24px;
     letter-spacing: 0.192941px;
-    color: #4D49C4;
+    color: #4d49c4;
   }
 
   svg {
-    fill: #BCC3D4;
+    fill: #bcc3d4;
     height: 20px;
     width: 20px;
   }

@@ -1,42 +1,36 @@
-import { HTMLAttributes } from "react";
-import { Container, Content, ContainerInline } from '@/styles/components/molecules/LabInfo';
+import { HTMLAttributes, ReactElement } from 'react';
+import {
+  Container,
+  Content,
+  ContainerInline,
+} from '@/styles/components/molecules/LabInfo';
 
 interface LabInfo extends HTMLAttributes<HTMLDivElement> {
   icon: any;
 }
 
-const Title = ({ children }) => {
-  return (
-    <h2>{ children }</h2>
-  );
-}
+const Title = ({ children }): ReactElement => {
+  return <h2>{children}</h2>;
+};
 
-const Description = ({ children }) => {
-  return (
-    <p>{ children }</p>
-  );
-}
+const Description = ({ children }): ReactElement => {
+  return <p>{children}</p>;
+};
 
-const InlineContent = ({ children }) => {
-  return (
-    <ContainerInline>
-      { children }
-    </ContainerInline>
-  );
-}
+const InlineContent = ({ children }): ReactElement => {
+  return <ContainerInline>{children}</ContainerInline>;
+};
 
-const LabInfo = ({ icon, children }: LabInfo) => {
+const LabInfo = ({ icon, children }: LabInfo): ReactElement => {
   return (
     <Container>
       <div>
-        <img src={icon} />
+        <img src={icon} alt="ícone" />
       </div>
-      <Content>
-        { children }
-      </Content>
+      <Content>{children}</Content>
     </Container>
   );
-}
+};
 
 LabInfo.Title = Title;
 LabInfo.Description = Description;

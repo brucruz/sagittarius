@@ -19,8 +19,9 @@ const howItWorks = [
     id: 3,
     image: scheduleImage,
     title: 'Agende',
-    text: 'A Heali entra em contato com os laboratórios e encontra o melhor horário para você.',
+    text:
+      'A Heali entra em contato com os laboratórios e encontra o melhor horário para você.',
   },
-]
+];
 
 export default howItWorks;

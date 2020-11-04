@@ -1,4 +1,4 @@
-import styled, { css } from "styled-components";
+import styled, { css } from 'styled-components';
 
 interface CheckboxItemProps {
   isChecked: boolean;
@@ -23,7 +23,7 @@ export const CheckboxItem = styled.label<CheckboxItemProps>`
 
   /* Paragrafo */
 
-  color: #3C4759;
+  color: #3c4759;
 
   &.checkbox-align-center svg {
     margin: auto 0;
@@ -33,9 +33,11 @@ export const CheckboxItem = styled.label<CheckboxItemProps>`
     right: 0;
   }
 
-  ${props => props.isChecked && css`
-    font-weight: bold;
-  `}
+  ${props =>
+    props.isChecked &&
+    css`
+      font-weight: bold;
+    `}
 
   input {
     position: absolute;
@@ -45,7 +47,7 @@ export const CheckboxItem = styled.label<CheckboxItemProps>`
     width: 0;
 
     &:checked + svg {
-      background: #4D49C4;
+      background: #4d49c4;
     }
 
     &:checked + svg::after {
@@ -62,14 +64,14 @@ export const CheckboxItem = styled.label<CheckboxItemProps>`
 
     /* branco */
 
-    color: #FFFFFF;
+    color: #ffffff;
     /* grey staff */
 
-    border: 1px solid #BCC3D4;
+    border: 1px solid #bcc3d4;
     border-radius: 2px;
 
     &::after {
-      content: "";
+      content: '';
       position: absolute;
       display: none;
 
@@ -86,7 +88,6 @@ export const CheckboxItem = styled.label<CheckboxItemProps>`
   }
 
   .checkbox-with-description {
-
     display: flex;
     flex-direction: column;
 

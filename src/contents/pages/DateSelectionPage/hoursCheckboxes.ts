@@ -4,11 +4,11 @@ const hoursCheckboxes = [
     hours: [
       {
         label: 'das 6h às 9h',
-        id: 'Manhã - das 6h às 9h'
+        id: 'Manhã - das 6h às 9h',
       },
       {
         label: 'das 9h às 12h',
-        id: 'Manhã - das 9h às 12h'
+        id: 'Manhã - das 9h às 12h',
       },
     ],
   },
@@ -17,11 +17,11 @@ const hoursCheckboxes = [
     hours: [
       {
         label: 'das 12h às 15h',
-        id: 'Tarde - das 12h às 15h'
+        id: 'Tarde - das 12h às 15h',
       },
       {
         label: 'das 15h às 18h',
-        id: 'Tarde - das 15h às 18h'
+        id: 'Tarde - das 15h às 18h',
       },
     ],
   },
@@ -30,10 +30,10 @@ const hoursCheckboxes = [
     hours: [
       {
         label: 'das 18h às 21h',
-        id: 'Noite - das 18h às 21h'
+        id: 'Noite - das 18h às 21h',
       },
     ],
   },
-]
+];
 
 export default hoursCheckboxes;

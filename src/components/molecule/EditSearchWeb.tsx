@@ -1,19 +1,18 @@
 import { useRouter } from 'next/router';
-import { useState, useCallback, useEffect, useMemo } from 'react';
-import Exam from '@/@types/Exam'; 
+import { useState, useCallback, useEffect, useMemo, ReactElement } from 'react';
+import Exam from '@/@types/Exam';
 import { MdSearch, MdPlace } from 'react-icons/md';
 import arrowIcon from '@/assets/components/molecules/EditSearch/arrow-edit-search.svg';
 import Input from '@/components/atom/Input';
-import examIndex from "@/services/search";
-import { buildSearchQuery } from "@/helpers/searchExams";
-import usePlacesAutocomplete from "use-places-autocomplete";
-import ExamSearchResult from "@/@types/ExamSearchResult";
+import examIndex from '@/services/search';
+import { buildSearchQuery } from '@/helpers/searchExams';
+import usePlacesAutocomplete from 'use-places-autocomplete';
+import ExamSearchResult from '@/@types/ExamSearchResult';
 import { Container } from '@/styles/components/molecules/EditSearchWeb';
 import { useSearchExam } from '@/hooks/searchExam';
 import ButtonBack from '../atom/ButtonBack';
 
-const EditSearchWeb = () => {
-
+const EditSearchWeb = (): ReactElement => {
   const router = useRouter();
 
   const [examTypedValue, setExamTypedValue] = useState('');
@@ -69,6 +68,7 @@ const EditSearchWeb = () => {
       : setExamResults([]);
   }, [examTypedValue, exams]);
 
+  // eslint-disable-next-line no-shadow
   const handleGetAddressInnerValue = useCallback((address: string) => {
     setValue(address);
   }, []);
@@ -91,25 +91,32 @@ const EditSearchWeb = () => {
   ]);
 
   useEffect(() => {
-    if (window.location.search !== `?${resultsSearchUrl}` && resultsSearchUrl !== '') {
+    if (
+      window.location.search !== `?${resultsSearchUrl}` &&
+      resultsSearchUrl !== ''
+    ) {
       router.push({
         pathname: `${window.location.pathname}`,
         search: resultsSearchUrl,
       });
     }
-  }, [resultsSearchUrl])
+  }, [resultsSearchUrl]);
 
   return (
-    <Container className={router.pathname.includes('detalhe') && 'in-detail-page'}>
-      <ButtonBack 
-        onClick={() => router.push({
-          pathname: router.pathname.includes('detalhe') ? '/resultado' : '/',
-          search: router.pathname.includes('detalhe') && resultsSearchUrl
-        })}
+    <Container
+      className={router.pathname.includes('detalhe') && 'in-detail-page'}
+    >
+      <ButtonBack
+        onClick={() =>
+          router.push({
+            pathname: router.pathname.includes('detalhe') ? '/resultado' : '/',
+            search: router.pathname.includes('detalhe') && resultsSearchUrl,
+          })
+        }
       />
       <Input
-        name='exam'
-        label='Seus Exames'
+        name="exam"
+        label="Seus Exames"
         icon={MdSearch}
         suggestions={{
           type: 'exams',
@@ -120,8 +127,8 @@ const EditSearchWeb = () => {
         getInputValue={handleGetExamInnerValue}
       />
       <Input
-        name='location'
-        label='Sua Localização'
+        name="location"
+        label="Sua Localização"
         icon={MdPlace}
         suggestions={{
           type: 'address',
@@ -134,6 +141,6 @@ const EditSearchWeb = () => {
       />
     </Container>
   );
-}
+};
 
 export default EditSearchWeb;

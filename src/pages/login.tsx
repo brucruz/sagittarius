@@ -3,9 +3,11 @@ import * as Yup from 'yup';
 import { FormHandles } from '@unform/core';
 import { Form } from '@unform/web';
 import { useRouter } from 'next/router';
-import { FormEvent, useCallback, useEffect, useRef, useState } from 'react';
+import { ReactElement, useCallback, useEffect, useRef, useState } from 'react';
 import { GoogleLogin, GoogleLoginResponse } from 'react-google-login';
-import FacebookLogin, { ReactFacebookLoginInfo } from 'react-facebook-login/dist/facebook-login-render-props';
+import FacebookLogin, {
+  ReactFacebookLoginInfo,
+} from 'react-facebook-login/dist/facebook-login-render-props';
 import { MdEmail, MdLock } from 'react-icons/md';
 import PageTemplate from '@/components/templates/PageTemplate';
 import Input from '@/components/atom/Input';
@@ -13,7 +15,12 @@ import Button from '@/components/atom/Button';
 import { useAuth, AuthState } from '@/hooks/auth';
 import { useToast } from '@/hooks/toast';
 import getValidationErrors from '@/utils/getValidationErrors';
-import { SocialButton, SocialButtonsContainer, RegisterLink, ForgotPassword } from '@/styles/pages/Login';
+import {
+  SocialButton,
+  SocialButtonsContainer,
+  RegisterLink,
+  ForgotPassword,
+} from '@/styles/pages/Login';
 import api from '@/services/api';
 import { buildSearchQuery } from '@/helpers/searchExams';
 import { useSearchExam } from '@/hooks/searchExam';
@@ -30,14 +37,13 @@ interface FormProps {
   password?: string;
 }
 
-export default function Login() {
-
+export default function Login(): ReactElement {
   const router = useRouter();
   const formRef = useRef<FormHandles>(null);
 
   const [formState, setFormState] = useState<FormProps>({
     email: '',
-    password: ''
+    password: '',
   });
 
   const { signIn, socialNetworkSignIn } = useAuth();
@@ -70,16 +76,16 @@ export default function Login() {
     }
   }, [address, exams, router, bagItems, params]);
 
-  function saveUserAuthenticated(data: AuthState) {
+  function saveUserAuthenticated(data: AuthState): void {
     socialNetworkSignIn(data);
     authRedirect();
   }
 
-  async function handleGoogleLogin(response) {
+  async function handleGoogleLogin(response): Promise<void> {
     const onlineResponse = response as GoogleLoginResponse;
 
     const { data } = await api.post('/sessions/google', {
-      googleTokenId: onlineResponse.tokenId
+      googleTokenId: onlineResponse.tokenId,
     });
 
     saveUserAuthenticated(data);
@@ -95,63 +101,64 @@ export default function Login() {
     saveUserAuthenticated(data);
   }
 
-  const handleSubmit = useCallback(async (data) => {
+  const handleSubmit = useCallback(
+    async data => {
+      try {
+        formRef.current?.setErrors({});
 
-    try {
-
-      formRef.current?.setErrors({});
-
-      const schema = Yup.object().shape({
-        email: Yup.string()
-          .required('E-mail obrigatório')
-          .email('Digite um e-mail válido'),
-        password: Yup.string().required('Senha obrigatória'),
-      });
-
-      await schema.validate(data, {
-        abortEarly: false,
-      });
-
-      await signIn({
-        email: data.email,
-        password: data.password
-      });
-
-      authRedirect();
-    } catch(err) {
-      if (err instanceof Yup.ValidationError) {
-        const errors = getValidationErrors(err);
-
-        formRef.current?.setErrors(errors);
-
-        return;
-      }
-
-      if (
-        err.response.data.message === 'Incorrect email/password combination'
-      ) {
-        addToast({
-          type: 'error',
-          title: 'Dados incorretos',
-          description:
-            'Os dados informados estão incorretos, cheque as credenciais.',
+        const schema = Yup.object().shape({
+          email: Yup.string()
+            .required('E-mail obrigatório')
+            .email('Digite um e-mail válido'),
+          password: Yup.string().required('Senha obrigatória'),
         });
 
-        return;
-      }
+        await schema.validate(data, {
+          abortEarly: false,
+        });
 
-      addToast({
-        type: 'error',
-        title: 'Erro na autenticação',
-        description: 'Ocorreu um erro ao fazer login, cheque as credenciais.',
-      });
-    }
-  }, [authRedirect])
+        await signIn({
+          email: data.email,
+          password: data.password,
+        });
+
+        authRedirect();
+      } catch (err) {
+        if (err instanceof Yup.ValidationError) {
+          const errors = getValidationErrors(err);
+
+          formRef.current?.setErrors(errors);
+
+          return;
+        }
+
+        if (
+          err.response.data.message === 'Incorrect email/password combination'
+        ) {
+          addToast({
+            type: 'error',
+            title: 'Dados incorretos',
+            description:
+              'Os dados informados estão incorretos, cheque as credenciais.',
+          });
+
+          return;
+        }
+
+        addToast({
+          type: 'error',
+          title: 'Erro na autenticação',
+          description: 'Ocorreu um erro ao fazer login, cheque as credenciais.',
+        });
+      }
+    },
+    [authRedirect],
+  );
 
   const handleFormChange = useCallback(() => {
     setFormState({
       email: formRef.current.getFieldValue('email'),
-      password: formRef.current.getFieldValue('password')
+      password: formRef.current.getFieldValue('password'),
     });
   }, []);
 
@@ -162,12 +169,12 @@ export default function Login() {
       }}
       titleMain={{
         title: 'Acesse sua conta',
-        subTitle: 'Digite seus dados para continuar'
+        subTitle: 'Digite seus dados para continuar',
       }}
     >
       <SEO
-        title='Acesse'
-        description='Faça seu login para agendar seus exames médicos de forma rápida, simples e segura'
+        title="Acesse"
+        description="Faça seu login para agendar seus exames médicos de forma rápida, simples e segura"
       />
 
       <Form ref={formRef} onSubmit={handleSubmit} onChange={handleFormChange}>
@@ -208,16 +215,22 @@ export default function Login() {
             appId={process.env.NEXT_PUBLIC_FACEBOOK_APP_ID || ''}
             fields="name, email, picture"
             render={renderProps => (
-              <SocialButton onClick={renderProps.onClick}>Facebook</SocialButton>
+              <SocialButton onClick={renderProps.onClick}>
+                Facebook
+              </SocialButton>
             )}
             callback={handleFacebookLogin}
           />
         </SocialButtonsContainer>
-        <Link href={{
-          pathname: '/cadastro',
-          query: { isBeforeSchedule: !!params.isBeforeSchedule }
-        }}>
-          <RegisterLink>Não tem uma conta? <span>Cadastre-se</span></RegisterLink>
+        <Link
+          href={{
+            pathname: '/cadastro',
+            query: { isBeforeSchedule: !!params.isBeforeSchedule },
+          }}
+        >
+          <RegisterLink>
+            Não tem uma conta? <span>Cadastre-se</span>
+          </RegisterLink>
         </Link>
       </Form>
     </PageTemplate>

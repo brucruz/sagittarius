@@ -1,15 +1,15 @@
-import device from "@/utils/devices";
-import styled from "styled-components";
+import device from '@/utils/devices';
+import styled from 'styled-components';
 
 export const SectionAbout = styled.section`
   margin-top: 91px;
   padding: 32px 4%;
-  background-color: #F2F5FB;
+  background-color: #f2f5fb;
 
   article {
     p {
-        margin-top: 24px;
-      &+p {
+      margin-top: 24px;
+      & + p {
         margin-top: 16px;
       }
     }
@@ -21,13 +21,13 @@ export const SectionAbout = styled.section`
     flex-direction: column;
     align-items: center;
     margin-left: 0;
-    margin-right: 0; 
+    margin-right: 0;
     padding: 100px 8.3%;
     text-align: center;
 
     h2 {
       font-size: 32px;
-      color: #2F2C77;
+      color: #2f2c77;
     }
 
     p {
@@ -45,7 +45,7 @@ export const SectionPayment = styled.section`
 
   @media ${device.tablet} {
     margin-left: 8.3%;
-    margin-right: 8.3%; 
+    margin-right: 8.3%;
     text-align: center;
 
     p {
@@ -85,7 +85,7 @@ export const PaymentOption = styled.article`
   width: 100%;
   height: 118px;
 
-  background: #F2F5FB;
+  background: #f2f5fb;
   border-radius: 8px;
   margin-bottom: 16px;
 
@@ -108,7 +108,7 @@ export const PaymentOption = styled.article`
 
     letter-spacing: 0.192941px;
 
-    color: #4D49C4;
+    color: #4d49c4;
 
     position: absolute;
 
@@ -117,7 +117,6 @@ export const PaymentOption = styled.article`
     margin-left: 16px;
     margin-bottom: 0;
   }
-
 `;
 
 export const SectionFAQ = styled.section`
@@ -125,7 +124,7 @@ export const SectionFAQ = styled.section`
 
   @media ${device.tablet} {
     margin-left: 8.3%;
-    margin-right: 8.3%; 
+    margin-right: 8.3%;
 
     h2 {
       font-size: 32px;

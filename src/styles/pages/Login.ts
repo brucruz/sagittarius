@@ -6,10 +6,10 @@ export const ForgotPassword = styled.a`
   cursor: pointer;
   font-weight: 700;
   text-decoration: underline;
-  
+
   & ~ button {
-    margin-top: 24px; 
-    margin-bottom: 32px; 
+    margin-top: 24px;
+    margin-bottom: 32px;
 
     & ~ span {
       font-weight: 700;
@@ -19,11 +19,11 @@ export const ForgotPassword = styled.a`
 `;
 
 export const SocialButton = styled.button`
-  background: #FFFFFF;
-  border: 1px solid #BCC3D4;
+  background: #ffffff;
+  border: 1px solid #bcc3d4;
   box-sizing: border-box;
   border-radius: 4px;
-  color: #3C4759;
+  color: #3c4759;
   width: 100%;
   padding: 10px 0;
 `;
@@ -37,7 +37,7 @@ export const SocialButtonsContainer = styled.div`
   button {
     flex: 0 49%;
   }
-`
+`;
 
 export const RegisterLink = styled.a`
   text-decoration: underline;

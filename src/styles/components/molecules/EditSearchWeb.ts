@@ -1,5 +1,5 @@
-import device from "@/utils/devices";
-import styled from "styled-components";
+import device from '@/utils/devices';
+import styled from 'styled-components';
 
 export const Container = styled.div`
   display: none;
@@ -21,7 +21,8 @@ export const Container = styled.div`
     margin-bottom: 32px;
     padding: 0 8.3%;
 
-    section, header {
+    section,
+    header {
       margin: 0 !important;
     }
 
@@ -31,16 +32,14 @@ export const Container = styled.div`
       justify-content: space-between;
 
       & > section {
-
         margin-left: 16px !important;
 
-        header { 
+        header {
           margin: 0 !important;
         }
- 
       }
 
-      & > footer { 
+      & > footer {
         margin-top: 48px !important;
         width: 49% !important;
       }

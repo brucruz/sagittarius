@@ -1,42 +1,51 @@
-import { GroupContainer } from "@/styles/components/molecules/CheckboxGroup";
-import { memo, useCallback, useState } from "react";
-import Checkbox, { CheckboxType } from "../atom/Checkbox";
+import { GroupContainer } from '@/styles/components/molecules/CheckboxGroup';
+import { memo, ReactElement, useCallback, useState } from 'react';
+import Checkbox, { CheckboxType } from '../atom/Checkbox';
 
 interface CheckboxGroupProps {
   title?: string;
   checkboxes: CheckboxType[];
 }
 
-const CheckboxGroup = ({ title, checkboxes }: CheckboxGroupProps) => {
-  const [checkboxItems, setCheckboxItems] = useState<CheckboxType[]>(checkboxes);
+const CheckboxGroup = ({
+  title,
+  checkboxes,
+}: CheckboxGroupProps): ReactElement => {
+  const [checkboxItems, setCheckboxItems] = useState<CheckboxType[]>(
+    checkboxes,
+  );
 
-  const handleCheckboxChange = useCallback((checkbox: CheckboxType) => {
-    // const modifiedItems = checkboxItems.map(item => {
-    //   item.id === checkbox.id ? item.isChecked = !checkbox.isChecked : item = item;
+  const handleCheckboxChange = useCallback(
+    (checkbox: CheckboxType) => {
+      // const modifiedItems = checkboxItems.map(item => {
+      //   item.id === checkbox.id ? item.isChecked = !checkbox.isChecked : item = item;
 
-    //   return item;
-    // });
+      //   return item;
+      // });
 
-    setCheckboxItems((markedCheckboxes) => [...markedCheckboxes, checkbox]);
-  }, [checkboxItems]);
+      setCheckboxItems(markedCheckboxes => [...markedCheckboxes, checkbox]);
+    },
+    [checkboxItems],
+  );
 
   return (
     <GroupContainer>
-      {title && (<h4>{title}</h4>)}
+      {title && <h4>{title}</h4>}
 
       <div>
-        {checkboxes && checkboxes.map(checkbox => (
-          <Checkbox
-            label={checkbox.label}
-            isChecked={checkbox.isChecked}
-            key={checkbox.label}
-            id={checkbox.id}
-            onChange={() => handleCheckboxChange(checkbox)}
-          />
-        ))}
+        {checkboxes &&
+          checkboxes.map(checkbox => (
+            <Checkbox
+              label={checkbox.label}
+              isChecked={checkbox.isChecked}
+              key={checkbox.label}
+              id={checkbox.id}
+              onChange={() => handleCheckboxChange(checkbox)}
+            />
+          ))}
       </div>
     </GroupContainer>
-  )
-}
+  );
+};
 
 export default memo(CheckboxGroup);

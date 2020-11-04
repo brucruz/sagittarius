@@ -1,4 +1,5 @@
 import Head from 'next/head';
+import { ReactElement } from 'react';
 
 interface SEOProps {
   title: string;
@@ -8,21 +9,21 @@ interface SEOProps {
   shouldIndexPage?: boolean;
 }
 
-const SEO =({
+const SEO = ({
   title,
   description,
   image,
   shouldExcludeTitleSuffix = false,
   shouldIndexPage = true,
-}: SEOProps) => {
-  const pageTitle = `${title} ${!shouldExcludeTitleSuffix && '| Heali'}`
+}: SEOProps): ReactElement => {
+  const pageTitle = `${title} ${!shouldExcludeTitleSuffix && '| Heali'}`;
   const pageImage = image ? `/${image}` : null;
 
   return (
     <Head>
       <title>{pageTitle}</title>
-      { description && <meta name="description" content={description} /> }
-      { pageImage && <meta name="image" content={pageImage} /> }
+      {description && <meta name="description" content={description} />}
+      {pageImage && <meta name="image" content={pageImage} />}
 
       {!shouldIndexPage && <meta name="robots" content="noindex,nofollow" />}
 
@@ -57,6 +58,6 @@ const SEO =({
       <meta name="twitter:image:height" content="620" />
     </Head>
   );
-}
+};
 
 export default SEO;

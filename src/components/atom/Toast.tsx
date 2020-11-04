@@ -1,12 +1,14 @@
-import { useEffect } from 'react';
+/* eslint-disable import/no-cycle */
+/* eslint-disable @typescript-eslint/ban-types */
+import { ReactElement, useEffect } from 'react';
+
+import { ToastMessage, useToast } from '@/hooks/toast';
 import {
   FiAlertCircle,
   FiCheckCircle,
   FiInfo,
   FiXCircle,
 } from 'react-icons/fi';
-
-import { ToastMessage, useToast } from '@/hooks/toast';
 
 import { Container } from '@/styles/components/atom/Toast';
 
@@ -21,7 +23,7 @@ const icons = {
   success: <FiCheckCircle size={24} />,
 };
 
-const Toast = ({ message, style }: ToastProps) => {
+const Toast = ({ message, style }: ToastProps): ReactElement => {
   const { removeToast } = useToast();
 
   useEffect(() => {

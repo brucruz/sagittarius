@@ -1,4 +1,3 @@
-import React from 'react';
 import GoogleMapReact from 'google-map-react';
 import { MapContainer } from '@/styles/components/organisms/Map';
 import Marker from '@/components/atom/MapMarker';

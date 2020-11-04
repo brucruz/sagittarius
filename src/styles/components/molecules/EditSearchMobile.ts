@@ -1,11 +1,11 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 import device from '@/utils/devices';
 
 export const Container = styled.div`
   display: flex;
   flex-direction: column;
 
-  button {
+  button:first-child {
     margin-right: auto;
     margin-bottom: 16px;
   }
@@ -13,7 +13,7 @@ export const Container = styled.div`
   width: 100%;
   margin: 8px 0;
 
-  border-bottom: 1px solid #BCC3D4;
+  border-bottom: 1px solid #bcc3d4;
 
   img {
     cursor: pointer;
@@ -34,7 +34,7 @@ export const Container = styled.div`
 export const Header = styled.div`
   display: flex;
   justify-content: space-between;
-  border-bottom: 1px solid #BCC3D4;
+  border-bottom: 1px solid #bcc3d4;
   padding: 8px 0;
 `;
 

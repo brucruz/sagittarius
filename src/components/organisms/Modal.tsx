@@ -1,4 +1,4 @@
-import { HTMLAttributes } from 'react';
+import { HTMLAttributes, ReactElement } from 'react';
 import ReactModal from 'react-modal';
 
 interface ModalProps extends HTMLAttributes<HTMLDivElement> {
@@ -6,7 +6,7 @@ interface ModalProps extends HTMLAttributes<HTMLDivElement> {
   setIsOpen: () => void;
 }
 
-const Modal = ({ children, isOpen, setIsOpen }: ModalProps) => {
+const Modal = ({ children, isOpen, setIsOpen }: ModalProps): ReactElement => {
   return (
     <ReactModal
       isOpen={isOpen}

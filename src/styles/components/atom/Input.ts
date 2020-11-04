@@ -1,4 +1,4 @@
-import styled, { css } from "styled-components";
+import styled, { css } from 'styled-components';
 
 interface UserInputProps {
   isErrored?: boolean;
@@ -30,7 +30,7 @@ export const UserInput = styled.header<UserInputProps>`
 
     letter-spacing: 0.192941px;
 
-    color: #3C4759;
+    color: #3c4759;
 
     margin-top: 14px;
     margin-bottom: 12px;
@@ -48,7 +48,7 @@ export const UserInput = styled.header<UserInputProps>`
 
     letter-spacing: 0.192941px;
 
-    color: #3C4759;
+    color: #3c4759;
   }
 
   svg {
@@ -60,12 +60,11 @@ export const UserInput = styled.header<UserInputProps>`
     width: 20px;
     height: 20px;
 
-    color: #4D49C4;
-
+    color: #4d49c4;
   }
 
   svg.password-eye-icon {
-    color: #3C4759 !important;
+    color: #3c4759 !important;
     opacity: 0.4;
     cursor: pointer;
   }
@@ -77,16 +76,16 @@ export const UserInput = styled.header<UserInputProps>`
         color: #000000;
         opacity: 0.6;
       }
-  `}
+    `}
 
   ${props =>
     props.isFilled &&
     css`
       svg {
-        color: #4D49C4;
+        color: #4d49c4;
         opacity: 1;
       }
-  `}
+    `}
 
   ${props =>
     (props.isFocused || props.isFilled) &&
@@ -111,17 +110,17 @@ export const UserInput = styled.header<UserInputProps>`
     `}
 
     ${props =>
-      props.hasSuggestions &&
-      css`
-        border-radius: 6px 6px 0 0;
-        border-bottom: 2px solid #4D49C4;
+    props.hasSuggestions &&
+    css`
+      border-radius: 6px 6px 0 0;
+      border-bottom: 2px solid #4d49c4;
     `}
 
     ${props =>
-      props.isErrored &&
-      css`
-        border-radius: 6px 6px 0 0;
-        border-bottom: 2px solid #BA3737;
+    props.isErrored &&
+    css`
+      border-radius: 6px 6px 0 0;
+      border-bottom: 2px solid #ba3737;
     `}
 `;
 
@@ -139,7 +138,7 @@ export const SuggestionArea = styled.footer`
   position: absolute;
   z-index: 100;
 
-  background: #FFFFFF;
+  background: #ffffff;
   border: 1px solid rgba(0, 0, 0, 0.2);
   width: 100%;
 
@@ -159,7 +158,7 @@ export const SuggestionArea = styled.footer`
 
       /* Paragrafo */
 
-      color: #3C4759;
+      color: #3c4759;
       opacity: 0.8;
 
       margin-top: 10px;
@@ -171,7 +170,7 @@ export const SuggestionArea = styled.footer`
       height: 20px;
       width: 20px;
 
-      color: #3C4759;
+      color: #3c4759;
       opacity: 0.8;
 
       margin-right: 16px;
@@ -185,7 +184,7 @@ export const SuggestionArea = styled.footer`
       border-bottom: 1px solid rgba(35, 43, 59, 0.16);
     }
   }
-`
+`;
 
 export const SelectedExams = styled.section`
   width: 100%;
@@ -201,10 +200,10 @@ export const SelectedExamsSummary = styled.header`
   display: flex;
   justify-content: space-between;
 
-  background: #FFFFFF;
+  background: #ffffff;
   /* grey staff */
 
-  border: 1px solid #BCC3D4;
+  border: 1px solid #bcc3d4;
   box-sizing: border-box;
   border-radius: 6px;
 
@@ -228,7 +227,7 @@ export const SelectedExamsSummary = styled.header`
   }
 
   button {
-    background: rgba(188,195,212,0.3);
+    background: rgba(188, 195, 212, 0.3);
 
     height: 32px;
     width: 32px;
@@ -245,7 +244,7 @@ export const SelectedExamsSummary = styled.header`
     justify-content: center;
 
     svg {
-      color: #4D49C4;
+      color: #4d49c4;
       height: 20px;
       width: 20px;
     }
@@ -255,16 +254,16 @@ export const SelectedExamsSummary = styled.header`
 export const SelectedExamsDetail = styled.footer`
   width: 100%;
 
-  background: #FFFFFF;
+  background: #ffffff;
   /* grey staff */
 
-  border: 1px solid #BCC3D4;
+  border: 1px solid #bcc3d4;
 
   position: absolute;
   z-index: -2;
   top: 45px;
 
-  border-bottom: 1px solid rgba(35,43,59,0.16);
+  border-bottom: 1px solid rgba(35, 43, 59, 0.16);
 
   max-height: 100px;
   overflow-x: hidden;
@@ -274,7 +273,7 @@ export const SelectedExamsDetail = styled.footer`
     display: flex;
     justify-content: space-between;
 
-    border-bottom: 1px solid rgba(35,43,59,0.16);
+    border-bottom: 1px solid rgba(35, 43, 59, 0.16);
 
     p {
       margin-top: 10px;
@@ -288,7 +287,7 @@ export const SelectedExamsDetail = styled.footer`
 
       /* Paragrafo */
 
-      color: #3C4759;
+      color: #3c4759;
       opacity: 0.8;
     }
 
@@ -300,7 +299,7 @@ export const SelectedExamsDetail = styled.footer`
       height: 16px;
       width: 16px;
 
-      color: rgba(60,71,89,0.6);
+      color: rgba(60, 71, 89, 0.6);
 
       cursor: pointer;
     }
@@ -317,10 +316,10 @@ export const ErrorMessage = styled.div`
 
     /* Vermelho - ERRO! */
 
-    color: #BA3737;
+    color: #ba3737;
 
     span {
-      color: #3C4759;
+      color: #3c4759;
       font-weight: 500;
     }
   }

@@ -1,34 +1,38 @@
 import dynamic from 'next/dynamic';
 
-import Accordion from "@/components/molecule/Accordion";
-import Footer from "@/components/organisms/Footer";
-import Section from "@/components/organisms/Section";
-import { faqQuestions } from "@/contents/pages/Home/faq";
-import howItWorks from "@/contents/pages/Home/howItWorks";
-import ourServices from "@/contents/pages/Home/ourServices";
-import MapsScript from "@/services/components/MapsScript";
-import { PaymentOption, PaymentOptions, SectionAbout, SectionFAQ, SectionPayment } from "@/styles/pages/Home";
+import Accordion from '@/components/molecule/Accordion';
+import Footer from '@/components/organisms/Footer';
+import Section from '@/components/organisms/Section';
+import { faqQuestions } from '@/contents/pages/Home/faq';
+import howItWorks from '@/contents/pages/Home/howItWorks';
+import ourServices from '@/contents/pages/Home/ourServices';
+import MapsScript from '@/services/components/MapsScript';
+import {
+  PaymentOption,
+  PaymentOptions,
+  SectionAbout,
+  SectionFAQ,
+  SectionPayment,
+} from '@/styles/pages/Home';
 import WhatsappWidget from '@/components/atom/WhatsappWidget';
-import Navbar from "../components/organisms/Navbar";
 import InitialState from '@/components/molecule/HomeInitialState';
 import mastercardImg from '@/assets/pages/Home/master-card.svg';
 import visaImg from '@/assets/pages/Home/visa-card.svg';
 import dinnerImg from '@/assets/pages/Home/dinner-card.svg';
 import picpayImg from '@/assets/pages/Home/picpay-card.svg';
-import { useEffect } from 'react';
+import SEO from '@/components/atom/SEO';
+import { ReactElement, useEffect } from 'react';
 import mixpanel from 'mixpanel-browser';
 import { useAuth } from '@/hooks/auth';
-import SEO from '@/components/atom/SEO';
+import Navbar from '../components/organisms/Navbar';
 
-const SearchExam = dynamic(
-  () => import("@/components/organisms/SearchExam"),
-  {
-    loading: () => <InitialState/>,
-    ssr: true,
-  }
-);
+const SearchExam = dynamic(() => import('@/components/organisms/SearchExam'), {
+  // eslint-disable-next-line react/display-name
+  loading: () => <InitialState />,
+  ssr: true,
+});
 
-const Home = () => {
+const Home = (): ReactElement => {
   const { user } = useAuth();
 
   useEffect(() => {
@@ -41,8 +45,8 @@ const Home = () => {
   return (
     <>
       <SEO
-        title='Exames médicos: compare preços e agende seus exames'
-        description='A Heali te conecta a uma rede de laboratórios parceiros. Você escolhe a melhorar opção para fazer seus exames médicos, pertinho do seu endereço. Compare preços e agende seus exames de forma rápida, simples e segura.'
+        title="Exames médicos: compare preços e agende seus exames"
+        description="A Heali te conecta a uma rede de laboratórios parceiros. Você escolhe a melhorar opção para fazer seus exames médicos, pertinho do seu endereço. Compare preços e agende seus exames de forma rápida, simples e segura."
       />
 
       <MapsScript />
@@ -51,27 +55,36 @@ const Home = () => {
 
       <SearchExam />
 
-      <SectionAbout id='sobre'>
+      <SectionAbout id="sobre">
         <h2>Sobre a Heali</h2>
 
         <article>
           <p>
-            A Heali te conecta a uma rede de laboratórios parceiros. Você escolhe a melhorar opção para fazer seus exames médicos, pertinho do seu endereço.
+            A Heali te conecta a uma rede de laboratórios parceiros. Você
+            escolhe a melhorar opção para fazer seus exames médicos, pertinho do
+            seu endereço.
           </p>
           <p>
-          Compare preços e agende seus exames de forma rápida, simples e segura.
+            Compare preços e agende seus exames de forma rápida, simples e
+            segura.
           </p>
         </article>
       </SectionAbout>
 
-      <Section id='como-funciona' title='Como Funciona' articles={howItWorks}/>
+      <Section id="como-funciona" title="Como Funciona" articles={howItWorks} />
 
-      <Section id='nossos-servicos' title='Nossos Serviços' articles={ourServices}/>
+      <Section
+        id="nossos-servicos"
+        title="Nossos Serviços"
+        articles={ourServices}
+      />
 
-      <SectionPayment id='pagamento'>
+      <SectionPayment id="pagamento">
         <h2>Formas de Pagamento</h2>
 
-        <p>Para facilitar ainda mais, aceitamos diversas formas de pagamento:</p>
+        <p>
+          Para facilitar ainda mais, aceitamos diversas formas de pagamento:
+        </p>
 
         <PaymentOptions>
           <PaymentOption>
@@ -92,25 +105,24 @@ const Home = () => {
         </PaymentOptions>
       </SectionPayment>
 
-      <SectionFAQ id='faq'>
+      <SectionFAQ id="faq">
         <h2>Perguntas Frequentes</h2>
 
         {faqQuestions?.map(question => {
-        return (
-          <Accordion
-            key={`question-${question.id}`}
-            text={question}
-            index={question.id}
-          />
-        );
-      })}
+          return (
+            <Accordion
+              key={`question-${question.id}`}
+              text={question}
+              index={question.id}
+            />
+          );
+        })}
       </SectionFAQ>
 
       <Footer />
       <WhatsappWidget />
-
     </>
-  )
-}
+  );
+};
 
 export default Home;
