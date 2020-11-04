@@ -17,8 +17,6 @@ interface PageTemplateProps extends HTMLAttributes<HTMLDivElement>{
 const PageTemplate = ({ children, titleMain, buttonType }: PageTemplateProps) => {
   const router = useRouter();
 
-  console.log(router.pathname)
-
   return (
     <>
       <Navbar />

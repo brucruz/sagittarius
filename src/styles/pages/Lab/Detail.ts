@@ -7,7 +7,7 @@ export const Container = styled.div`
 
   @media ${device.laptop} {
     flex-direction: row;
-    margin: 128px 0;
+    margin-bottom: 128px;
     padding: 0 8.3%;
   }
 `;
@@ -20,7 +20,6 @@ export const LabInfoContainer = styled.div`
 
 export const Content = styled.div`
   min-height: calc(100vh);
-  margin: 64px 0;
   padding: 0 8.3%;
 
   @media ${device.laptop} {

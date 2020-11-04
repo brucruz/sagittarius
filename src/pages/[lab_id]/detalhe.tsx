@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import mixpanel from 'mixpanel-browser';
 import LabResultFromAPI from '@/@types/LabResultFromAPI';
 import PriceFormatted from '@/@types/PriceFormatted';
+import { useMediaQuery } from 'react-responsive';
 import TotalPriceBagContainer from '@/components/molecule/TotalPriceBagContainer';
 import PageTemplate from "@/components/templates/PageTemplate";
 import { MdClose } from 'react-icons/md';
@@ -37,6 +38,8 @@ import { useAuth } from '@/hooks/auth';
 import MapsScript from '@/services/components/MapsScript';
 import { GetServerSideProps } from 'next';
 import api from '@/services/api';
+import EditSearchWeb from '@/components/molecule/EditSearchWeb';
+import EditSearchMobile from '@/components/molecule/EditSearchMobile';
 import SEO from '@/components/atom/SEO';
 
 interface QueryParamsProps {
@@ -60,11 +63,19 @@ export default function Detail({ labDetail }: LabDetailProps) {
   const [displayListExams, setDisplayListExams] = useState(true);
   const [displayMap, setDisplayMap] = useState(false);
   const [selectedPrices, setSelectedPrices] = useState<PriceFormatted[]>([]);
+  const [isWeb, setIsWeb] = useState(false);
 
   const router = useRouter();
 
   const { addBagItems } = useBag();
   const { user } = useAuth();
+
+
+  const webQuery = useMediaQuery({ minWidth: 1024 });
+
+  useEffect(() => {  
+    setIsWeb(webQuery);
+  }, [webQuery]);
 
   useEffect(() => {
     user && mixpanel.identify(user.id);
@@ -121,6 +132,7 @@ export default function Detail({ labDetail }: LabDetailProps) {
       />
 
       <Navbar />
+        {isWeb ? <EditSearchWeb /> : <EditSearchMobile /> }
         <Container>
           <Content>
             <CompanyTitle>

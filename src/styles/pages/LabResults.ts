@@ -9,11 +9,12 @@ export const Container = styled.div`
     font-size: 24px;
     margin-bottom: 16px;
   }
-
+;
   @media ${device.laptop} {
+    margin: 0;
+    margin: 32px 0;
     display: flex;
     justify-content: space-between;
-    margin-top: 128px;
     padding: 0 8.3%;
 
     h1 {
