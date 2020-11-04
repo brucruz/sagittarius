@@ -2,8 +2,6 @@ import { GA_TRACKING_ID } from '@/services/analytics'
 import Document, { DocumentContext, Head, Html, Main, NextScript } from 'next/document'
 import { ServerStyleSheet } from 'styled-components'
 
-import favicon from '@/assets/favicon.ico';
-
 const gtmId = process.env.NEXT_PUBLIC_GTM ? process.env.NEXT_PUBLIC_GTM : '';
 export default class MyDocument extends Document {
   static async getInitialProps(ctx: DocumentContext) {
