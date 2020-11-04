@@ -13,10 +13,14 @@ import formatDistance from '@/utils/formatDistance';
 import formatValue from '@/utils/formatValue';
 import LabResultFromAPI from '@/@types/LabResultFromAPI';
 import { useRouter } from 'next/router';
+import EditSearchMobile from '@/components/molecule/EditSearchMobile';
+import EditSearchWeb from '@/components/molecule/EditSearchWeb';
 import { useAuth } from '@/hooks/auth';
 import mixpanel from 'mixpanel-browser';
+import { useMediaQuery } from 'react-responsive';
 import Lab from '@/@types/Lab';
 import isArray from '@/utils/isArray';
+import { useSearchExam } from '@/hooks/searchExam';
 import SEO from '@/components/atom/SEO';
 import Exam from '@/@types/Exam';
 import { loadMapApi } from '@/utils/GoogleMapsUtils';
@@ -101,12 +105,20 @@ const LabResultCard = ({
 export default function LabResults({
   labResults,
   examsIds,
-  exams,
   address,
+  exams,
   lat: latitude,
   lng: longitude,
   // title,
 }: LabResultsProps) {
+
+  const [isWeb, setIsWeb] = useState(false);
+
+  const webQuery = useMediaQuery({ minWidth: 1024 });
+
+  useEffect(() => {  
+    setIsWeb(webQuery);
+  }, [webQuery]);
 //   const [scriptLoaded, setScriptLoaded] = useState(false);
 
 //   useEffect(() => {
@@ -181,10 +193,11 @@ export default function LabResults({
       />
 
       <NavBar />
+        {isWeb && <EditSearchWeb />}
         <Container>
           <Content>
             <h1>Buscando {examsIds.length} Exames</h1>
-
+            {!isWeb && <EditSearchMobile /> }
             {labResults.length === 1 ? (
               <h3>{labResults.length} Laboratório encontrado</h3>
             ) : (
