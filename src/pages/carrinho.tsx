@@ -11,7 +11,7 @@ import { ItemsContainer, ConfirmOrder, BagContent } from '@/styles/pages/Cart';
 import { useBag } from '@/hooks/bag';
 import formatValueWo$ from '@/utils/formatValueWo$';
 import { useAuth } from '@/hooks/auth';
-
+import SEO from '@/components/atom/SEO';
 import mixpanel from 'mixpanel-browser';
 
 export default function Cart(): ReactElement {
@@ -65,6 +65,11 @@ export default function Cart(): ReactElement {
       }}
       titleMain={{ title: 'Meu carrinho' }}
     >
+      <SEO
+        title="Carrinho"
+        description="Agende seus exames médicos de forma rápida, simples e segura"
+      />
+
       <BagContent>
         <ItemsContainer>
           <div className="header-items-container">

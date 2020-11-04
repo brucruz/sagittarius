@@ -15,6 +15,7 @@ import Checkbox from '@/components/atom/Checkbox';
 import { useRouter } from 'next/router';
 import mixpanel from 'mixpanel-browser';
 import { useAuth } from '@/hooks/auth';
+import SEO from '@/components/atom/SEO';
 
 interface DateErrors {
   fromDate?: string;
@@ -114,6 +115,11 @@ const DateSelectionPage = (): ReactElement => {
         backLinkUrl: '/checkout/paciente',
       }}
     >
+      <SEO
+        title="Qual a data desejada para realização do exame?"
+        description="Informe a data desejada para a realização do exame."
+      />
+
       <DateRange>
         <DateSelector
           name="fromDate"

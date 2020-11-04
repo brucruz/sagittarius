@@ -10,7 +10,7 @@ import { useBag } from '@/hooks/bag';
 import { useSearchExam } from '@/hooks/searchExam';
 import { useToast } from '@/hooks/toast';
 import { useRouter } from 'next/router';
-import { useCallback, useEffect, useRef, ReactElement } from 'react';
+import { ReactElement, useCallback, useEffect, useRef } from 'react';
 import api from '@/services/api';
 import getValidationErrors from '@/utils/getValidationErrors';
 import Input from '@/components/atom/Input';
@@ -18,6 +18,7 @@ import { MdLock, MdMail, MdPerson } from 'react-icons/md';
 import { FaWhatsapp } from 'react-icons/fa';
 import { InputGroupTitle } from '@/styles/pages/SignUp';
 import Button from '@/components/atom/Button';
+import SEO from '@/components/atom/SEO';
 
 interface RouterQueryParams {
   isBeforeSchedule?: boolean;
@@ -169,6 +170,11 @@ const SignUpPage = (): ReactElement => {
         subTitle: 'Digite seus dados para continuar',
       }}
     >
+      <SEO
+        title="Cadastre-se"
+        description="Faça seu cadastro para agendar seus exames médicos de forma rápida, simples e segura"
+      />
+
       <Form ref={formRef} onSubmit={handleSubmit}>
         <InputGroupTitle>Dados Pessoais</InputGroupTitle>
 

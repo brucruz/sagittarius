@@ -11,6 +11,7 @@ import mixpanel from 'mixpanel-browser';
 import { useAuth } from '@/hooks/auth';
 import api from '@/services/api';
 import Patient from '@/@types/Patient';
+import SEO from '@/components/atom/SEO';
 
 export default function Patients(): ReactElement {
   const [patients, setPatients] = useState<Patient[]>([]);
@@ -91,6 +92,11 @@ export default function Patients(): ReactElement {
         backLinkUrl: '/carrinho',
       }}
     >
+      <SEO
+        title="Selecione o paciente que irá fazer o exame"
+        description="Indique quem fará os exames agendados. Caso queira, você pode cadastrar alguém da sua família ou amigo como seu paciente."
+      />
+
       <Content>
         {self ? (
           <PatientSelector

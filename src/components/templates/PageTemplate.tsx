@@ -23,8 +23,6 @@ const PageTemplate = ({
 }: PageTemplateProps): ReactElement => {
   const router = useRouter();
 
-  console.log(router.pathname);
-
   return (
     <>
       <Navbar />

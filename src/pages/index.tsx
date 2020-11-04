@@ -20,6 +20,7 @@ import mastercardImg from '@/assets/pages/Home/master-card.svg';
 import visaImg from '@/assets/pages/Home/visa-card.svg';
 import dinnerImg from '@/assets/pages/Home/dinner-card.svg';
 import picpayImg from '@/assets/pages/Home/picpay-card.svg';
+import SEO from '@/components/atom/SEO';
 import { ReactElement, useEffect } from 'react';
 import mixpanel from 'mixpanel-browser';
 import { useAuth } from '@/hooks/auth';
@@ -43,6 +44,11 @@ const Home = (): ReactElement => {
 
   return (
     <>
+      <SEO
+        title="Exames médicos: compare preços e agende seus exames"
+        description="A Heali te conecta a uma rede de laboratórios parceiros. Você escolhe a melhorar opção para fazer seus exames médicos, pertinho do seu endereço. Compare preços e agende seus exames de forma rápida, simples e segura."
+      />
+
       <MapsScript />
 
       <Navbar />

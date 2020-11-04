@@ -15,8 +15,6 @@ const CheckboxGroup = ({
     checkboxes,
   );
 
-  console.log(checkboxItems);
-
   const handleCheckboxChange = useCallback(
     (checkbox: CheckboxType) => {
       // const modifiedItems = checkboxItems.map(item => {

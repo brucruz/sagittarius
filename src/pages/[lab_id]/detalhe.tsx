@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import mixpanel from 'mixpanel-browser';
 import LabResultFromAPI from '@/@types/LabResultFromAPI';
 import PriceFormatted from '@/@types/PriceFormatted';
+import { useMediaQuery } from 'react-responsive';
 import TotalPriceBagContainer from '@/components/molecule/TotalPriceBagContainer';
 import PageTemplate from '@/components/templates/PageTemplate';
 import {
@@ -41,6 +42,9 @@ import { useAuth } from '@/hooks/auth';
 import MapsScript from '@/services/components/MapsScript';
 import { GetServerSideProps } from 'next';
 import api from '@/services/api';
+import EditSearchWeb from '@/components/molecule/EditSearchWeb';
+import EditSearchMobile from '@/components/molecule/EditSearchMobile';
+import SEO from '@/components/atom/SEO';
 
 interface QueryParamsProps {
   ids?: string[];
@@ -62,11 +66,18 @@ export default function Detail({ labDetail }: LabDetailProps): ReactElement {
   const [displayListExams, setDisplayListExams] = useState(true);
   const [displayMap, setDisplayMap] = useState(false);
   const [selectedPrices, setSelectedPrices] = useState<PriceFormatted[]>([]);
+  const [isWeb, setIsWeb] = useState(false);
 
   const router = useRouter();
 
   const { addBagItems } = useBag();
   const { user } = useAuth();
+
+  const webQuery = useMediaQuery({ minWidth: 1024 });
+
+  useEffect(() => {
+    setIsWeb(webQuery);
+  }, [webQuery]);
 
   useEffect(() => {
     user && mixpanel.identify(user.id);
@@ -120,9 +131,25 @@ export default function Detail({ labDetail }: LabDetailProps): ReactElement {
     selectedPrices.length > 0 &&
     selectedPrices.map(price => price.price)?.reduce((acc, cur) => acc + cur);
 
+  const examsTitles = labDetail.prices.map(price => price.exam.title);
+
   return labDetail ? (
     <>
+      <SEO
+        title={`${
+          examsTitles.length === 1 ? `${examsTitles[0]}` : 'Exames'
+        } em ${labDetail.lab.company.title} - ${labDetail.lab.title}`}
+        description={`Agende aqui ${
+          examsTitles.length === 1
+            ? `o exame de ${examsTitles[0]}`
+            : `os exames de ${examsTitles.join(', ')}`
+        } no laboratório ${labDetail.lab.company.title} - ${
+          labDetail.lab.title
+        }`}
+      />
+
       <Navbar />
+      {isWeb ? <EditSearchWeb /> : <EditSearchMobile />}
       <Container>
         <Content>
           <CompanyTitle>

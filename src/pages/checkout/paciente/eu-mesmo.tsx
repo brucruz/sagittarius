@@ -31,6 +31,7 @@ import sexRadio from '@/contents/pages/PatientCreation/sexRadio';
 import RadioButton from '@/components/atom/RadioButton';
 import documentIdType from '@/contents/pages/PatientCreation/documentIdType';
 import { RadioButtonGroup } from '@/styles/pages/NewPatient';
+import SEO from '@/components/atom/SEO';
 
 interface SigUpFormData {
   first_name: string;
@@ -179,6 +180,11 @@ const SignUpPage = (): ReactElement => {
         subTitle: 'Insira seus dados abaixo',
       }}
     >
+      <SEO
+        title="Cadastre-se como paciente"
+        description="Informe os dados faltantes para que você possa terminar de se cadastrar como paciente."
+      />
+
       <Form ref={formRef} onSubmit={handleSubmit}>
         <DateSelector
           name="birth_date"
