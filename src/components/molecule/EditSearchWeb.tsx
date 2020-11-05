@@ -77,8 +77,8 @@ const EditSearchWeb = (): ReactElement => {
               title: hit.title,
               slug: hit.slug,
               alternative_titles: hit.alternative_titles,
-              created_date: '',
-              updated_date: '',
+              created_date: hit.created_date,
+              updated_date: hit.updated_date,
             };
           });
 
