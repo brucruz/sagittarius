@@ -56,6 +56,10 @@ export const Content = styled.div`
     margin-bottom: 4px;
   }
 
+  & > section > div:last-child {
+    margin-top: 8px !important;
+  }
+
   @media ${device.laptop} {
     display: flex;
     flex-direction: row;
