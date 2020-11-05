@@ -10,7 +10,6 @@ import User from '@/@types/User';
 import mixpanel from 'mixpanel-browser';
 
 import api from '../services/api';
-// import { Mixpanel } from '../mixpanel';
 
 export interface AuthState {
   token: string;

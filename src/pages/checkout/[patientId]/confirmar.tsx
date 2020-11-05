@@ -167,7 +167,7 @@ const AskingRemainingInfo = ({
         });
       }
     },
-    [addToast, router],
+    [addToast, router, patientId, updateUser, token, user],
   );
 
   return (
@@ -286,7 +286,14 @@ const OrderReview = (): ReactElement => {
         hours: preferredHours,
       };
     }
-  }, [patient, prices, user]);
+  }, [
+    patient,
+    prices,
+    user,
+    formattedPreferredFromDate,
+    formattedPreferredToDate,
+    preferredHours,
+  ]);
 
   const handleSubmitQuote = useCallback(async () => {
     if (prices.length < 1) {

@@ -80,13 +80,13 @@ const Input = ({
   const [isOpenSelectedExams, setIsOpenSelectedExams] = useState(false);
   const [inputType, setInputType] = useState('text');
 
-  const { addAddress, addExam, exams, removeExam, address } = useSearchExam();
+  const { addAddress, addExam, exams, removeExam } = useSearchExam();
   const { user } = useAuth();
 
   useEffect(() => {
     inputRef.current.value && setIsFilled(true);
     setInputType(type);
-  }, [suggestions, inputRef]);
+  }, [suggestions, inputRef, type]);
 
   const { error } = isSubmit ? useField(name) : { error: '' };
 
@@ -107,7 +107,7 @@ const Input = ({
     setIsFocused(true);
 
     suggestions && setHasSuggestions(true);
-  }, []);
+  }, [suggestions]);
 
   const handleClickOutsideInput = useCallback(() => {
     if (!suggestions) return;
@@ -120,7 +120,7 @@ const Input = ({
     !value && setIsFilled(false);
 
     setHasSuggestions(false);
-  }, [inputRef]);
+  }, [inputRef, getInputValue, suggestions, value]);
 
   const handleClickOutsideSelectedExams = useCallback(() => {
     setIsOpenSelectedExams(false);
@@ -132,7 +132,7 @@ const Input = ({
     suggestions && getInputValue(inputRef.current?.value);
 
     suggestions && setHasSuggestions(true);
-  }, []);
+  }, [suggestions, getInputValue]);
 
   const handlePlaceSelect = useCallback(
     (address: string) => () => {
@@ -170,7 +170,7 @@ const Input = ({
           console.log('😱 Error: ', error);
         });
     },
-    [suggestions, user],
+    [suggestions, user, addAddress],
   );
 
   const handleExamSelect = useCallback(
@@ -182,8 +182,13 @@ const Input = ({
 
       inputRef.current.value = '';
       setIsFilled(false);
+
+      user && mixpanel.identify(user.id);
+      mixpanel.track('Add Exam To Search', {
+        Exam: exam.title,
+      });
     },
-    [suggestions, addExam],
+    [suggestions, addExam, user],
   );
 
   const handleExamRemove = useCallback(

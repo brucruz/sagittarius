@@ -4,8 +4,6 @@ import mixpanel from 'mixpanel-browser';
 import LabResultFromAPI from '@/@types/LabResultFromAPI';
 import PriceFormatted from '@/@types/PriceFormatted';
 import { useMediaQuery } from 'react-responsive';
-import TotalPriceBagContainer from '@/components/molecule/TotalPriceBagContainer';
-import PageTemplate from '@/components/templates/PageTemplate';
 import {
   MdClose,
   MdKeyboardArrowUp,
@@ -13,10 +11,8 @@ import {
 } from 'react-icons/md';
 import Modal from '@/components/organisms/Modal';
 import GoogleMap from '@/components/organisms/Map';
-import useFetch from '@/services/hooks/useFetch';
 import Navbar from '@/components/organisms/Navbar';
 import Footer from '@/components/organisms/Footer';
-import labIcon from '@/assets/components/molecules/LabInfo/lab.svg';
 import clockIcon from '@/assets/components/molecules/LabInfo/clock.svg';
 import locationIcon from '@/assets/components/molecules/LabInfo/location.svg';
 
@@ -31,13 +27,11 @@ import {
   ModalMapHeader,
 } from '@/styles/pages/Lab/Detail';
 import LabInfo from '@/components/molecule/LabInfo';
-import Link from 'next/link';
 import Button from '@/components/atom/Button';
 import bagIcon from '@/assets/pages/LabDetail/bag-icon.svg';
 import Checkbox from '@/components/atom/Checkbox';
 import formatValueWo$ from '@/utils/formatValueWo$';
 import { useBag } from '@/hooks/bag';
-import PricesInBag from '@/@types/PricesInBag';
 import { useAuth } from '@/hooks/auth';
 import MapsScript from '@/services/components/MapsScript';
 import { GetServerSideProps } from 'next';
@@ -111,7 +105,16 @@ export default function Detail({ labDetail }: LabDetailProps): ReactElement {
     });
 
     router.push('/carrinho');
-  }, [addBagItems, selectedPrices, user]);
+  }, [
+    addBagItems,
+    selectedPrices,
+    user,
+    labDetail,
+    router,
+    selectedExamsTitles,
+    selectedPricesValues,
+    selectedTotalPrice,
+  ]);
 
   function handlePriceChange(price: PriceFormatted): void {
     if (selectedPrices.includes(price)) {

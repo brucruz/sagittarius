@@ -56,7 +56,7 @@ const SearchExam = (): ReactElement => {
 
   useEffect(() => {
     address && setValue(address.address);
-  }, [address]);
+  }, [address, setValue]);
 
   useEffect(() => {
     examTypedValue !== ''
@@ -175,9 +175,12 @@ const SearchExam = (): ReactElement => {
     setSearchDisplay(state);
   }, []);
 
-  const handleGetAddressInnerValue = useCallback((address: string) => {
-    setValue(address);
-  }, []);
+  const handleGetAddressInnerValue = useCallback(
+    (address: string) => {
+      setValue(address);
+    },
+    [setValue],
+  );
 
   const handleGetExamInnerValue = useCallback((exam: string) => {
     setExamTypedValue(exam);
@@ -186,13 +189,8 @@ const SearchExam = (): ReactElement => {
   const handleExamSelection = useCallback(
     (exam: Exam): void => {
       addExam(exam);
-
-      user && mixpanel.identify(user.id);
-      mixpanel.track('Add Exam To Search', {
-        Exam: exam.title,
-      });
     },
-    [user],
+    [addExam],
   );
 
   const handleClearExamSuggestions = useCallback(() => {

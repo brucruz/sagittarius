@@ -162,6 +162,7 @@ const BagProvider = ({ children }): ReactElement => {
         Company: selectedLab.company.title,
         Exam: item.exam.title,
         Price: item.price,
+        'Click Source': 'Cart Widget',
       });
 
       const labIndex = bagItems.findIndex(lab => lab.id === selectedLab.id);

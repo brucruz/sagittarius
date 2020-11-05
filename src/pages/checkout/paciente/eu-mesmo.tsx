@@ -21,8 +21,7 @@ import {
 import api from '@/services/api';
 import getValidationErrors from '@/utils/getValidationErrors';
 import Input from '@/components/atom/Input';
-import { MdMail, MdPerson, MdVerifiedUser } from 'react-icons/md';
-import { FaWhatsapp } from 'react-icons/fa';
+import { MdVerifiedUser } from 'react-icons/md';
 import { InputGroupTitle } from '@/styles/pages/SignUp';
 import Button from '@/components/atom/Button';
 import Patient from '@/@types/Patient';
@@ -160,7 +159,16 @@ const SignUpPage = (): ReactElement => {
         });
       }
     },
-    [addToast, router, birthDate, selectedSex, selectedIdType, formRef],
+    [
+      addToast,
+      router,
+      birthDate,
+      selectedSex,
+      selectedIdType,
+      formRef,
+      token,
+      user,
+    ],
   );
 
   const errors = useMemo(() => {

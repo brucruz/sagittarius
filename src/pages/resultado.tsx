@@ -8,12 +8,12 @@ import {
   CardHeader,
   CardFooter,
   HeaderInfo,
-  Stars,
+  // Stars,
   Price,
   LabResultList,
 } from '@/styles/pages/LabResults';
 import GoogleMap from '@/components/organisms/Map';
-import star from '@/assets/pages/LabResults/star-image.svg';
+// import star from '@/assets/pages/LabResults/star-image.svg';
 import { LabResultFromAPIFormatted } from '@/hooks/labResults';
 import MapsScript from '@/services/components/MapsScript';
 import { GetServerSideProps } from 'next';
@@ -29,10 +29,8 @@ import mixpanel from 'mixpanel-browser';
 import { useMediaQuery } from 'react-responsive';
 import Lab from '@/@types/Lab';
 import isArray from '@/utils/isArray';
-import { useSearchExam } from '@/hooks/searchExam';
 import SEO from '@/components/atom/SEO';
 import Exam from '@/@types/Exam';
-import { loadMapApi } from '@/utils/GoogleMapsUtils';
 
 interface QueryParamsProps {
   ids?: string[];
@@ -63,13 +61,6 @@ const LabResultCard = ({
   const router = useRouter();
   const { user } = useAuth();
 
-  useEffect(() => {
-    user && mixpanel.identify(user.id);
-    mixpanel.track('Page View', {
-      'Page Title': 'Lab Results',
-    });
-  }, [user]);
-
   const handleTrackLabClick = useCallback(
     (lab: Lab): void => {
       user && mixpanel.identify(user.id);
@@ -83,7 +74,7 @@ const LabResultCard = ({
         search: resultsSearchUrl,
       });
     },
-    [user, router, resultsSearchUrl],
+    [user, router, resultsSearchUrl, result],
   );
 
   return (
@@ -129,11 +120,20 @@ export default function LabResults({
 LabResultsProps): ReactElement {
   const [isWeb, setIsWeb] = useState(false);
 
+  const { user } = useAuth();
+
   const webQuery = useMediaQuery({ minWidth: 1024 });
 
   useEffect(() => {
     setIsWeb(webQuery);
   }, [webQuery]);
+
+  useEffect(() => {
+    user && mixpanel.identify(user.id);
+    mixpanel.track('Page View', {
+      'Page Title': 'Lab Results',
+    });
+  }, [user]);
 
   //   const [scriptLoaded, setScriptLoaded] = useState(false);
 
@@ -198,8 +198,6 @@ LabResultsProps): ReactElement {
   //     console.log("Geocode was not successful for the following reason: " + status);
   //   }
   // });
-
-  // console.log(title);
 
   return (
     <>
@@ -292,7 +290,6 @@ export const getServerSideProps: GetServerSideProps<LabResultsProps> = async con
         address: queryParams.add,
         lat: queryParams.lat,
         lng: queryParams.lng,
-        // title: title,
       },
     };
   } catch (err) {

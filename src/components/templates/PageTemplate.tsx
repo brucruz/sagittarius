@@ -12,7 +12,6 @@ interface PageTemplateProps extends HTMLAttributes<HTMLDivElement> {
     title?: string;
     subTitle?: string;
   };
-  // backLinkUrl: UrlObject | string;
   buttonType: GoBackProps;
 }
 

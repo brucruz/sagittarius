@@ -79,7 +79,7 @@ export default function Patients(): ReactElement {
 
       router.push(`/checkout/${patient.id}/data`);
     }
-  }, [user, selectedPatient, patients]);
+  }, [user, selectedPatient, patients, router]);
 
   return (
     <PageTemplate

@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 import { useState, useCallback, useEffect, useMemo, ReactElement } from 'react';
 import Exam from '@/@types/Exam';
 import { MdSearch, MdPlace } from 'react-icons/md';
-import arrowIcon from '@/assets/components/molecules/EditSearch/arrow-edit-search.svg';
+// import arrowIcon from '@/assets/components/molecules/EditSearch/arrow-edit-search.svg';
 import Input from '@/components/atom/Input';
 import examIndex from '@/services/search';
 import { buildSearchQuery } from '@/helpers/searchExams';
@@ -39,7 +39,7 @@ const EditSearchWeb = (): ReactElement => {
 
   useEffect(() => {
     address && setValue(address.address);
-  }, [address]);
+  }, [address, setValue]);
 
   useEffect(() => {
     examTypedValue !== ''
@@ -68,14 +68,19 @@ const EditSearchWeb = (): ReactElement => {
       : setExamResults([]);
   }, [examTypedValue, exams]);
 
-  // eslint-disable-next-line no-shadow
-  const handleGetAddressInnerValue = useCallback((address: string) => {
-    setValue(address);
-  }, []);
+  const handleGetAddressInnerValue = useCallback(
+    (typedAddress: string) => {
+      setValue(typedAddress);
+    },
+    [setValue],
+  );
 
-  const handleExamSelection = useCallback((exam: Exam): void => {
-    addExam(exam);
-  }, []);
+  const handleExamSelection = useCallback(
+    (exam: Exam): void => {
+      addExam(exam);
+    },
+    [addExam],
+  );
 
   const handleClearExamSuggestions = useCallback(() => {
     setExamResults([]);
@@ -100,7 +105,7 @@ const EditSearchWeb = (): ReactElement => {
         search: resultsSearchUrl,
       });
     }
-  }, [resultsSearchUrl]);
+  }, [resultsSearchUrl, router]);
 
   return (
     <Container

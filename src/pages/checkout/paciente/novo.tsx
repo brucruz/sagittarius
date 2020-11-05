@@ -166,7 +166,7 @@ const SignUpPage = (): ReactElement => {
         });
       }
     },
-    [addToast, router, birthDate, selectedSex, selectedIdType],
+    [addToast, router, birthDate, selectedSex, selectedIdType, token, user],
   );
 
   const errors = useMemo(() => {

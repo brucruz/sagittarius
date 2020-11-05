@@ -43,15 +43,21 @@ const DateSelectionPage = (): ReactElement => {
     return fromDate || new Date();
   }, [fromDate]);
 
-  const getFromDate = useCallback((date: Date) => {
-    selectPreferredFromDate(date);
-    setFromDate(date);
-  }, []);
+  const getFromDate = useCallback(
+    (date: Date) => {
+      selectPreferredFromDate(date);
+      setFromDate(date);
+    },
+    [selectPreferredFromDate],
+  );
 
-  const getToDate = useCallback((date: Date) => {
-    selectPreferredToDate(date);
-    setToDate(date);
-  }, []);
+  const getToDate = useCallback(
+    (date: Date) => {
+      selectPreferredToDate(date);
+      setToDate(date);
+    },
+    [selectPreferredToDate],
+  );
 
   const getFromTypedDate = useCallback((date: string) => {
     const parsedDate = parse(date, 'dd/MM/yyyy', new Date());
@@ -78,7 +84,7 @@ const DateSelectionPage = (): ReactElement => {
 
       selectPreferredFromDate(fromDate);
     }
-  }, [fromDate]);
+  }, [fromDate, selectPreferredFromDate]);
 
   const checkIfToDateIsTrue = useCallback(() => {
     if (toDate?.toString() === 'Invalid Date') {
@@ -93,7 +99,7 @@ const DateSelectionPage = (): ReactElement => {
 
       selectPreferredToDate(toDate);
     }
-  }, [toDate]);
+  }, [toDate, selectPreferredToDate]);
 
   const handleSubmit = useCallback(() => {
     user && mixpanel.identify(user.id);
@@ -102,7 +108,7 @@ const DateSelectionPage = (): ReactElement => {
     router.push({
       pathname: `/checkout/${patientId}/confirmar`,
     });
-  }, [user, router]);
+  }, [user, router, patientId]);
 
   return (
     <PageTemplate

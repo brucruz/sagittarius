@@ -28,7 +28,6 @@ interface star {
 
 export default function ThankYou(): ReactElement {
   const { user } = useAuth();
-  const router = useRouter();
 
   useEffect(() => {
     user && mixpanel.identify(user.id);
@@ -109,7 +108,7 @@ export default function ThankYou(): ReactElement {
     });
 
     mixpanel.track_links('#nps-redirect', 'NPS - Research Button Click');
-  }, [user, router]);
+  }, [user, userRate]);
 
   return (
     <PageTemplate
