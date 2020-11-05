@@ -214,9 +214,7 @@ const Input = ({
   const clickOutsideUserSelectedExams = useClickOutsideRef(
     handleClickOutsideSelectedExams,
   );
-
-  console.log(router);
-
+  
   user && mixpanel.identify(user.id);
   mixpanel.track_links(
     '#Whatsapp_Exam_Not_Found',
