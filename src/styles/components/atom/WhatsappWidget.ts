@@ -9,8 +9,12 @@ export const Container = styled.div`
   bottom: 10px;
   right: 24px;
 
-  padding: 10px 16px;
+  padding: 12px;
   border-radius: 30px;
+
+  @media ${device.tablet} {
+    padding: 10px 16px;
+  }
 
   box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.25);
 
@@ -22,9 +26,24 @@ export const Container = styled.div`
     align-items: center;
 
     svg {
-      height: 20px;
-      width: 20px;
-      margin-right: 10px;
+      height: 24px;
+      width: 24px;
+
+      @media ${device.tablet} {
+        height: 20px;
+        width: 20px;
+        margin-right: 10px;
+      }
+    }
+
+    h4 {
+      display: none;
+    }
+
+    @media ${device.tablet} {
+      h4 {
+        display: block;
+      }
     }
   }
 `;
