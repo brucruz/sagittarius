@@ -13,6 +13,10 @@ export const Container = styled.div`
     align-items: center;
     width: 100%;
 
+    &.has-error {
+      align-items: baseline !important;
+    }
+
     @media ${device.laptopL} {
       margin-top: 88px;
     }
@@ -26,10 +30,21 @@ export const Container = styled.div`
       margin: 0 !important;
     }
 
+    button + section {
+      display: grid;
+      margin-right: 16px !important;
+
+      grid-gap: 16px 2px;
+      grid-template-columns: repeat(2, 1fr);
+
+      & > div {
+        grid-row-start: 2 !important;
+        margin-top: -8px !important;
+      }
+    }
+
     & > section {
       width: 100%;
-      display: flex;
-      justify-content: space-between;
 
       & > section {
         margin-left: 16px !important;
