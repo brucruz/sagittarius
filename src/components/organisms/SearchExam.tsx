@@ -74,7 +74,7 @@ const SearchExam = (): ReactElement => {
         })
         .then(({ hits, query }) => {
           if (hits.length === 0) {
-            setExamError('Desculpa, não conseguimos encontrar esse exame.');
+            setExamError('Desculpe, não localizamos este exame.');
 
             user && mixpanel.identify(user.id);
             mixpanel.register(
