@@ -18,6 +18,10 @@ import { useToast } from '@/hooks/toast';
 import ExamSearchResult from '@/@types/ExamSearchResult';
 import examIndex from '@/services/search';
 import { buildSearchQuery } from '@/helpers/searchExams';
+import {
+  EXAMS as EXAMS_CONSTANT,
+  EXAM as EXAM_CONSTANT,
+} from '@/constants/examsSearch';
 import Input from '../atom/Input';
 import PageHeader from '../molecule/PageHeader';
 import TitleMain from '../molecule/TitleMain';
@@ -30,6 +34,7 @@ const SearchExam = (): ReactElement => {
   const [searchDisplay, setSearchDisplay] = useState<SearchDisplay>('initial');
   const [examTypedValue, setExamTypedValue] = useState('');
   const [examResults, setExamResults] = useState<Exam[]>([]);
+  const [examError, setExamError] = useState('');
 
   const {
     ready,
@@ -59,30 +64,48 @@ const SearchExam = (): ReactElement => {
   }, [address, setValue]);
 
   useEffect(() => {
-    examTypedValue !== ''
-      ? examIndex
-          .search<ExamSearchResult>(examTypedValue, {
-            attributesToRetrieve: ['title', 'alternative_titles'],
-            hitsPerPage: 5,
-            clickAnalytics: true,
-            analytics: true,
-          })
-          .then(({ hits }) => {
-            const results = hits.map(hit => {
-              return {
-                id: hit.objectID,
-                title: hit.title,
-                slug: hit.slug,
-                alternative_titles: hit.alternative_titles,
-                created_date: '',
-                updated_date: '',
-              };
-            });
+    if (examTypedValue !== '') {
+      examIndex
+        .search<ExamSearchResult>(examTypedValue, {
+          attributesToRetrieve: ['title', 'alternative_titles'],
+          hitsPerPage: 5,
+          clickAnalytics: true,
+          analytics: true,
+        })
+        .then(({ hits, query }) => {
+          if (hits.length === 0) {
+            setExamError('Desculpe, não localizamos este exame.');
 
-            setExamResults(results);
-          })
-          .catch(err => console.log(err))
-      : setExamResults([]);
+            user && mixpanel.identify(user.id);
+            mixpanel.register(
+              {
+                'Not Found Exam': query,
+              },
+              1,
+            );
+            mixpanel.track('Exam Not Found - Display error message');
+          } else {
+            setExamError('');
+          }
+
+          const results = hits.map(hit => {
+            return {
+              id: hit.objectID,
+              title: hit.title,
+              slug: hit.slug,
+              alternative_titles: hit.alternative_titles,
+              created_date: hit.created_date,
+              updated_date: hit.updated_date,
+            };
+          });
+
+          setExamResults(results);
+        })
+        .catch(err => console.log(err));
+    } else {
+      setExamResults([]);
+      setExamError('');
+    }
   }, [examTypedValue, exams]);
 
   const resultsSearchUrl = useMemo(() => buildSearchQuery(address, exams), [
@@ -164,7 +187,7 @@ const SearchExam = (): ReactElement => {
   }, [router, user, addToast, resultsSearchUrl, exams, address, examsTitles]);
 
   const handleBeginButtonClick = useCallback(() => {
-    setSearchDisplay('exam');
+    setSearchDisplay(EXAM_CONSTANT);
   }, []);
 
   const handleExamSubmit = useCallback(() => {
@@ -205,7 +228,7 @@ const SearchExam = (): ReactElement => {
         <InitialState beginButtonCallback={handleBeginButtonClick} />
       )}
 
-      {searchDisplay === 'exam' && (
+      {searchDisplay === EXAM_CONSTANT && (
         <ExamState>
           <PageHeader
             buttonType={{
@@ -223,9 +246,10 @@ const SearchExam = (): ReactElement => {
           <Input
             name="exam"
             label="Seus Exames"
+            errorProps={examError}
             icon={MdSearch}
             suggestions={{
-              type: 'exams',
+              type: EXAMS_CONSTANT,
               data: examResults,
               getSelectedExam: handleExamSelection,
               clearSuggestions: handleClearExamSuggestions,
@@ -246,7 +270,7 @@ const SearchExam = (): ReactElement => {
           <PageHeader
             buttonType={{
               type: 'change_state_button',
-              backButtonNewState: 'exam',
+              backButtonNewState: EXAM_CONSTANT,
               backButtonStateCallback: handleReturnButtonClick,
               stepper: '2/2',
             }}

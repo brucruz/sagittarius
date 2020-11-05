@@ -20,6 +20,8 @@ import {
   MdRemoveRedEye,
 } from 'react-icons/md';
 import { getGeocode, getLatLng, Suggestion } from 'use-places-autocomplete';
+import { useRouter } from 'next/router';
+import { EXAMS as EXAMS_CONSTANT } from '@/constants/examsSearch';
 
 import Exam from '@/@types/Exam';
 import { useSearchExam } from '@/hooks/searchExam';
@@ -38,6 +40,7 @@ import useClickOutsideRef from '@/hooks/clickOutside';
 import { useAuth } from '@/hooks/auth';
 
 import { useField } from '@unform/core';
+import Link from 'next/link';
 
 type SuggestionProps =
   | {
@@ -54,6 +57,7 @@ type SuggestionProps =
     };
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   name: string;
+  errorProps?: string;
   label: string;
   icon?: any;
   type?: string;
@@ -66,6 +70,7 @@ const Input = ({
   name,
   label,
   icon: Icon,
+  errorProps = '',
   suggestions,
   type,
   getInputValue,
@@ -73,7 +78,7 @@ const Input = ({
   isSubmit,
 }: InputProps): ReactElement => {
   const inputRef = useRef<HTMLInputElement>(null);
-
+  const router = useRouter();
   const [isFocused, setIsFocused] = useState(false);
   const [isFilled, setIsFilled] = useState(false);
   const [hasSuggestions, setHasSuggestions] = useState(false);
@@ -88,7 +93,7 @@ const Input = ({
     setInputType(type);
   }, [suggestions, inputRef, type]);
 
-  const { error } = isSubmit ? useField(name) : { error: '' };
+  const { error } = isSubmit ? useField(name) : { error: errorProps };
 
   if (isSubmit) {
     const { fieldName, registerField } = useField(name);
@@ -178,7 +183,7 @@ const Input = ({
       addExam(exam);
 
       setHasSuggestions(false);
-      suggestions.type === 'exams' && suggestions.clearSuggestions;
+      suggestions.type === EXAMS_CONSTANT && suggestions.clearSuggestions;
 
       inputRef.current.value = '';
       setIsFilled(false);
@@ -208,6 +213,12 @@ const Input = ({
   const clickOutsideUserInputRef = useClickOutsideRef(handleClickOutsideInput);
   const clickOutsideUserSelectedExams = useClickOutsideRef(
     handleClickOutsideSelectedExams,
+  );
+  
+  user && mixpanel.identify(user.id);
+  mixpanel.track_links(
+    '#Whatsapp_Exam_Not_Found',
+    'Exam Not Found - Whatsapp Click',
   );
 
   return (
@@ -248,7 +259,7 @@ const Input = ({
         )}
       </UserInput>
 
-      {hasSuggestions && suggestions.type === 'exams' && (
+      {hasSuggestions && suggestions.type === EXAMS_CONSTANT && (
         <SuggestionArea>
           {suggestions.data.map(exam => (
             <article key={exam.id} onClick={() => handleExamSelect(exam)}>
@@ -277,8 +288,28 @@ const Input = ({
         </SuggestionArea>
       )}
 
+      {error && (
+        <ErrorMessage>
+          <p>
+            {error}{' '}
+            {suggestions?.type === EXAMS_CONSTANT ? (
+              <a
+                target="_blank"
+                rel="noopener noreferrer"
+                id="Whatsapp_Exam_Not_Found"
+                href="https://api.whatsapp.com/send?phone=5511936186364"
+              >
+                Clique aqui para te ajudarmos.
+              </a>
+            ) : (
+              <span>Tente novamente.</span>
+            )}
+          </p>
+        </ErrorMessage>
+      )}
+
       <SelectedExams ref={clickOutsideUserSelectedExams}>
-        {exams?.length > 0 && suggestions?.type === 'exams' && (
+        {exams?.length > 0 && suggestions?.type === EXAMS_CONSTANT && (
           <SelectedExamsSummary
             onClick={() => setIsOpenSelectedExams(!isOpenSelectedExams)}
           >
@@ -311,14 +342,6 @@ const Input = ({
           </SelectedExamsDetail>
         )}
       </SelectedExams>
-
-      {error && (
-        <ErrorMessage>
-          <p>
-            {error} <span>Tente novamente.</span>
-          </p>
-        </ErrorMessage>
-      )}
     </InputContainer>
   );
 };

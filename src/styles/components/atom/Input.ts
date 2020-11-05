@@ -307,7 +307,7 @@ export const SelectedExamsDetail = styled.footer`
 `;
 
 export const ErrorMessage = styled.div`
-  margin-top: -9px;
+  margin-top: 8px;
 
   p {
     font-weight: bold;
