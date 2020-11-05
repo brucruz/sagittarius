@@ -192,7 +192,7 @@ export default function Login(): ReactElement {
           icon={MdLock}
           isSubmit
         />
-        <Link href="">
+        <Link href="/esqueci-minha-senha">
           <ForgotPassword>Esqueci minha senha</ForgotPassword>
         </Link>
         <Button
