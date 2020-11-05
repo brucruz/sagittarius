@@ -222,7 +222,7 @@ export const BagBadgeFooter = styled.footer`
   }
 
   button {
-    background: #247fa6;
+    background: #4d49c4;
     border-radius: 6px;
 
     padding: 4px 12px;
