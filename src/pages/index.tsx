@@ -47,7 +47,7 @@ const Home = (): ReactElement => {
     <>
       <SEO
         title="Exames médicos: compare preços e agende seus exames"
-        description="A Heali te conecta a uma rede de laboratórios parceiros. Você escolhe a melhorar opção para fazer seus exames médicos, pertinho do seu endereço. Compare preços e agende seus exames de forma rápida, simples e segura."
+        description="A Heali te conecta a uma rede de laboratórios parceiros. Você escolhe a melhor opção para fazer seus exames médicos, pertinho do seu endereço. Compare preços e agende seus exames de forma rápida, simples e segura."
       />
 
       <Head>
@@ -77,7 +77,7 @@ const Home = (): ReactElement => {
         <article>
           <p>
             A Heali te conecta a uma rede de laboratórios parceiros. Você
-            escolhe a melhorar opção para fazer seus exames médicos, pertinho do
+            escolhe a melhor opção para fazer seus exames médicos, pertinho do
             seu endereço.
           </p>
           <p>
