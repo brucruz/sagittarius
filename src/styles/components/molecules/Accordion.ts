@@ -41,9 +41,25 @@ export const AccordionPanel = styled.div.attrs(({ className }) => ({
   color: #3c4759;
 
   p {
-    margin: 1.2rem;
-    line-height: 1.6rem;
-    color: #444;
+    /* margin: 1.2rem; */
+    margin-top: 8.71px;
+    margin-left: 8px;
+    margin-right: 8px;
+    margin-bottom: 15.5px;
+
+    font-style: normal;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 22px;
+
+    /* Paragrafo */
+
+    color: #3c4759;
+
+    strong {
+      font-weight: 900;
+      color: #4d49c4;
+    }
   }
 
   &.active {
