@@ -24,6 +24,7 @@ import SEO from '@/components/atom/SEO';
 import { ReactElement, useEffect } from 'react';
 import mixpanel from 'mixpanel-browser';
 import { useAuth } from '@/hooks/auth';
+import Head from 'next/head';
 import Navbar from '../components/organisms/Navbar';
 
 const SearchExam = dynamic(() => import('@/components/organisms/SearchExam'), {
@@ -48,6 +49,21 @@ const Home = (): ReactElement => {
         title="Exames médicos: compare preços e agende seus exames"
         description="A Heali te conecta a uma rede de laboratórios parceiros. Você escolhe a melhorar opção para fazer seus exames médicos, pertinho do seu endereço. Compare preços e agende seus exames de forma rápida, simples e segura."
       />
+
+      <Head>
+        <script
+          type="application/ld+json"
+          // eslint-disable-next-line react/no-danger
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(`{"@context": "https://schema.org/","@type": "FAQPage","mainEntity": [${faqQuestions.map(
+              faq =>
+                `{"@type": "Question","name": "${faq.question}","acceptedAnswer": {"@type": "Answer","text": "${faq.answer}"}`,
+            )}]
+          }`),
+          }}
+          key="jsonld-faq-page"
+        />
+      </Head>
 
       <MapsScript />
 
