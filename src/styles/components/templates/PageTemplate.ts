@@ -6,6 +6,10 @@ export const Container = styled.div`
   margin-top: 64px;
   padding: 0 24px;
 
+  &.no-button {
+    margin-top: 88px !important;
+  }
+
   @media ${device.tablet} {
     margin-left: auto;
     margin-right: auto;

@@ -12,7 +12,7 @@ interface PageTemplateProps extends HTMLAttributes<HTMLDivElement> {
     title?: string;
     subTitle?: string;
   };
-  buttonType: GoBackProps;
+  buttonType?: GoBackProps;
 }
 
 const PageTemplate = ({
@@ -26,13 +26,13 @@ const PageTemplate = ({
     <>
       <Navbar />
       <Container
-        className={
+        className={`${
           (router.pathname === '/carrinho' ||
             router.pathname.includes('confirmar')) &&
           'cart-width'
-        }
+        } ${!buttonType && 'no-button'}`}
       >
-        <PageHeader buttonType={buttonType} />
+        {buttonType && <PageHeader buttonType={buttonType} />}
 
         {titleMain && (
           <TitleMain title={titleMain.title} subtitle={titleMain.subTitle} />
