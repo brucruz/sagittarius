@@ -67,7 +67,7 @@ const SearchExam = (): ReactElement => {
     if (examTypedValue !== '') {
       examIndex
         .search<ExamSearchResult>(examTypedValue, {
-          attributesToRetrieve: ['title', 'alternative_titles'],
+          attributesToRetrieve: ['title', 'alternative_titles', 'slug'],
           hitsPerPage: 5,
           clickAnalytics: true,
           analytics: true,
@@ -94,6 +94,7 @@ const SearchExam = (): ReactElement => {
               title: hit.title,
               slug: hit.slug,
               alternative_titles: hit.alternative_titles,
+              highlightedWords: hit.highlightResult,
               created_date: hit.created_date,
               updated_date: hit.updated_date,
             };
@@ -106,7 +107,7 @@ const SearchExam = (): ReactElement => {
       setExamResults([]);
       setExamError('');
     }
-  }, [examTypedValue, exams]);
+  }, [examTypedValue, exams, user]);
 
   const resultsSearchUrl = useMemo(() => buildSearchQuery(address, exams), [
     address,

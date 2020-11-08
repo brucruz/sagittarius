@@ -20,7 +20,6 @@ import {
   MdRemoveRedEye,
 } from 'react-icons/md';
 import { getGeocode, getLatLng, Suggestion } from 'use-places-autocomplete';
-import { useRouter } from 'next/router';
 import { EXAMS as EXAMS_CONSTANT } from '@/constants/examsSearch';
 
 import Exam from '@/@types/Exam';
@@ -40,7 +39,6 @@ import useClickOutsideRef from '@/hooks/clickOutside';
 import { useAuth } from '@/hooks/auth';
 
 import { useField } from '@unform/core';
-import Link from 'next/link';
 
 type SuggestionProps =
   | {
@@ -78,7 +76,6 @@ const Input = ({
   isSubmit,
 }: InputProps): ReactElement => {
   const inputRef = useRef<HTMLInputElement>(null);
-  const router = useRouter();
   const [isFocused, setIsFocused] = useState(false);
   const [isFilled, setIsFilled] = useState(false);
   const [hasSuggestions, setHasSuggestions] = useState(false);
@@ -214,7 +211,7 @@ const Input = ({
   const clickOutsideUserSelectedExams = useClickOutsideRef(
     handleClickOutsideSelectedExams,
   );
-  
+
   user && mixpanel.identify(user.id);
   mixpanel.track_links(
     '#Whatsapp_Exam_Not_Found',
