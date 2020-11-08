@@ -46,7 +46,7 @@ interface LabResultCardProp {
 
 interface LabResultsProps {
   labResults: LabResultFromAPIFormatted[];
-  examsIds: string[] | string;
+  examsSlugs: string[] | string;
   exams: Exam[];
   address: string;
   lat: string;
@@ -70,7 +70,7 @@ const LabResultCard = ({
       });
 
       router.push({
-        pathname: `${result.lab.id}/detalhe`,
+        pathname: `${result.lab.slug}/detalhe`,
         search: resultsSearchUrl,
       });
     },
@@ -111,7 +111,7 @@ const LabResultCard = ({
 
 export default function LabResults({
   labResults,
-  examsIds,
+  examsSlugs,
   address,
   exams,
   lat: latitude,
@@ -152,20 +152,20 @@ export default function LabResults({
   const latQuery = `lat=${latitude}`;
   const lngQuery = `lng=${longitude}`;
 
-  const idsQueryArray =
-    typeof examsIds === 'string'
-      ? `ids[]=${examsIds}`
-      : examsIds.map(id => {
-          const idFormatted = `ids[]=${id.toString()}`;
+  const slugsQueryArray =
+    typeof examsSlugs === 'string'
+      ? `slg[]=${examsSlugs}`
+      : examsSlugs.map(id => {
+          const idFormatted = `slg[]=${id.toString()}`;
 
           return idFormatted;
         });
 
-  const idsQueryWithComma = idsQueryArray.toString();
+  const slugsQueryWithComma = slugsQueryArray.toString();
 
-  const idsQuery = idsQueryWithComma.replace(/,/g, '&');
+  const slugsQuery = slugsQueryWithComma.replace(/,/g, '&');
 
-  const resultsSearchUrl = `?${idsQuery}&${addQuery}&${latQuery}&${lngQuery}`;
+  const resultsSearchUrl = `?${slugsQuery}&${addQuery}&${latQuery}&${lngQuery}`;
 
   const examsTitles = exams.map(exam => exam.title);
 
@@ -192,7 +192,7 @@ export default function LabResults({
       {isWeb && <EditSearchWeb />}
       <Container>
         <Content>
-          <h1>Buscando {examsIds.length} Exames</h1>
+          <h1>Buscando {examsSlugs.length} Exames</h1>
           {!isWeb && <EditSearchMobile />}
           {labResults.length === 1 ? (
             <h3>{labResults.length} Laboratório encontrado</h3>
@@ -249,12 +249,12 @@ export const getServerSideProps: GetServerSideProps<LabResultsProps> = async con
       },
     });
 
-    const examsIds = exams.map(exam => exam.id);
+    const examsSlugs = exams.map(exam => exam.slug);
 
     return {
       props: {
         labResults: resultsFormatted,
-        examsIds,
+        examsSlugs,
         exams,
         address: queryParams.add,
         lat: queryParams.lat,
