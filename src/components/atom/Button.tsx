@@ -4,7 +4,11 @@ import { ButtonHTMLAttributes, ReactElement } from 'react';
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement>;
 
 const Button = ({ children, ...rest }: ButtonProps): ReactElement => {
-  return <Base {...rest}>{children}</Base>;
+  return (
+    <Base data-testid="button-atom" {...rest}>
+      {children}
+    </Base>
+  );
 };
 
 export default Button;
