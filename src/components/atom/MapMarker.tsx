@@ -9,7 +9,7 @@ interface MarkerProps {
 
 const Marker: React.FC<MarkerProps> = ({ type = 'vendor' }) => {
   return (
-    <div>
+    <div data-testid="map-marker-atom">
       <PinBounce type={type} />
       {type === 'user' && <Pulse />}
     </div>
