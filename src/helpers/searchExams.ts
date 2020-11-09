@@ -8,7 +8,8 @@ export const buildSearchQuery = (address: Address, exams: Exam[]): string =>
       add: address.address,
       lat: address.latitude,
       lng: address.longitude,
-      ids: exams.map((exam: Exam) => exam.id),
+      slg: exams.map((exam: Exam) => exam.slug),
+      // ids: exams.map((exam: Exam) => exam.id),
     },
     { arrayFormat: 'bracket' },
   );

@@ -28,12 +28,12 @@ import { useAuth } from '@/hooks/auth';
 import mixpanel from 'mixpanel-browser';
 import { useMediaQuery } from 'react-responsive';
 import Lab from '@/@types/Lab';
-import isArray from '@/utils/isArray';
 import SEO from '@/components/atom/SEO';
 import Exam from '@/@types/Exam';
 
 interface QueryParamsProps {
   ids?: string[];
+  'slg[]'?: string[];
   add?: string;
   lat?: string;
   lng?: string;
@@ -46,7 +46,7 @@ interface LabResultCardProp {
 
 interface LabResultsProps {
   labResults: LabResultFromAPIFormatted[];
-  examsIds: string[] | string;
+  examsSlugs: string[] | string;
   exams: Exam[];
   address: string;
   lat: string;
@@ -70,7 +70,7 @@ const LabResultCard = ({
       });
 
       router.push({
-        pathname: `${result.lab.id}/detalhe`,
+        pathname: `${result.lab.slug}/detalhe`,
         search: resultsSearchUrl,
       });
     },
@@ -111,13 +111,12 @@ const LabResultCard = ({
 
 export default function LabResults({
   labResults,
-  examsIds,
+  examsSlugs,
   address,
   exams,
   lat: latitude,
   lng: longitude,
-}: // resultsSearchUrl
-LabResultsProps): ReactElement {
+}: LabResultsProps): ReactElement {
   const [isWeb, setIsWeb] = useState(false);
 
   const { user } = useAuth();
@@ -134,15 +133,6 @@ LabResultsProps): ReactElement {
       'Page Title': 'Lab Results',
     });
   }, [user]);
-
-  //   const [scriptLoaded, setScriptLoaded] = useState(false);
-
-  //   useEffect(() => {
-  //     const googleMapScript = loadMapApi();
-  //     googleMapScript.addEventListener('load', function () {
-  //         setScriptLoaded(true);
-  //     });
-  // }, []);
 
   const labsLocation = useMemo(() => {
     const locations = labResults.map(result => {
@@ -162,42 +152,22 @@ LabResultsProps): ReactElement {
   const latQuery = `lat=${latitude}`;
   const lngQuery = `lng=${longitude}`;
 
-  const idsQueryArray =
-    typeof examsIds === 'string'
-      ? `ids[]=${examsIds}`
-      : examsIds.map(id => {
-          const idFormatted = `ids[]=${id.toString()}`;
+  const slugsQueryArray =
+    typeof examsSlugs === 'string'
+      ? `slg[]=${examsSlugs}`
+      : examsSlugs.map(id => {
+          const idFormatted = `slg[]=${id.toString()}`;
 
           return idFormatted;
         });
 
-  const idsQueryWithComma = idsQueryArray.toString();
+  const slugsQueryWithComma = slugsQueryArray.toString();
 
-  const idsQuery = idsQueryWithComma.replace(/,/g, '&');
+  const slugsQuery = slugsQueryWithComma.replace(/,/g, '&');
 
-  const resultsSearchUrl = `?${idsQuery}&${addQuery}&${latQuery}&${lngQuery}`;
+  const resultsSearchUrl = `?${slugsQuery}&${addQuery}&${latQuery}&${lngQuery}`;
 
   const examsTitles = exams.map(exam => exam.title);
-
-  // const geocoder = scriptLoaded && new google.maps.Geocoder();
-
-  // scriptLoaded && geocoder.geocode({ address }, (results, status) => {
-  //   if (status === "OK") {
-  //     const firstResult = results[0];
-  //     const addressComponents = firstResult.address_components;
-
-  //     const neighbourhoodComponent = addressComponents.find(component => component.types.includes('sublocality'));
-  //     const neighbourhood = neighbourhoodComponent.long_name;
-
-  //     const cityComponent = addressComponents.find(component => component.types.includes('administrative_area_level_2'));
-  //     const city = cityComponent.long_name;
-
-  //     const stateComponent = addressComponents.find(component => component.types.includes('administrative_area_level_1'));
-  //     const state = stateComponent.short_name;
-  //   } else {
-  //     console.log("Geocode was not successful for the following reason: " + status);
-  //   }
-  // });
 
   return (
     <>
@@ -222,7 +192,7 @@ LabResultsProps): ReactElement {
       {isWeb && <EditSearchWeb />}
       <Container>
         <Content>
-          <h1>Buscando {examsIds.length} Exames</h1>
+          <h1>Buscando {examsSlugs.length} Exames</h1>
           {!isWeb && <EditSearchMobile />}
           {labResults.length === 1 ? (
             <h3>{labResults.length} Laboratório encontrado</h3>
@@ -259,9 +229,6 @@ LabResultsProps): ReactElement {
 export const getServerSideProps: GetServerSideProps<LabResultsProps> = async context => {
   const queryParams: QueryParamsProps = context.query;
 
-  const examsIds = isArray(queryParams['ids[]'])
-    ? queryParams['ids[]']
-    : [queryParams['ids[]']];
   try {
     const { data } = await api.get<LabResultFromAPI[]>(`/search/results`, {
       params: context.query,
@@ -278,14 +245,16 @@ export const getServerSideProps: GetServerSideProps<LabResultsProps> = async con
 
     const { data: exams } = await api.get<Exam[]>('exams/list', {
       params: {
-        exam_ids: examsIds,
+        slg: queryParams['slg[]'],
       },
     });
+
+    const examsSlugs = exams.map(exam => exam.slug);
 
     return {
       props: {
         labResults: resultsFormatted,
-        examsIds,
+        examsSlugs,
         exams,
         address: queryParams.add,
         lat: queryParams.lat,

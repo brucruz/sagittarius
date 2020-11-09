@@ -42,6 +42,7 @@ import SEO from '@/components/atom/SEO';
 
 interface QueryParamsProps {
   ids?: string[];
+  'eSlg[]'?: string | string[];
   add?: string;
   lat?: string;
   lng?: string;
@@ -262,7 +263,12 @@ export const getServerSideProps: GetServerSideProps<LabDetailProps> = async cont
   const { data } = await api.get<LabPricesResultFromAPI>(
     `/search/${queryParams.lab_id}/results`,
     {
-      params: queryParams,
+      params: {
+        eSlg: queryParams['slg[]'],
+        add: queryParams.add,
+        lat: queryParams.lat,
+        lng: queryParams.lng,
+      },
     },
   );
 
