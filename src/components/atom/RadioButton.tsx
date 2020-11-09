@@ -15,7 +15,7 @@ const RadioButton = ({
   name,
 }: RadioButtonProps): ReactElement => {
   return (
-    <Base>
+    <Base data-testid="radio-button-atom">
       <span className="text">{label}</span>
       <input type="radio" checked={isChecked} value={value} name={name} />
       <span className="checkmark">
