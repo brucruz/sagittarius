@@ -6,7 +6,7 @@ const ButtonBack = ({
   ...rest
 }: ButtonHTMLAttributes<HTMLButtonElement>): ReactElement => {
   return (
-    <ButtonBackContainer {...rest}>
+    <ButtonBackContainer data-testid="button-back-atom" {...rest}>
       <img src={leftArrow} alt="voltar" />
     </ButtonBackContainer>
   );
