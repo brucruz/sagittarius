@@ -45,7 +45,7 @@ const GoogleMap: React.FC<MapsProps> = ({ markers, lat, lng }) => {
         bootstrapURLKeys={{
           key: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
             ? process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
-            : `AIzaSyACB39SUcUZr77jXir0PnIPu-quOHqraXY`,
+            : '',
         }}
         defaultCenter={center}
         defaultZoom={13}
