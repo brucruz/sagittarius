@@ -1,10 +1,10 @@
-const { createWriteStream } = require('fs');
-const { SitemapStream, EnumChangefreq } = require('sitemap');
-const { createGzip } = require('zlib');
-const { get } = require("axios");
-const seoLocations = require('../contents/seoLocations.js');
+import { createWriteStream } from 'fs';
+import { SitemapStream, EnumChangefreq } from 'sitemap';
+import { createGzip } from 'zlib';
+import Axios from 'axios';
+import seoLocations from '../contents/seoLocations.js';
 
-async function generateSitemap() {
+export default async function generateSitemap() {
   try {
     const smStream = new SitemapStream({
       hostname: 'https://heali.me',
@@ -25,7 +25,7 @@ async function generateSitemap() {
     // Create site entries for lab results
     // Set lab results change frequency as daily
     // const exams = await fetchExams();
-    const { data: exams } = await get('https://api.heali.me/exams');
+    const { data: exams } = await Axios.get('https://api.heali.me/exams');
 
     console.log('Fetched exams data');
 
@@ -52,7 +52,9 @@ async function generateSitemap() {
     // Create site entries for lab details
     // Set lab results change frequency as daily
     // const originalExams = await fetchAssociatedOriginalExams();
-    const { data: originalExams } = await get('https://api.heali.me/originalexams/associated');
+    const { data: originalExams } = await Axios.get(
+      'https://api.heali.me/originalexams/associated',
+    );
 
     console.log('Fetched original exams data');
 
