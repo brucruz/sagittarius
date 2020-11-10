@@ -19,9 +19,14 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Runs yarn sitemap
       - uses: actions/checkout@master
         
+      
+        # Install packages
+      - name: Install packages
+        run: yarn
+        
+        # Runs yarn sitemap
       - name: Yarn Sitemap
         run: yarn sitemap
 
