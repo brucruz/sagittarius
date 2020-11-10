@@ -12,7 +12,7 @@ const ButtonNext = ({
   ...rest
 }: ButtonNextProps): ReactElement => {
   return (
-    <Container disabled={disabled} {...rest}>
+    <Container data-testid="button-next-atom" disabled={disabled} {...rest}>
       <p>{text}</p>
 
       <img src={next} alt="" />
