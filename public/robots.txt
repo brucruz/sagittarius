@@ -1,0 +1,7 @@
+Sitemap: https://heali.me/api/sitemap.xml
+
+User-agent: *
+Allow: /*
+
+Disallow: /api/*
+Disallow: /_next/*

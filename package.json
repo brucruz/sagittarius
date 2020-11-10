@@ -36,11 +36,13 @@
     "react-modal": "^3.11.2",
     "react-responsive": "^8.1.0",
     "react-spring": "^8.0.27",
+    "sitemap": "^6.3.3",
     "styled-components": "^5.2.0",
     "swr": "^0.3.6",
     "use-places-autocomplete": "^1.5.7",
     "uuidv4": "^6.2.4",
-    "yup": "^0.29.3"
+    "yup": "^0.29.3",
+    "zlib": "^1.0.5"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.11.5",
