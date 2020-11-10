@@ -1,6 +1,6 @@
 // update locations on: https://docs.google.com/spreadsheets/d/1UYg18vq3AES9sPFOFzyhcjxSl6n20nRRXXz0VCx--2c/edit#gid=1908011111
 
-const seoLocations = [
+module.exports = [
   { add: 'São Paulo - SP', lat: -23.548666, lng: -46.6382523 },
   { add: 'Santo Amaro - São Paulo - SP', lat: -23.6545639, lng: -46.706852 },
   { add: 'Santana - São Paulo - SP', lat: -23.502388, lng: -46.6262856 },
@@ -253,4 +253,4 @@ const seoLocations = [
   },
 ];
 
-export default seoLocations;
+// export default seoLocations;
