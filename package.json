@@ -9,7 +9,8 @@
     "lint:fix": "eslint 'src/**/*.{ts,tsx}' --fix",
     "prettier": "prettier --write \"src/**/*.{ts,tsx}\"",
     "test": "jest --silent",
-    "test:coverage": "jest --coverage"
+    "test:coverage": "jest --coverage",
+    "sitemap": "node src/scripts/generateSitemap.js"
   },
   "dependencies": {
     "@types/mixpanel-browser": "^2.35.4",
