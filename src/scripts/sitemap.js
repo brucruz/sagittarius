@@ -3,9 +3,6 @@
 const fs = require('fs');
 
 const Axios = require('axios');
-
-const globby = require('globby');
-const prettier = require('prettier');
 const seoLocations = require('../contents/seoLocations');
 
 (async () => {
