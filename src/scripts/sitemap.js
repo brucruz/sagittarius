@@ -6,6 +6,8 @@ const Axios = require('axios');
 const seoLocations = require('../contents/seoLocations');
 const { promisify } = require('util');
 const { pipeline } = require('stream');
+const Axios = require('axios');
+const seoLocations = require('../contents/seoLocations');
 
 (async () => {
   const writeStream = fs.createWriteStream('./public/sitemap.xml');
@@ -80,7 +82,7 @@ const { pipeline } = require('stream');
   writeStream.write(`</urlset>`);
 
   writeStream.end();
-
+  
   const pipe = promisify(pipeline);
 
   const gzip = zlib.createGzip();
