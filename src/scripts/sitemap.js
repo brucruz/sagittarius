@@ -38,9 +38,7 @@ const seoLocations = require('../contents/seoLocations');
         .map(location => {
           return `
         <url>
-          <loc>https://heali.me/resultado/${encodeURIComponent(
-            `?slg[]=${exam.slug}&add=${location.add}&lat=${location.lat}&lng=${location.lng}`,
-          )}</loc>
+          <loc>https://heali.me/resultado/?slg[]=${encodeURIComponent(exam.slug)}&add=${encodeURIComponent(location.add)}&lat=${encodeURIComponent(location.lat)}&lng=${encodeURIComponent(location.lng)}</loc>
           <lastmod>${format(parseISO(exam.updated_date), 'yyyy-MM-dd')}</lastmod>
           <changefreq>daily</changefreq>
         </url>
@@ -67,9 +65,7 @@ const seoLocations = require('../contents/seoLocations');
     .map(originalExam => {
       return `
       <url>
-        <loc>https://heali.me/${encodeURIComponent(
-          `${originalExam.lab.slug}/?slg[]=${originalExam.exam.slug}`,
-        )}</loc>
+        <loc>https://heali.me/${encodeURIComponent(originalExam.lab.slug)}/?slg[]=${encodeURIComponent(originalExam.exam.slug)}</loc>
         <lastmod>${format(parseISO(originalExam.updated_date), 'yyyy-MM-dd')}</lastmod>
         <changefreq>daily</changefreq>
       </url>
