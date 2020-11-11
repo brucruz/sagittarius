@@ -11,7 +11,7 @@ export default function WhatsappWidget(): ReactElement {
   mixpanel.track_links('#Whatsapp_Help_Button', 'Help - Whatsapp Button Click');
 
   return (
-    <Container>
+    <Container data-testid="whatsapp-widget-atom">
       <a
         target="_blank"
         rel="noopener noreferrer"

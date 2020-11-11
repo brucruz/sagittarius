@@ -11,9 +11,11 @@ interface LinkBackProps {
 const LinkBack = ({ url }: LinkBackProps): ReactElement => {
   return (
     <Link href={url}>
-      <LinkBackContainer>
-        <img src={leftArrow} alt="voltar" />
-      </LinkBackContainer>
+      <a data-testid="link-back-atom">
+        <LinkBackContainer>
+          <img src={leftArrow} alt="voltar" />
+        </LinkBackContainer>
+      </a>
     </Link>
   );
 };
