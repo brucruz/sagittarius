@@ -11,13 +11,14 @@ import {
   UserMenuContainer,
 } from '@/styles/components/molecules/UserMenu';
 import Link from 'next/link';
-import { useState, ReactElement } from 'react';
+import { useState, ReactElement, useCallback } from 'react';
 import { MdPerson } from 'react-icons/md';
 
 const UserMenu = (): ReactElement => {
-  const { user } = useAuth();
+  const { user, signOut } = useAuth();
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isMouseOverMenu, setIsMouseOverMenu] = useState(false);
 
   return (
     <Container>
@@ -34,7 +35,11 @@ const UserMenu = (): ReactElement => {
       )}
 
       {!!user && (
-        <OnlineUserMenu onBlur={() => setIsMenuOpen(false)}>
+        <OnlineUserMenu
+          onMouseOverCapture={() => setIsMouseOverMenu(true)}
+          onMouseLeave={() => setIsMouseOverMenu(false)}
+          onBlur={() => !isMouseOverMenu && setIsMenuOpen(false)}
+        >
           <div>
             <UserAvatar onClick={() => setIsMenuOpen(!isMenuOpen)}>
               {user.avatar_url ? (
@@ -69,7 +74,7 @@ const UserMenu = (): ReactElement => {
                 </MenuItem>
 
                 <MenuItem>
-                  <button type="button">
+                  <button type="button" onClick={() => signOut()}>
                     <p>Sair</p>
                   </button>
                 </MenuItem>
