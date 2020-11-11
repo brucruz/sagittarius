@@ -20,12 +20,26 @@ const SEO = ({
   const pageImage = image ? `/${image}` : null;
 
   return (
-    <Head>
+    <Head data-testid="seo-atom">
       <title>{pageTitle}</title>
-      {description && <meta name="description" content={description} />}
-      {pageImage && <meta name="image" content={pageImage} />}
+      {description && (
+        <meta
+          data-testid="seo-description"
+          name="description"
+          content={description}
+        />
+      )}
+      {pageImage && (
+        <meta data-testid="seo-image" name="image" content={pageImage} />
+      )}
 
-      {!shouldIndexPage && <meta name="robots" content="noindex,nofollow" />}
+      {!shouldIndexPage && (
+        <meta
+          data-testid="seo-index-page"
+          name="robots"
+          content="noindex,nofollow"
+        />
+      )}
 
       <meta httpEquiv="x-ua-compatible" content="IE=edge,chrome=1" />
       <meta name="MobileOptimized" content="320" />
