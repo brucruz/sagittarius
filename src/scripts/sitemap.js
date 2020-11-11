@@ -2,12 +2,10 @@
 // const OriginalExam = require('@/@types/OriginalExam');
 const fs = require('fs');
 const zlib = require('zlib');
-const Axios = require('axios');
 const seoLocations = require('../contents/seoLocations');
 const { promisify } = require('util');
 const { pipeline } = require('stream');
 const Axios = require('axios');
-const seoLocations = require('../contents/seoLocations');
 
 (async () => {
   const writeStream = fs.createWriteStream('./public/sitemap.xml');
@@ -82,7 +80,7 @@ const seoLocations = require('../contents/seoLocations');
   writeStream.write(`</urlset>`);
 
   writeStream.end();
-  
+
   const pipe = promisify(pipeline);
 
   const gzip = zlib.createGzip();
