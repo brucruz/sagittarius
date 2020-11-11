@@ -1,9 +1,11 @@
 // const Exam = require('@/@types/Exam');
 // const OriginalExam = require('@/@types/OriginalExam');
 const fs = require('fs');
-
-const Axios = require('axios');
+const zlib = require('zlib');
 const seoLocations = require('../contents/seoLocations');
+const { promisify } = require('util');
+const { pipeline } = require('stream');
+const Axios = require('axios');
 
 (async () => {
   const writeStream = fs.createWriteStream('./public/sitemap.xml');
@@ -13,7 +15,7 @@ const seoLocations = require('../contents/seoLocations');
 
   const indexUrl = `<url>
 <loc>${`https://heali.me`}</loc>
-<lastmod>${new Date()}</lastmod>,
+<lastmod>${new Date()}</lastmod>
 <changefreq>weekly</changefreq>
 </url>`;
 
@@ -78,4 +80,11 @@ const seoLocations = require('../contents/seoLocations');
   writeStream.write(`</urlset>`);
 
   writeStream.end();
+
+  const pipe = promisify(pipeline);
+
+  const gzip = zlib.createGzip();
+  const source = fs.createReadStream('./public/sitemap.xml');
+  const destination = fs.createWriteStream('./public/sitemap.xml.gz');
+  await pipe(source, gzip, destination);
 })();

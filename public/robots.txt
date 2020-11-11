@@ -1,4 +1,4 @@
-Sitemap: https://heali.me/sitemap.xml
+Sitemap: https://heali.me/sitemap.xml.gz
 
 User-agent: *
 Allow: /*
