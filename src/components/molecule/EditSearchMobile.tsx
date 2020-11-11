@@ -52,6 +52,7 @@ const EditSearch = (): ReactElement => {
 
   useEffect(() => {
     address && setValue(address.address);
+    console.log('ohayo');
   }, [address, setValue]);
 
   useEffect(() => {

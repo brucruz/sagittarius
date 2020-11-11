@@ -67,6 +67,11 @@ export const Container = styled.div`
       section {
         display: none !important;
       }
+
+      & > footer {
+        width: 100% !important;
+        margin-top: 0 !important;
+      }
     }
   }
 `;

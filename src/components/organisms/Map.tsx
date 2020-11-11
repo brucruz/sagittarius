@@ -47,7 +47,7 @@ const GoogleMap: React.FC<MapsProps> = ({ markers, lat, lng }) => {
             ? process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
             : '',
         }}
-        defaultCenter={center}
+        center={center}
         defaultZoom={13}
         distanceToMouse={distanceToMouse}
       >
