@@ -1,11 +1,10 @@
-// const Exam = require('@/@types/Exam');
-// const OriginalExam = require('@/@types/OriginalExam');
+const { format, parseISO } = require('date-fns');
 const fs = require('fs');
 const zlib = require('zlib');
-const seoLocations = require('../contents/seoLocations');
 const { promisify } = require('util');
 const { pipeline } = require('stream');
 const Axios = require('axios');
+const seoLocations = require('../contents/seoLocations');
 
 (async () => {
   const writeStream = fs.createWriteStream('./public/sitemap.xml');
@@ -15,7 +14,7 @@ const Axios = require('axios');
 
   const indexUrl = `<url>
 <loc>${`https://heali.me`}</loc>
-<lastmod>${new Date()}</lastmod>
+<lastmod>${format(new Date(), 'yyyy-MM-dd')}</lastmod>
 <changefreq>weekly</changefreq>
 </url>`;
 
@@ -39,8 +38,10 @@ const Axios = require('axios');
         .map(location => {
           return `
         <url>
-          <loc>https://heali.me/resultado/${encodeURIComponent(`?slg[]=${exam.slug}&add=${location.add}&lat=${location.lat}&lng=${location.lng}`)}</loc>
-          <lastmod>${exam.updated_date}</lastmod>
+          <loc>https://heali.me/resultado/${encodeURIComponent(
+            `?slg[]=${exam.slug}&add=${location.add}&lat=${location.lat}&lng=${location.lng}`,
+          )}</loc>
+          <lastmod>${format(parseISO(exam.updated_date), 'yyyy-MM-dd')}</lastmod>
           <changefreq>daily</changefreq>
         </url>
       `;
@@ -66,8 +67,10 @@ const Axios = require('axios');
     .map(originalExam => {
       return `
       <url>
-        <loc>https://heali.me/${encodeURIComponent(`${originalExam.lab.slug}/?slg[]=${originalExam.exam.slug}`)}</loc>
-        <lastmod>${originalExam.updated_date}</lastmod>
+        <loc>https://heali.me/${encodeURIComponent(
+          `${originalExam.lab.slug}/?slg[]=${originalExam.exam.slug}`,
+        )}</loc>
+        <lastmod>${format(parseISO(originalExam.updated_date), 'yyyy-MM-dd')}</lastmod>
         <changefreq>daily</changefreq>
       </url>
     `;
