@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import dynamic from 'next/dynamic';
 
 import Accordion from '@/components/molecule/Accordion';
@@ -43,13 +44,8 @@ const Home = (): ReactElement => {
     });
   }, [user]);
 
-  const replaceObj = {
-    '<a target="_blank" rel="noopener noreferrer" href="https://api.whatsapp.com/send?phone=5511936186364">whatsapp</a>':
-      'whatsapp',
-    '<a href="mailto:ola@heali.me">ola@heali.me</a>': 'ola@heali.me',
-  };
-
-  const replaceLinks = new RegExp(Object.keys(replaceObj).join('|'), 'gi');
+  const whatsappLink = '<a target="_blank" rel="noopener noreferrer" href="https://api.whatsapp.com/send?phone=5511936186364">whatsapp</a>';
+  const emailLink = '<a href="mailto:ola@heali.me">ola@heali.me</a>';
 
   return (
     <>
@@ -67,12 +63,7 @@ const Home = (): ReactElement => {
               faq =>
                 `{"@type": "Question","name": "${
                   faq.question
-                }","acceptedAnswer": {"@type": "Answer","text": "${faq.answer.replace(
-                  replaceLinks,
-                  matched => {
-                    return replaceObj[matched];
-                  },
-                )}"}}`,
+                }","acceptedAnswer": {"@type": "Answer","text": "${faq.answer.replace(whatsappLink, 'whatsapp').replace(emailLink, 'ola@heali.me')}"}}`,
             )}]
           }`,
           }}

@@ -21,8 +21,7 @@ export const faqQuestions: FaqQuestionsType[] = [
   {
     id: 3,
     question: 'Quando receberei as instruções de preparo do exame?',
-    answer: `Assim que <strong>confirmarmos o pagamento</strong>, entraremos em contato contigo via <strong>email e whatsapp</strong> para te explicarmos todas as instruções de preparo do exame.
-    `,
+    answer: `Assim que <strong>confirmarmos o pagamento</strong>, entraremos em contato contigo via <strong>email e whatsapp</strong> para te explicarmos todas as instruções de preparo do exame.`,
   },
   {
     id: 4,
