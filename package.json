@@ -10,7 +10,7 @@
     "prettier": "prettier --write \"src/**/*.{ts,tsx}\"",
     "test": "jest --silent",
     "test:coverage": "jest --coverage",
-    "sitemap": "node src/scripts/generateSitemap.js"
+    "sitemap": "node src/scripts/sitemap.js"
   },
   "dependencies": {
     "@types/mixpanel-browser": "^2.35.4",
