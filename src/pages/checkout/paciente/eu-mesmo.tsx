@@ -191,6 +191,7 @@ const SignUpPage = (): ReactElement => {
       <SEO
         title="Cadastre-se como paciente"
         description="Informe os dados faltantes para que você possa terminar de se cadastrar como paciente."
+        canonical="checkout/paciente/eu-mesmo"
       />
 
       <Form ref={formRef} onSubmit={handleSubmit}>

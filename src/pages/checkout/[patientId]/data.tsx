@@ -124,6 +124,7 @@ const DateSelectionPage = (): ReactElement => {
       <SEO
         title="Qual a data desejada para realização do exame?"
         description="Informe a data desejada para a realização do exame."
+        canonical={`checkout/${patientId}/data`}
       />
 
       <DateRange>

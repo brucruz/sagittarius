@@ -12,6 +12,7 @@ import { useToast } from '@/hooks/toast';
 import { useRouter } from 'next/router';
 import { useAuth } from '@/hooks/auth';
 import mixpanel from 'mixpanel-browser';
+import SEO from '@/components/atom/SEO';
 
 interface QueryParams {
   token?: string;
@@ -88,7 +89,7 @@ export default function ResetPassword(): ReactElement {
         });
       }
     },
-    [addToast, params, router],
+    [addToast, params, router, user],
   );
 
   return (
@@ -98,6 +99,12 @@ export default function ResetPassword(): ReactElement {
         subTitle: 'Digite a nova senha continuar',
       }}
     >
+      <SEO
+        title="Redefina sua senha"
+        description="Informe uma nova senha para que você possa continuar acessando a Heali"
+        canonical="redefinir senha"
+      />
+
       <Form ref={formRef} onSubmit={handleSubmit}>
         <Input
           icon={MdEmail}

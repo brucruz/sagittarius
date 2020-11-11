@@ -173,6 +173,7 @@ const SignUpPage = (): ReactElement => {
       <SEO
         title="Cadastre-se"
         description="Faça seu cadastro para agendar seus exames médicos de forma rápida, simples e segura"
+        canonical="cadastro"
       />
 
       <Form ref={formRef} onSubmit={handleSubmit}>

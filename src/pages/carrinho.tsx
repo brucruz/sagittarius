@@ -93,6 +93,7 @@ export default function Cart(): ReactElement {
       <SEO
         title="Carrinho"
         description="Agende seus exames médicos de forma rápida, simples e segura"
+        canonical="carrinho"
       />
 
       <BagContent>

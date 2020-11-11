@@ -148,9 +148,9 @@ export default function LabResults({
     return locations;
   }, [labResults]);
 
-  const addQuery = `add=${address}`;
-  const latQuery = `lat=${latitude}`;
-  const lngQuery = `lng=${longitude}`;
+  const addQuery = `add=${encodeURIComponent(address)}`;
+  const latQuery = `lat=${encodeURIComponent(latitude)}`;
+  const lngQuery = `lng=${encodeURIComponent(longitude)}`;
 
   const slugsQueryArray =
     typeof examsSlugs === 'string'
@@ -186,6 +186,7 @@ export default function LabResults({
                 ', ',
               )})`
         }`}
+        canonical={`resultado/${resultsSearchUrl}`}
       />
 
       <NavBar />

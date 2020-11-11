@@ -5,6 +5,7 @@ interface SEOProps {
   title: string;
   description?: string;
   image?: string;
+  canonical?: string;
   shouldExcludeTitleSuffix?: boolean;
   shouldIndexPage?: boolean;
 }
@@ -13,6 +14,7 @@ const SEO = ({
   title,
   description,
   image,
+  canonical,
   shouldExcludeTitleSuffix = false,
   shouldIndexPage = true,
 }: SEOProps): ReactElement => {
@@ -41,6 +43,8 @@ const SEO = ({
         />
       )}
 
+      <link rel="canonical" href={`(https://heali.me/${canonical || ''})`} />
+
       <meta httpEquiv="x-ua-compatible" content="IE=edge,chrome=1" />
       <meta name="MobileOptimized" content="320" />
       <meta name="HandheldFriendly" content="True" />
@@ -54,6 +58,7 @@ const SEO = ({
       <meta property="og:locale" content="pt_BR" />
       <meta property="og:type" content="website" />
       <meta property="og:site_name" content={pageTitle} />
+      <meta property="og:url" content={`${canonical}`} />
       <meta property="og:image" content={pageImage} />
       <meta property="og:image:secure_url" content={pageImage} />
       <meta property="og:image:alt" content="Thumbnail" />

@@ -349,6 +349,7 @@ const OrderReview = (): ReactElement => {
       <SEO
         title="Confirmar pedido de agendamento de exames"
         description="Confira se as informações do pedido de agendamento de exames estão corretas."
+        canonical={`checkout/${patientId}/confirmar`}
       />
 
       <Header>

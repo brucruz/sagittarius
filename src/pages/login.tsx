@@ -175,6 +175,7 @@ export default function Login(): ReactElement {
       <SEO
         title="Acesse"
         description="Faça seu login para agendar seus exames médicos de forma rápida, simples e segura"
+        canonical="login"
       />
 
       <Form ref={formRef} onSubmit={handleSubmit} onChange={handleFormChange}>

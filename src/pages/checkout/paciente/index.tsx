@@ -95,6 +95,7 @@ export default function Patients(): ReactElement {
       <SEO
         title="Selecione o paciente que irá fazer o exame"
         description="Indique quem fará os exames agendados. Caso queira, você pode cadastrar alguém da sua família ou amigo como seu paciente."
+        canonical="checkout/paciente"
       />
 
       <Content>

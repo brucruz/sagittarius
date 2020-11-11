@@ -11,6 +11,7 @@ import Button from '@/components/atom/Button';
 import { useToast } from '@/hooks/toast';
 import { useAuth } from '@/hooks/auth';
 import mixpanel from 'mixpanel-browser';
+import SEO from '@/components/atom/SEO';
 
 interface ForgotPasswordFormData {
   email: string;
@@ -73,7 +74,7 @@ export default function ForgotPassword(): ReactElement {
         });
       }
     },
-    [addToast],
+    [addToast, user],
   );
 
   return (
@@ -86,6 +87,12 @@ export default function ForgotPassword(): ReactElement {
         subTitle: 'Digite seus dados para continuar',
       }}
     >
+      <SEO
+        title="Esqueci minha senha"
+        description="Informe seu e-mail para que você possa recuperar sua senha"
+        canonical="esqueci-minha-senha"
+      />
+
       <Form ref={formRef} onSubmit={handleSubmit}>
         <Input
           icon={MdEmail}

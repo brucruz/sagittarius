@@ -55,9 +55,19 @@ interface LabPricesResultFromAPI extends LabResultFromAPI {
 
 interface LabDetailProps {
   labDetail: LabPricesResultFromAPI;
+  examsSlugs: string[] | string;
+  address?: string;
+  latitude?: string;
+  longitude?: string;
 }
 
-export default function Detail({ labDetail }: LabDetailProps): ReactElement {
+export default function Detail({
+  labDetail,
+  examsSlugs,
+  address,
+  latitude,
+  longitude,
+}: LabDetailProps): ReactElement {
   const [displayListExams, setDisplayListExams] = useState(true);
   const [displayMap, setDisplayMap] = useState(false);
   const [selectedPrices, setSelectedPrices] = useState<PriceFormatted[]>([]);
@@ -137,6 +147,27 @@ export default function Detail({ labDetail }: LabDetailProps): ReactElement {
 
   const examsTitles = labDetail.prices.map(price => price.exam.title);
 
+  const addQuery = `add=${encodeURIComponent(address)}`;
+  const latQuery = `lat=${encodeURIComponent(latitude)}`;
+  const lngQuery = `lng=${encodeURIComponent(longitude)}`;
+
+  const slugsQueryArray =
+    typeof examsSlugs === 'string'
+      ? `slg[]=${examsSlugs}`
+      : examsSlugs.map(id => {
+          const idFormatted = `slg[]=${id.toString()}`;
+
+          return idFormatted;
+        });
+
+  const slugsQueryWithComma = slugsQueryArray.toString();
+
+  const slugsQuery = slugsQueryWithComma.replace(/,/g, '&');
+
+  const resultsSearchUrl = `?${slugsQuery}${address && `&${addQuery}`}${
+    latitude && `&${latQuery}`
+  }${longitude && `&${lngQuery}`}`;
+
   return labDetail ? (
     <>
       <SEO
@@ -150,6 +181,7 @@ export default function Detail({ labDetail }: LabDetailProps): ReactElement {
         } no laboratório ${labDetail.lab.company.title} - ${
           labDetail.lab.title
         }`}
+        canonical={`${labDetail.lab.slug}/${resultsSearchUrl}`}
       />
 
       <Navbar />
@@ -272,9 +304,15 @@ export const getServerSideProps: GetServerSideProps<LabDetailProps> = async cont
     },
   );
 
+  const examsSlugs = data.prices.map(price => price.exam.slug);
+
   return {
     props: {
       labDetail: data,
+      examsSlugs,
+      address: queryParams.add,
+      latitude: queryParams.lat,
+      longitude: queryParams.lng,
     },
   };
 };
