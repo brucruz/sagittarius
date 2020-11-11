@@ -21,7 +21,7 @@ import visaImg from '@/assets/pages/Home/visa-card.svg';
 import dinnerImg from '@/assets/pages/Home/dinner-card.svg';
 import picpayImg from '@/assets/pages/Home/picpay-card.svg';
 import SEO from '@/components/atom/SEO';
-import { ReactElement, useEffect } from 'react';
+import { ReactElement, useCallback, useEffect } from 'react';
 import mixpanel from 'mixpanel-browser';
 import { useAuth } from '@/hooks/auth';
 import Head from 'next/head';
@@ -43,6 +43,14 @@ const Home = (): ReactElement => {
     });
   }, [user]);
 
+  const replaceObj = {
+    '<a target="_blank" rel="noopener noreferrer" href="https://api.whatsapp.com/send?phone=5511936186364">whatsapp</a>':
+      'whatsapp',
+    '<a href="mailto:ola@heali.me">ola@heali.me</a>': 'ola@heali.me',
+  };
+
+  const replaceLinks = new RegExp(Object.keys(replaceObj).join('|'), 'gi');
+
   return (
     <>
       <SEO
@@ -55,11 +63,18 @@ const Home = (): ReactElement => {
           type="application/ld+json"
           // eslint-disable-next-line react/no-danger
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify(`{"@context": "https://schema.org/","@type": "FAQPage","mainEntity": [${faqQuestions.map(
+            __html: `{"@context": "https://schema.org/","@type": "FAQPage","mainEntity": [${faqQuestions.map(
               faq =>
-                `{"@type": "Question","name": "${faq.question}","acceptedAnswer": {"@type": "Answer","text": "${faq.answer}"}`,
+                `{"@type": "Question","name": "${
+                  faq.question
+                }","acceptedAnswer": {"@type": "Answer","text": "${faq.answer.replace(
+                  replaceLinks,
+                  matched => {
+                    return replaceObj[matched];
+                  },
+                )}"}}`,
             )}]
-          }`),
+          }`,
           }}
           key="jsonld-faq-page"
         />
