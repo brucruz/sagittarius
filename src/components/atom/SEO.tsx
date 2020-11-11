@@ -21,6 +21,8 @@ const SEO = ({
   const pageTitle = `${title} ${!shouldExcludeTitleSuffix && '| Heali'}`;
   const pageImage = image ? `/${image}` : null;
 
+  const canonicalUrl = `https://heali.me/${canonical || ''}`;
+
   return (
     <Head data-testid="seo-atom">
       <title>{pageTitle}</title>
@@ -43,7 +45,7 @@ const SEO = ({
         />
       )}
 
-      <link rel="canonical" href={`(https://heali.me/${canonical || ''})`} />
+      <link rel="canonical" href={canonicalUrl} />
 
       <meta httpEquiv="x-ua-compatible" content="IE=edge,chrome=1" />
       <meta name="MobileOptimized" content="320" />
@@ -58,7 +60,7 @@ const SEO = ({
       <meta property="og:locale" content="pt_BR" />
       <meta property="og:type" content="website" />
       <meta property="og:site_name" content={pageTitle} />
-      <meta property="og:url" content={`${canonical}`} />
+      <meta property="og:url" content={canonicalUrl} />
       <meta property="og:image" content={pageImage} />
       <meta property="og:image:secure_url" content={pageImage} />
       <meta property="og:image:alt" content="Thumbnail" />
