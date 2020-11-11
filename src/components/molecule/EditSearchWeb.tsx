@@ -89,10 +89,11 @@ const EditSearchWeb = (): ReactElement => {
       setExamResults([]);
       setExamError('');
     }
-  }, [examTypedValue, exams]);
+  }, [examTypedValue, exams, user]);
 
   const handleGetAddressInnerValue = useCallback(
     (typedAddress: string) => {
+      console.log('heheheh');
       setValue(typedAddress);
     },
     [setValue],
