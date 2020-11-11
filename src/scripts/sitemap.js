@@ -3,33 +3,19 @@
 const fs = require('fs');
 
 const Axios = require('axios');
-
-const globby = require('globby');
-const prettier = require('prettier');
 const seoLocations = require('../contents/seoLocations');
 
 (async () => {
   const writeStream = fs.createWriteStream('./public/sitemap.xml');
 
-  writeStream.write(`
-    <?xml version="1.0" encoding="UTF-8"?>
-    <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  `);
+  writeStream.write(`<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">`);
 
-  // Ignore Next.js specific files (e.g., _app.js) and API routes.
-  const pages = await globby([
-    'pages/**/*{.js,.mdx}',
-    '!pages/_*.js',
-    '!pages/api',
-  ]);
-
-  const indexUrl = `
-    <url>
-      <loc>${`https://heali.me`}</loc>
-      <lastmod>${new Date()}</lastmod>,
-      <changefreq>weekly</changefreq>
-    </url>
-  `;
+  const indexUrl = `<url>
+<loc>${`https://heali.me`}</loc>
+<lastmod>${new Date()}</lastmod>,
+<changefreq>weekly</changefreq>
+</url>`;
 
   writeStream.write(indexUrl);
   console.log('Wrote index page');
@@ -51,8 +37,8 @@ const seoLocations = require('../contents/seoLocations');
         .map(location => {
           return `
         <url>
-          <loc>${`https://heali.me/resultado/?slg[]=${exam.slug}&add=${location.add}&lat=${location.lat}&lng=${location.lng}`}</loc>
-          <lastmod>${exam.updated_date}</lastmod>,
+          <loc>https://heali.me/resultado/${encodeURIComponent(`?slg[]=${exam.slug}&add=${location.add}&lat=${location.lat}&lng=${location.lng}`)}</loc>
+          <lastmod>${exam.updated_date}</lastmod>
           <changefreq>daily</changefreq>
         </url>
       `;
@@ -78,8 +64,8 @@ const seoLocations = require('../contents/seoLocations');
     .map(originalExam => {
       return `
       <url>
-        <loc>${`https://heali.me/${originalExam.lab.slug}/?slg[]=${originalExam.exam.slug}`}</loc>
-        <lastmod>${originalExam.updated_date}</lastmod>,
+        <loc>https://heali.me/${encodeURIComponent(`${originalExam.lab.slug}/?slg[]=${originalExam.exam.slug}`)}</loc>
+        <lastmod>${originalExam.updated_date}</lastmod>
         <changefreq>daily</changefreq>
       </url>
     `;
@@ -91,20 +77,5 @@ const seoLocations = require('../contents/seoLocations');
 
   writeStream.write(`</urlset>`);
 
-  // const sitemap = `
-  //       <?xml version="1.0" encoding="UTF-8"?>
-  //       <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  //         ${pagesUrls}
-  //         ${resultsUrls}
-  //         ${detailsUrls}
-  //       </urlset>
-  //   `;
-
-  // // If you're not using Prettier, you can remove this.
-  // const formatted = prettier.format(sitemap, {
-  //   ...prettierConfig,
-  //   parser: 'html',
-  // });
-
-  // await fs.writeFileSync('public/sitemap.xml', formatted);
+  writeStream.end();
 })();
