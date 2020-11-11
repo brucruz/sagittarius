@@ -5,7 +5,7 @@ import { MdSearch, MdPlace } from 'react-icons/md';
 // import arrowIcon from '@/assets/components/molecules/EditSearch/arrow-edit-search.svg';
 import Input from '@/components/atom/Input';
 import examIndex from '@/services/search';
-import { buildSearchQuery } from '@/helpers/searchExams';
+import { buildSearchQuery, executeSearchQuery } from '@/helpers/searchExams';
 import usePlacesAutocomplete from 'use-places-autocomplete';
 import ExamSearchResult from '@/@types/ExamSearchResult';
 import { Container } from '@/styles/components/molecules/EditSearchWeb';
@@ -47,53 +47,11 @@ const EditSearchWeb = (): ReactElement => {
   }, [address, setValue]);
 
   useEffect(() => {
-    if (examTypedValue !== '') {
-      examIndex
-        .search<ExamSearchResult>(examTypedValue, {
-          attributesToRetrieve: ['title', 'alternative_titles'],
-          hitsPerPage: 5,
-          clickAnalytics: true,
-          analytics: true,
-        })
-        .then(({ hits, query }) => {
-          if (hits.length === 0) {
-            setExamError('Desculpe, não localizamos este exame.');
-
-            user && mixpanel.identify(user.id);
-            mixpanel.register(
-              {
-                'Not Found Exam': query,
-              },
-              1,
-            );
-            mixpanel.track('Exam Not Found - Display error message');
-          } else {
-            setExamError('');
-          }
-
-          const results = hits.map(hit => {
-            return {
-              id: hit.objectID,
-              title: hit.title,
-              slug: hit.slug,
-              alternative_titles: hit.alternative_titles,
-              created_date: hit.created_date,
-              updated_date: hit.updated_date,
-            };
-          });
-
-          setExamResults(results);
-        })
-        .catch(err => console.log(err));
-    } else {
-      setExamResults([]);
-      setExamError('');
-    }
+    executeSearchQuery({ examTypedValue, setExamError, setExamResults, user });
   }, [examTypedValue, exams, user]);
 
   const handleGetAddressInnerValue = useCallback(
     (typedAddress: string) => {
-      console.log('heheheh');
       setValue(typedAddress);
     },
     [setValue],

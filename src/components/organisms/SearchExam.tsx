@@ -17,7 +17,7 @@ import { useAuth } from '@/hooks/auth';
 import { useToast } from '@/hooks/toast';
 import ExamSearchResult from '@/@types/ExamSearchResult';
 import examIndex from '@/services/search';
-import { buildSearchQuery } from '@/helpers/searchExams';
+import { buildSearchQuery, executeSearchQuery } from '@/helpers/searchExams';
 import {
   EXAMS as EXAMS_CONSTANT,
   EXAM as EXAM_CONSTANT,
@@ -64,49 +64,7 @@ const SearchExam = (): ReactElement => {
   }, [address, setValue]);
 
   useEffect(() => {
-    if (examTypedValue !== '') {
-      examIndex
-        .search<ExamSearchResult>(examTypedValue, {
-          attributesToRetrieve: ['title', 'alternative_titles', 'slug'],
-          hitsPerPage: 5,
-          clickAnalytics: true,
-          analytics: true,
-        })
-        .then(({ hits, query }) => {
-          if (hits.length === 0) {
-            setExamError('Desculpe, não localizamos este exame.');
-
-            user && mixpanel.identify(user.id);
-            mixpanel.register(
-              {
-                'Not Found Exam': query,
-              },
-              1,
-            );
-            mixpanel.track('Exam Not Found - Display error message');
-          } else {
-            setExamError('');
-          }
-
-          const results = hits.map(hit => {
-            return {
-              id: hit.objectID,
-              title: hit.title,
-              slug: hit.slug,
-              alternative_titles: hit.alternative_titles,
-              highlightedWords: hit.highlightResult,
-              created_date: hit.created_date,
-              updated_date: hit.updated_date,
-            };
-          });
-
-          setExamResults(results);
-        })
-        .catch(err => console.log(err));
-    } else {
-      setExamResults([]);
-      setExamError('');
-    }
+    executeSearchQuery({ examTypedValue, setExamError, setExamResults, user });
   }, [examTypedValue, exams, user]);
 
   const resultsSearchUrl = useMemo(() => buildSearchQuery(address, exams), [
