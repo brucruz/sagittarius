@@ -6,4 +6,5 @@ export default {
     '^.+\\.tsx?$': 'babel-jest',
     '^.+\\.svg$': 'jest-svg-transformer',
   },
+  setupFilesAfterEnv: ['<rootDir>/src/config/setupTests.ts'],
 };

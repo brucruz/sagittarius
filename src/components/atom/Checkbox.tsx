@@ -23,6 +23,7 @@ const Checkbox = ({
 }: CheckboxProps): ReactElement => {
   return (
     <CheckboxItem
+      data-testid="check-box-atom"
       isChecked={isChecked}
       id={id}
       className={description && 'checkbox-align-center'}
