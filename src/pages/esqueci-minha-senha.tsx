@@ -101,7 +101,9 @@ export default function ForgotPassword(): ReactElement {
           name="email"
           label="E-mail"
         />
-        <Button type="submit">Recuperar senha</Button>
+        <Button type="submit" className="margin-top">
+          Recuperar senha
+        </Button>
       </Form>
     </PageTemplate>
   );

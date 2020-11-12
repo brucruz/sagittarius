@@ -1,11 +1,8 @@
 import styled from 'styled-components';
 import React from 'react';
 
-export const ForgotPassword = styled.a`
-  font-size: 14px;
-  cursor: pointer;
-  font-weight: 700;
-  text-decoration: underline;
+export const ForgotPasswordContainer = styled.div`
+  margin-top: 16px;
 
   & ~ button {
     margin-top: 24px;
@@ -16,6 +13,13 @@ export const ForgotPassword = styled.a`
       font-size: 14px;
     }
   }
+`;
+
+export const ForgotPassword = styled.a`
+  font-size: 14px;
+  cursor: pointer;
+  font-weight: 700;
+  text-decoration: underline;
 `;
 
 export const SocialButton = styled.button`

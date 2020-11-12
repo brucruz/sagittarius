@@ -2,76 +2,62 @@ import device from '@/utils/devices';
 import styled from 'styled-components';
 
 export const Container = styled.div`
-  display: none;
+  display: flex;
+  align-items: center;
+  width: 100%;
 
-  button {
-    margin-right: 16px;
+  &.has-error {
+    align-items: baseline !important;
+
+    button + div + section {
+      align-self: flex-start;
+    }
   }
 
-  @media ${device.laptop} {
-    display: flex;
-    align-items: center;
-    width: 100%;
+  @media ${device.laptopL} {
+    margin-top: 88px;
+  }
 
-    &.has-error {
-      align-items: baseline !important;
+  margin-top: 64px;
+  margin-bottom: 32px;
+  padding: 0 8.3%;
+
+  header,
+  section {
+    margin: 0 !important;
+  }
+
+  button {
+    margin-right: 8px;
+  }
+
+  button + div {
+    width: 100% !important;
+
+    input {
+      width: 100%;
     }
+  }
+
+  div > footer {
+    width: calc((100% / 3) - 7.6%);
 
     @media ${device.laptopL} {
-      margin-top: 88px;
+      width: calc((100% / 3) - 7%);
     }
 
-    margin-top: 64px;
-    margin-bottom: 32px;
-    padding: 0 8.3%;
-
-    section,
-    header {
-      margin: 0 !important;
+    @media ${device.desktop} {
+      max-width: 100%;
+      width: calc((100% / 3) - 6.5%);
     }
+  }
 
-    button + section {
-      display: grid;
-      margin-right: 16px !important;
+  button + div + section,
+  button + div + section + div {
+    width: 100%;
+  }
 
-      grid-gap: 16px 2px;
-      grid-template-columns: repeat(2, 1fr);
-
-      & > div {
-        grid-row-start: 2 !important;
-        margin-top: -8px !important;
-      }
-    }
-
-    & > section {
-      width: 100%;
-
-      & > section {
-        margin-left: 16px !important;
-
-        header {
-          margin: 0 !important;
-        }
-      }
-
-      & > footer {
-        margin-top: 48px !important;
-        width: 49% !important;
-      }
-    }
-
-    & > section:last-child {
-      width: 30%;
-      margin-left: 16px !important;
-
-      section {
-        display: none !important;
-      }
-
-      & > footer {
-        width: 100% !important;
-        margin-top: 0 !important;
-      }
-    }
+  button + div + section {
+    margin: 0 8px !important;
   }
 `;

@@ -64,4 +64,8 @@ export const Content = styled.div`
     display: flex;
     flex-direction: row;
   }
+
+  div footer {
+    max-width: calc(100% - 50px);
+  }
 `;

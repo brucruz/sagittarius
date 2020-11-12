@@ -22,11 +22,13 @@ import {
   EXAMS as EXAMS_CONSTANT,
   EXAM as EXAM_CONSTANT,
 } from '@/constants/examsSearch';
+import InputWithSuggestions from '@/components/molecule/InputWithSuggestions';
 import Input from '../atom/Input';
 import PageHeader from '../molecule/PageHeader';
 import TitleMain from '../molecule/TitleMain';
 import ButtonNext from '../atom/ButtonNext';
 import InitialState from '../molecule/HomeInitialState';
+import SelectedExams from '../atom/SelectedExams';
 
 type SearchDisplay = 'initial' | 'exam' | 'address';
 
@@ -202,11 +204,12 @@ const SearchExam = (): ReactElement => {
             title="Quais exames está buscando?"
             subtitle="Digite e adicione os exames que quer agendar."
           />
-          <Input
+
+          <InputWithSuggestions
             name="exam"
             label="Seus Exames"
-            errorProps={examError}
-            icon={MdSearch}
+            error={examError}
+            value={examTypedValue}
             suggestions={{
               type: EXAMS_CONSTANT,
               data: examResults,
@@ -215,6 +218,8 @@ const SearchExam = (): ReactElement => {
             }}
             getInputValue={handleGetExamInnerValue}
           />
+
+          <SelectedExams suggestions={EXAMS_CONSTANT} />
 
           <ButtonNext
             text="Continuar"
@@ -240,10 +245,9 @@ const SearchExam = (): ReactElement => {
             subtitle="Digite o endereço, bairro ou cidade de onde quer fazer o exame."
           />
 
-          <Input
+          <InputWithSuggestions
             name="location"
             label="Sua Localização"
-            icon={MdPlace}
             suggestions={{
               type: 'address',
               data: addressSuggestions,

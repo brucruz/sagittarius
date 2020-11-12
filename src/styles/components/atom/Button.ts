@@ -13,6 +13,10 @@ export const Base = styled.button`
     background: linear-gradient(90deg, #4d49c4 0%, #7672dd 97.71%);
   }
 
+  &.margin-top {
+    margin-top: 16px;
+  }
+
   ${props =>
     props.disabled &&
     css`

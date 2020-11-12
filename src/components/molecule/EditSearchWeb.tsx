@@ -11,9 +11,11 @@ import ExamSearchResult from '@/@types/ExamSearchResult';
 import { Container } from '@/styles/components/molecules/EditSearchWeb';
 import { useSearchExam } from '@/hooks/searchExam';
 import { useAuth } from '@/hooks/auth';
+import SelectedExams from '@/components/atom/SelectedExams';
 import mixpanel from 'mixpanel-browser';
 import { EXAMS as EXAMS_CONSTANT } from '@/constants/examsSearch';
 import ButtonBack from '../atom/ButtonBack';
+import InputWithSuggestions from './InputWithSuggestions';
 
 const EditSearchWeb = (): ReactElement => {
   const router = useRouter();
@@ -99,23 +101,25 @@ const EditSearchWeb = (): ReactElement => {
           })
         }
       />
-      <Input
+      <InputWithSuggestions
         name="exam"
         label="Seus Exames"
-        errorProps={examError}
-        icon={MdSearch}
+        error={examError}
         suggestions={{
           type: EXAMS_CONSTANT,
           data: examResults,
           getSelectedExam: handleExamSelection,
           clearSuggestions: handleClearExamSuggestions,
         }}
+        value={examTypedValue}
         getInputValue={handleGetExamInnerValue}
       />
-      <Input
+
+      <SelectedExams suggestions={EXAMS_CONSTANT} />
+
+      <InputWithSuggestions
         name="location"
         label="Sua Localização"
-        icon={MdPlace}
         suggestions={{
           type: 'address',
           data: addressSuggestions,

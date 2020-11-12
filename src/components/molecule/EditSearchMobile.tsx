@@ -21,6 +21,8 @@ import mixpanel from 'mixpanel-browser';
 import { useAuth } from '@/hooks/auth';
 import { useSearchExam } from '@/hooks/searchExam';
 import ButtonBack from '../atom/ButtonBack';
+import InputWithSuggestions from './InputWithSuggestions';
+import SelectedExams from '../atom/SelectedExams';
 
 const EditSearch = (): ReactElement => {
   const router = useRouter();
@@ -119,11 +121,10 @@ const EditSearch = (): ReactElement => {
       </Header>
       {displaySearchContent && (
         <Content>
-          <Input
+          <InputWithSuggestions
             name="exam"
             label="Seus Exames"
-            icon={MdSearch}
-            errorProps={examError}
+            error={examError}
             suggestions={{
               type: EXAMS_CONSTANT,
               data: examResults,
@@ -131,11 +132,14 @@ const EditSearch = (): ReactElement => {
               clearSuggestions: handleClearExamSuggestions,
             }}
             getInputValue={handleGetExamInnerValue}
+            value={examTypedValue}
           />
-          <Input
+
+          <SelectedExams suggestions={EXAMS_CONSTANT} />
+
+          <InputWithSuggestions
             name="location"
             label="Sua Localização"
-            icon={MdPlace}
             suggestions={{
               type: 'address',
               data: addressSuggestions,
