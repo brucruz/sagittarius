@@ -38,7 +38,7 @@ const seoLocations = require('../contents/seoLocations');
         .map(location => {
           return `
         <url>
-          <loc>https://heali.me/resultado/?slg[]=${encodeURIComponent(exam.slug)}&add=${encodeURIComponent(location.add)}&lat=${encodeURIComponent(location.lat)}&lng=${encodeURIComponent(location.lng)}</loc>
+          <loc>https://heali.me/resultado/?slg[]=${encodeURIComponent(exam.slug)}&amp;add=${encodeURIComponent(location.add)}&amp;lat=${encodeURIComponent(location.lat)}&amp;lng=${encodeURIComponent(location.lng)}</loc>
           <lastmod>${format(parseISO(exam.updated_date), 'yyyy-MM-dd')}</lastmod>
           <changefreq>daily</changefreq>
         </url>
