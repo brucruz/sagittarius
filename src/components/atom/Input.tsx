@@ -18,7 +18,6 @@ import { Suggestion } from 'use-places-autocomplete';
 import { EXAMS as EXAMS_CONSTANT } from '@/constants/examsSearch';
 
 import Exam from '@/@types/Exam';
-import { useSearchExam } from '@/hooks/searchExam';
 import {
   InputContainer,
   UserInput,
@@ -26,7 +25,6 @@ import {
   InputTextArea,
   ErrorMessage,
 } from '@/styles/components/atom/Input';
-import useClickOutsideRef from '@/hooks/clickOutside';
 import { useAuth } from '@/hooks/auth';
 
 import { useField } from '@unform/core';
@@ -71,7 +69,6 @@ const Input = ({
   const [isFilled, setIsFilled] = useState(false);
   const [hasSuggestions, setHasSuggestions] = useState(false);
   const [inputType, setInputType] = useState('text');
-
   const { user } = useAuth();
 
   useEffect(() => {
@@ -141,6 +138,7 @@ const Input = ({
         {type === 'password' && (
           <MdRemoveRedEye
             className="password-eye-icon"
+            data-testid="password-icon"
             onClick={() =>
               inputRef.current?.value &&
               (inputType === 'password'
