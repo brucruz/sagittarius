@@ -120,7 +120,9 @@ export default function ResetPassword(): ReactElement {
           name="password_confirmation"
           label="Confirmar nova senha"
         />
-        <Button type="submit">Trocar senha</Button>
+        <Button type="submit" className="margin-top">
+          Trocar senha
+        </Button>
       </Form>
     </PageTemplate>
   );

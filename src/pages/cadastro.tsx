@@ -211,6 +211,7 @@ const SignUpPage = (): ReactElement => {
 
         <Button
           type="submit"
+          className="margin-top"
           // disabled={!emailValue || !passwordValue}
         >
           Cadastrar

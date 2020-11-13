@@ -20,6 +20,7 @@ import {
   SocialButtonsContainer,
   RegisterLink,
   ForgotPassword,
+  ForgotPasswordContainer,
 } from '@/styles/pages/Login';
 import api from '@/services/api';
 import { buildSearchQuery } from '@/helpers/searchExams';
@@ -193,9 +194,11 @@ export default function Login(): ReactElement {
           icon={MdLock}
           isSubmit
         />
-        <Link href="/esqueci-minha-senha">
-          <ForgotPassword>Esqueci minha senha</ForgotPassword>
-        </Link>
+        <ForgotPasswordContainer>
+          <Link href="/esqueci-minha-senha">
+            <ForgotPassword>Esqueci minha senha</ForgotPassword>
+          </Link>
+        </ForgotPasswordContainer>
         <Button
           type="submit"
           disabled={!formState.password || !formState.email}
