@@ -256,7 +256,9 @@ const SignUpPage = (): ReactElement => {
           isSubmit
         />
 
-        <Button type="submit">Cadastrar</Button>
+        <Button type="submit" className="margin-top24">
+          Cadastrar
+        </Button>
       </Form>
     </PageTemplate>
   );

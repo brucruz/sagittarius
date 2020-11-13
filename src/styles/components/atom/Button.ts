@@ -17,6 +17,10 @@ export const Base = styled.button`
     margin-top: 16px;
   }
 
+  &.margin-top24 {
+    margin-top: 24px;
+  }
+
   ${props =>
     props.disabled &&
     css`
