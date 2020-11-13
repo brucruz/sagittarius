@@ -9,6 +9,7 @@ import {
   ReactElement,
   useRef,
   useState,
+  memo,
 } from 'react';
 import mixpanel from 'mixpanel-browser';
 
@@ -99,19 +100,6 @@ const Input = ({
     suggestions && setHasSuggestions(true);
   }, [suggestions]);
 
-  const handleClickOutsideInput = useCallback(() => {
-    if (!suggestions) return;
-    setIsFocused(false);
-
-    inputRef.current.value = '';
-
-    getInputValue('');
-
-    !value && setIsFilled(false);
-
-    setHasSuggestions(false);
-  }, [inputRef, getInputValue, suggestions, value]);
-
   const handleInputChange = useCallback(() => {
     setIsFilled(!!inputRef.current?.value);
 
@@ -119,8 +107,6 @@ const Input = ({
 
     suggestions && setHasSuggestions(true);
   }, [suggestions, getInputValue]);
-
-  const clickOutsideUserInputRef = useClickOutsideRef(handleClickOutsideInput);
 
   user && mixpanel.identify(user.id);
   mixpanel.track_links(
@@ -136,7 +122,6 @@ const Input = ({
         isFocused={isFocused}
         onFocus={handleInputFocus}
         hasSuggestions={hasSuggestions}
-        ref={clickOutsideUserInputRef}
       >
         <InputIcon>{Icon && <Icon />}</InputIcon>
 
@@ -189,4 +174,4 @@ const Input = ({
   );
 };
 
-export default Input;
+export default memo(Input);
