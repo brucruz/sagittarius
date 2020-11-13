@@ -15,11 +15,12 @@ import formatValue from '@/utils/formatValue';
 import { cartQl } from '@/services/cartql';
 import { gql } from '@apollo/client';
 import api from '@/services/api';
+import Price from '@/@types/Price';
 import Lab from '../@types/Lab';
 import { useAuth } from './auth';
 
 interface CartQLItem {
-  id: string;
+  name: string;
 }
 interface CartQLQuery {
   cart: {
@@ -52,31 +53,70 @@ interface BagContextData {
 const BagContext = createContext<BagContextData>({} as BagContextData);
 
 const BagProvider = ({ children }): ReactElement => {
+  const [isBagOpen, setIsBagOpen] = useState(false);
+  const [bagItems, setBagItems] = useState<PricesInBag[]>([]);
+
   useEffect(() => {
     cartQl
       .query<CartQLQuery>({
         query: gql`
           query {
-            cart(id: "teste-bruno23091989") {
+            cart(id: "teste-bruno23091989123") {
               id
               email
               isEmpty
               abandoned
               items {
-                id
+                name
               }
             }
           }
         `,
       })
-      .then(result => {
-        console.log(result);
-      });
-  }, []);
+      .then(gqlResult => {
+        const carQLItems = gqlResult.data.cart.items;
 
-  const [isBagOpen, setIsBagOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-  const [bagItems, setBagItems] = useState<PricesInBag[]>([]);
+        const carQLItemsIds = carQLItems.map(item => item.name);
+
+        if (carQLItems.length > 0) {
+          api
+            .get<Price[]>('/prices', {
+              params: {
+                id: carQLItemsIds,
+              },
+            })
+            .then(apiResult => {
+              const apiPrices = apiResult.data;
+
+              const apiLabs = apiPrices.map(apiPrice => apiPrice.lab);
+
+              const itemsToAddInBag: PricesInBag[] = apiLabs.map(apiLab => {
+                const labPrices = apiPrices.filter(
+                  price => price.lab_id === apiLab.id,
+                );
+
+                const labPricesFormatted: PriceFormatted[] = labPrices.map(
+                  price => {
+                    return {
+                      ...price,
+                      formatted_price: formatValue(price.price),
+                    };
+                  },
+                );
+
+                return {
+                  ...apiLab,
+                  price: labPricesFormatted,
+                };
+              });
+
+              setBagItems(itemsToAddInBag);
+            })
+            .catch(err => console.log(err));
+        }
+      })
+      .catch(err => console.log(err));
+  }, []);
 
   const { user } = useAuth();
 
