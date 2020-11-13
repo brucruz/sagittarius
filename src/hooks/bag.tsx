@@ -54,6 +54,7 @@ const BagContext = createContext<BagContextData>({} as BagContextData);
 
 const BagProvider = ({ children }): ReactElement => {
   const [isBagOpen, setIsBagOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [bagItems, setBagItems] = useState<PricesInBag[]>([]);
 
   useEffect(() => {
@@ -74,7 +75,8 @@ const BagProvider = ({ children }): ReactElement => {
         `,
       })
       .then(gqlResult => {
-        const carQLItems = gqlResult.data.cart.items;
+        const { loading, data } = gqlResult;
+        const carQLItems = data.cart.items;
 
         const carQLItemsIds = carQLItems.map(item => item.name);
 
@@ -111,6 +113,7 @@ const BagProvider = ({ children }): ReactElement => {
               });
 
               setBagItems(itemsToAddInBag);
+              setIsLoading(loading);
             })
             .catch(err => console.log(err));
         }
