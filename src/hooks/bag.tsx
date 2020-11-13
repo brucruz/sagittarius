@@ -6,13 +6,30 @@ import {
   useCallback,
   useMemo,
   ReactElement,
+  useEffect,
 } from 'react';
 import mixpanel from 'mixpanel-browser';
 import PriceFormatted from '@/@types/PriceFormatted';
 import PricesInBag from '@/@types/PricesInBag';
 import formatValue from '@/utils/formatValue';
+import { cartQl } from '@/services/cartql';
+import { gql } from '@apollo/client';
+import api from '@/services/api';
 import Lab from '../@types/Lab';
 import { useAuth } from './auth';
+
+interface CartQLItem {
+  id: string;
+}
+interface CartQLQuery {
+  cart: {
+    id: string;
+    email: string;
+    isEmpty: boolean;
+    abandoned: boolean;
+    items: CartQLItem[];
+  };
+}
 
 interface BagContextData {
   isBagOpen: boolean;
@@ -35,8 +52,30 @@ interface BagContextData {
 const BagContext = createContext<BagContextData>({} as BagContextData);
 
 const BagProvider = ({ children }): ReactElement => {
-  const [isBagOpen, setIsBagOpen] = useState(false);
+  useEffect(() => {
+    cartQl
+      .query<CartQLQuery>({
+        query: gql`
+          query {
+            cart(id: "teste-bruno23091989") {
+              id
+              email
+              isEmpty
+              abandoned
+              items {
+                id
+              }
+            }
+          }
+        `,
+      })
+      .then(result => {
+        console.log(result);
+      });
+  }, []);
 
+  const [isBagOpen, setIsBagOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [bagItems, setBagItems] = useState<PricesInBag[]>([]);
 
   const { user } = useAuth();
