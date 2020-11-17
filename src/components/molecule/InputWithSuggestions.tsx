@@ -45,7 +45,7 @@ const InputWithSuggestions = ({
   const [hasSuggestions, setHasSuggestions] = useState(false);
 
   useEffect(() => {
-    console.log(value === address.address)
+    console.log(value === address.address);
     if (
       suggestions.type === ADDRESS_CONSTANT &&
       (address.address === value || value === '')
