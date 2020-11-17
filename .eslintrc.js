@@ -16,7 +16,7 @@ module.exports = {
       jsx: true,
     },
   },
-  plugins: ["@typescript-eslint", "react-hooks", "react", "prettier", "import"],
+  plugins: ["@typescript-eslint", "react-hooks", "react", "prettier", "import", "graphql"],
   extends: [
     "airbnb",
     "plugin:@typescript-eslint/recommended",

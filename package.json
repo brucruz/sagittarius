@@ -45,7 +45,7 @@
     "styled-components": "^5.2.0",
     "swr": "^0.3.6",
     "use-places-autocomplete": "^1.5.7",
-    "uuidv4": "^6.2.4",
+    "uuidv4": "^6.2.5",
     "yup": "^0.29.3",
     "zlib": "^1.0.5"
   },
@@ -77,6 +77,7 @@
     "eslint-config-prettier": "^6.15.0",
     "eslint-import-resolver-babel-module": "^5.2.0",
     "eslint-import-resolver-typescript": "^2.3.0",
+    "eslint-plugin-graphql": "^4.0.0",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-jsx-a11y": "^6.4.1",
     "eslint-plugin-prettier": "^3.1.4",

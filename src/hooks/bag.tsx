@@ -9,28 +9,24 @@ import {
   useEffect,
 } from 'react';
 import mixpanel from 'mixpanel-browser';
+import { uuid } from 'uuidv4';
 import PriceFormatted from '@/@types/PriceFormatted';
 import PricesInBag from '@/@types/PricesInBag';
 import formatValue from '@/utils/formatValue';
-import { cartQl } from '@/services/cartql';
-import { gql } from '@apollo/client';
+import {
+  ADD_CART_ITEM,
+  GET_OR_CREATE_CART,
+  REMOVE_CART_ITEM,
+  CartQLQuery,
+  GetOrCreateCartVariables,
+  AddCartItemVariables,
+  RemoveCartItemVariables,
+} from '@/services/cartql';
+import { useLazyQuery, useMutation } from '@apollo/client';
 import api from '@/services/api';
 import Price from '@/@types/Price';
 import Lab from '../@types/Lab';
 import { useAuth } from './auth';
-
-interface CartQLItem {
-  name: string;
-}
-interface CartQLQuery {
-  cart: {
-    id: string;
-    email: string;
-    isEmpty: boolean;
-    abandoned: boolean;
-    items: CartQLItem[];
-  };
-}
 
 interface BagContextData {
   isBagOpen: boolean;
@@ -54,74 +50,22 @@ const BagContext = createContext<BagContextData>({} as BagContextData);
 
 const BagProvider = ({ children }): ReactElement => {
   const [isBagOpen, setIsBagOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
   const [bagItems, setBagItems] = useState<PricesInBag[]>([]);
-
-  useEffect(() => {
-    cartQl
-      .query<CartQLQuery>({
-        query: gql`
-          query {
-            cart(id: "teste-bruno23091989123") {
-              id
-              email
-              isEmpty
-              abandoned
-              items {
-                name
-              }
-            }
-          }
-        `,
-      })
-      .then(gqlResult => {
-        const { loading, data } = gqlResult;
-        const carQLItems = data.cart.items;
-
-        const carQLItemsIds = carQLItems.map(item => item.name);
-
-        if (carQLItems.length > 0) {
-          api
-            .get<Price[]>('/prices', {
-              params: {
-                id: carQLItemsIds,
-              },
-            })
-            .then(apiResult => {
-              const apiPrices = apiResult.data;
-
-              const apiLabs = apiPrices.map(apiPrice => apiPrice.lab);
-
-              const itemsToAddInBag: PricesInBag[] = apiLabs.map(apiLab => {
-                const labPrices = apiPrices.filter(
-                  price => price.lab_id === apiLab.id,
-                );
-
-                const labPricesFormatted: PriceFormatted[] = labPrices.map(
-                  price => {
-                    return {
-                      ...price,
-                      formatted_price: formatValue(price.price),
-                    };
-                  },
-                );
-
-                return {
-                  ...apiLab,
-                  price: labPricesFormatted,
-                };
-              });
-
-              setBagItems(itemsToAddInBag);
-              setIsLoading(loading);
-            })
-            .catch(err => console.log(err));
-        }
-      })
-      .catch(err => console.log(err));
-  }, []);
+  const [bagId, setBagId] = useState<string>(undefined);
 
   const { user } = useAuth();
+
+  const [GetCartQLItems, { data: cartQLCart }] = useLazyQuery<
+    CartQLQuery,
+    GetOrCreateCartVariables
+  >(GET_OR_CREATE_CART);
+
+  const [AddBagItemToCartQL] = useMutation<string, AddCartItemVariables>(
+    ADD_CART_ITEM,
+  );
+  const [RemoveBagItemToCartQL] = useMutation<string, RemoveCartItemVariables>(
+    REMOVE_CART_ITEM,
+  );
 
   const openBag = useCallback(() => {
     setIsBagOpen(true);
@@ -137,6 +81,65 @@ const BagProvider = ({ children }): ReactElement => {
     mixpanel.track('Close Bag');
   }, [user]);
 
+  const generateBagId = useCallback(() => {
+    const id = uuid();
+
+    sessionStorage.setItem('@Heali:bagId', id);
+
+    setBagId(id);
+  }, []);
+
+  useEffect(() => {
+    setBagId(sessionStorage.getItem('@Heali:bagId'));
+
+    bagId &&
+      GetCartQLItems({
+        variables: { cartQLId: 'teste-bruno23091989' },
+        // variables: { cartQLId: bagId },
+      });
+
+    const cartQLItems = cartQLCart && cartQLCart.cart.items;
+
+    const cartQLItemsIds = cartQLCart && cartQLItems.map(item => item.id);
+
+    if (cartQLCart && cartQLItemsIds.length > 0) {
+      api
+        .get<Price[]>('/prices', {
+          params: {
+            id: cartQLItemsIds,
+          },
+        })
+        .then(results => {
+          const apiPrices = results.data;
+
+          const apiLabs = apiPrices.map(apiPrice => apiPrice.lab);
+
+          const itemsToAddInBag: PricesInBag[] = apiLabs.map(apiLab => {
+            const labPrices = apiPrices.filter(
+              price => price.lab_id === apiLab.id,
+            );
+
+            const labPricesFormatted: PriceFormatted[] = labPrices.map(
+              price => {
+                return {
+                  ...price,
+                  formatted_price: formatValue(price.price),
+                };
+              },
+            );
+
+            return {
+              ...apiLab,
+              price: labPricesFormatted,
+            };
+          });
+
+          setBagItems(itemsToAddInBag);
+        })
+        .catch(err => console.log(err));
+    }
+  }, [bagId, GetCartQLItems, cartQLCart]);
+
   const addBagItem = useCallback(
     (item: PricesInBag) => {
       const clickedItem = item;
@@ -151,6 +154,15 @@ const BagProvider = ({ children }): ReactElement => {
 
       if (clickedLabIndex < 0) {
         setBagItems(oldBagItems => [...oldBagItems, clickedItem]);
+
+        AddBagItemToCartQL({
+          variables: {
+            cartQLId: bagId,
+            priceId: clickedPrice.id,
+            priceName: clickedPrice.exam.title,
+            pricePrice: clickedPrice.price,
+          },
+        });
       } else {
         const clickedPriceIndex = bagItems[clickedLabIndex].price.findIndex(
           labPrice => labPrice.id === clickedPrice.id,
@@ -167,16 +179,41 @@ const BagProvider = ({ children }): ReactElement => {
           clickedItem.price = newClickedLabPrices;
 
           setBagItems(oldBagItems => [...oldBagItems, clickedItem]);
+
+          AddBagItemToCartQL({
+            variables: {
+              cartQLId: bagId,
+              priceId: clickedPrice.id,
+              priceName: clickedPrice.exam.title,
+              pricePrice: clickedPrice.price,
+            },
+          });
         } else if (clickedLabPricesCount > 1) {
           bagItems[clickedLabIndex].price.splice(clickedPriceIndex, 1);
+
           setBagItems([...bagItems]);
+
+          RemoveBagItemToCartQL({
+            variables: {
+              cartQLId: bagId,
+              priceId: clickedPrice.id,
+            },
+          });
         } else {
           bagItems.splice(clickedLabIndex, 1);
+
           setBagItems([...bagItems]);
+
+          RemoveBagItemToCartQL({
+            variables: {
+              cartQLId: bagId,
+              priceId: clickedPrice.id,
+            },
+          });
         }
       }
     },
-    [bagItems, setBagItems],
+    [bagItems, setBagItems, bagId, AddBagItemToCartQL, RemoveBagItemToCartQL],
   );
 
   const addBagItems = useCallback(
@@ -208,6 +245,17 @@ const BagProvider = ({ children }): ReactElement => {
         }),
       };
 
+      items.map(item =>
+        AddBagItemToCartQL({
+          variables: {
+            cartQLId: bagId,
+            priceId: item.id,
+            priceName: item.exam.title,
+            pricePrice: item.price,
+          },
+        }),
+      );
+
       if (bagItems.length === 0) {
         setBagItems([itemToAdd]);
       } else {
@@ -233,7 +281,7 @@ const BagProvider = ({ children }): ReactElement => {
         });
       });
     },
-    [bagItems, setBagItems, user],
+    [bagItems, setBagItems, user, bagId, AddBagItemToCartQL],
   );
 
   const removeBagItem = useCallback(
