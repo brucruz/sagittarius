@@ -34,6 +34,11 @@ export interface RemoveCartItemVariables {
   priceId: string;
 }
 
+export interface UpdateCartQLBagVariables {
+  cartQLId: string;
+  email: string;
+}
+
 export const GET_OR_CREATE_CART = gql`
   query GetCartQLItems($cartQLId: ID!) {
     cart(id: $cartQLId) {
@@ -72,6 +77,20 @@ export const REMOVE_CART_ITEM = gql`
   mutation RemoveBagItemToCartQL($cartQLId: ID!, $priceId: ID!) {
     removeItem(input: { cartId: $cartQLId, id: $priceId }) {
       id
+    }
+  }
+`;
+
+export const UPDATE_CARTQL_BAG = gql`
+  mutation UpdateCartQLBag($cartQLId: ID!, $email: String) {
+    updateCart(input: { id: $cartQLId, email: $email }) {
+      id
+      email
+      isEmpty
+      abandoned
+      items {
+        id
+      }
     }
   }
 `;

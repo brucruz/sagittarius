@@ -25,7 +25,6 @@ export default function Cart(): ReactElement {
     bagCompanyLabTitles,
     bagExamsTitles,
     bagLabCount,
-    bagIsLoading,
   } = useBag();
   const { user } = useAuth();
   const router = useRouter();

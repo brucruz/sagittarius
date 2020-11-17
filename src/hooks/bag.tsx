@@ -9,7 +9,6 @@ import {
   useEffect,
 } from 'react';
 import mixpanel from 'mixpanel-browser';
-import { uuid } from 'uuidv4';
 import PriceFormatted from '@/@types/PriceFormatted';
 import PricesInBag from '@/@types/PricesInBag';
 import formatValue from '@/utils/formatValue';
@@ -21,12 +20,21 @@ import {
   GetOrCreateCartVariables,
   AddCartItemVariables,
   RemoveCartItemVariables,
+  UpdateCartQLBagVariables,
+  UPDATE_CARTQL_BAG,
 } from '@/services/cartql';
 import { useLazyQuery, useMutation } from '@apollo/client';
 import api from '@/services/api';
 import Price from '@/@types/Price';
+import User from '@/@types/User';
 import Lab from '../@types/Lab';
 import { useAuth } from './auth';
+
+interface Bag {
+  id: string;
+  user?: User;
+  prices?: Price[];
+}
 
 interface BagContextData {
   isBagOpen: boolean;
@@ -37,6 +45,7 @@ interface BagContextData {
   addBagItems(items: PriceFormatted[], currentLab: Lab): void;
   removeBagItem(item: PriceFormatted, selectedLab: PricesInBag): void;
   clearBag(): void;
+  initiateCheckout(): Promise<void>;
   bagPrices: PriceFormatted[];
   bagTotalPrice: number;
   bagTotalPriceFormatted: string;
@@ -53,7 +62,7 @@ const BagProvider = ({ children }): ReactElement => {
   const [bagItems, setBagItems] = useState<PricesInBag[]>([]);
   const [bagId, setBagId] = useState<string>(undefined);
 
-  const { user } = useAuth();
+  const { user, token } = useAuth();
 
   const [GetCartQLItems, { data: cartQLCart }] = useLazyQuery<
     CartQLQuery,
@@ -65,6 +74,9 @@ const BagProvider = ({ children }): ReactElement => {
   );
   const [RemoveBagItemToCartQL] = useMutation<string, RemoveCartItemVariables>(
     REMOVE_CART_ITEM,
+  );
+  const [UpdateCartQLBag] = useMutation<string, UpdateCartQLBagVariables>(
+    UPDATE_CARTQL_BAG,
   );
 
   const openBag = useCallback(() => {
@@ -81,12 +93,14 @@ const BagProvider = ({ children }): ReactElement => {
     mixpanel.track('Close Bag');
   }, [user]);
 
-  const generateBagId = useCallback(() => {
-    const id = uuid();
+  const generateBagId = useCallback(async () => {
+    const { data } = await api.post<Bag>('/bags');
 
-    sessionStorage.setItem('@Heali:bagId', id);
+    sessionStorage.setItem('@Heali:bagId', data.id);
 
-    setBagId(id);
+    setBagId(data.id);
+
+    return data;
   }, []);
 
   useEffect(() => {
@@ -94,8 +108,7 @@ const BagProvider = ({ children }): ReactElement => {
 
     bagId &&
       GetCartQLItems({
-        variables: { cartQLId: 'teste-bruno23091989' },
-        // variables: { cartQLId: bagId },
+        variables: { cartQLId: bagId },
       });
 
     const cartQLItems = cartQLCart && cartQLCart.cart.items;
@@ -141,7 +154,11 @@ const BagProvider = ({ children }): ReactElement => {
   }, [bagId, GetCartQLItems, cartQLCart]);
 
   const addBagItem = useCallback(
-    (item: PricesInBag) => {
+    async (item: PricesInBag) => {
+      let bag: Bag;
+
+      if (!bagId) bag = await generateBagId();
+
       const clickedItem = item;
 
       const clickedPrice = item.price[0];
@@ -157,7 +174,7 @@ const BagProvider = ({ children }): ReactElement => {
 
         AddBagItemToCartQL({
           variables: {
-            cartQLId: bagId,
+            cartQLId: bagId || bag.id,
             priceId: clickedPrice.id,
             priceName: clickedPrice.exam.title,
             pricePrice: clickedPrice.price,
@@ -182,7 +199,7 @@ const BagProvider = ({ children }): ReactElement => {
 
           AddBagItemToCartQL({
             variables: {
-              cartQLId: bagId,
+              cartQLId: bagId || bag.id,
               priceId: clickedPrice.id,
               priceName: clickedPrice.exam.title,
               pricePrice: clickedPrice.price,
@@ -195,7 +212,7 @@ const BagProvider = ({ children }): ReactElement => {
 
           RemoveBagItemToCartQL({
             variables: {
-              cartQLId: bagId,
+              cartQLId: bagId || bag.id,
               priceId: clickedPrice.id,
             },
           });
@@ -206,18 +223,29 @@ const BagProvider = ({ children }): ReactElement => {
 
           RemoveBagItemToCartQL({
             variables: {
-              cartQLId: bagId,
+              cartQLId: bagId || bag.id,
               priceId: clickedPrice.id,
             },
           });
         }
       }
     },
-    [bagItems, setBagItems, bagId, AddBagItemToCartQL, RemoveBagItemToCartQL],
+    [
+      bagItems,
+      setBagItems,
+      bagId,
+      AddBagItemToCartQL,
+      RemoveBagItemToCartQL,
+      generateBagId,
+    ],
   );
 
   const addBagItems = useCallback(
     async (items: PriceFormatted[], currentLab: Lab) => {
+      let bag: Bag;
+
+      if (!bagId) bag = await generateBagId();
+
       const itemToAdd: PricesInBag = {
         id: currentLab.id,
         title: currentLab.title,
@@ -248,7 +276,7 @@ const BagProvider = ({ children }): ReactElement => {
       items.map(item =>
         AddBagItemToCartQL({
           variables: {
-            cartQLId: bagId,
+            cartQLId: bagId || bag.id,
             priceId: item.id,
             priceName: item.exam.title,
             pricePrice: item.price,
@@ -281,11 +309,15 @@ const BagProvider = ({ children }): ReactElement => {
         });
       });
     },
-    [bagItems, setBagItems, user, bagId, AddBagItemToCartQL],
+    [bagItems, setBagItems, user, bagId, AddBagItemToCartQL, generateBagId],
   );
 
   const removeBagItem = useCallback(
-    (item: PriceFormatted, selectedLab: PricesInBag) => {
+    async (item: PriceFormatted, selectedLab: PricesInBag) => {
+      let bag: Bag;
+
+      if (!bagId) bag = await generateBagId();
+
       user && mixpanel.identify(user.id);
       mixpanel.track('Remove Exam from Bag', {
         Lab: selectedLab.title,
@@ -314,8 +346,15 @@ const BagProvider = ({ children }): ReactElement => {
       } else {
         setBagItems([...bagItems]);
       }
+
+      RemoveBagItemToCartQL({
+        variables: {
+          cartQLId: bagId || bag.id,
+          priceId: item.id,
+        },
+      });
     },
-    [bagItems, user],
+    [bagItems, user, generateBagId, bagId, RemoveBagItemToCartQL],
   );
 
   const clearBag = useCallback(() => {
@@ -369,6 +408,29 @@ const BagProvider = ({ children }): ReactElement => {
     return labCount;
   }, [bagItems]);
 
+  const initiateCheckout = useCallback(async () => {
+    if (bagId && token) {
+      const bagPricesIds = bagPrices.map(price => price.id);
+
+      await api.put<Bag>(
+        `/bags/${bagId}`,
+        {
+          priceId: bagPricesIds,
+        },
+        {
+          headers: { Authorization: `Bearer: ${token}` },
+        },
+      );
+
+      await UpdateCartQLBag({
+        variables: {
+          cartQLId: bagId,
+          email: user.email,
+        },
+      });
+    }
+  }, [token, user, UpdateCartQLBag, bagId, bagPrices]);
+
   return (
     <BagContext.Provider
       value={{
@@ -380,6 +442,7 @@ const BagProvider = ({ children }): ReactElement => {
         addBagItems,
         removeBagItem,
         clearBag,
+        initiateCheckout,
         bagPrices,
         bagTotalPrice,
         bagTotalPriceFormatted,
