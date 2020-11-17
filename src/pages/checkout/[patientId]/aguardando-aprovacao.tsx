@@ -21,8 +21,8 @@ export default function WaitingApproval(): ReactElement {
       }}
     >
       <SEO
-        title="Pedido de agendamento concluído"
-        description="Obrigado! Recebemos seu pedido de agendamento de exames médicos e em breve um atendente entrará em contato contigo."
+        title="Aguardando confirmação de pagamento"
+        description="Obrigado! Recebemos seu pedido de agendamento de exames médicos e agora estamos aguardando a aprovação do seu pagamento. Você receberá um e-mail com informando sobre a aprovação."
       />
       <Content>
         <Smile>:)</Smile>
