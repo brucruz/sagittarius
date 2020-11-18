@@ -53,7 +53,6 @@ const Toast = ({ message, style }: ToastProps): ReactElement => {
       <button
         data-testid="button-close-toast"
         onClick={() => {
-          console.log('hehehe')
           removeToast(message.id);
         }}
         type="button"
