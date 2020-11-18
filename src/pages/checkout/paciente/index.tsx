@@ -12,6 +12,7 @@ import { useAuth } from '@/hooks/auth';
 import api from '@/services/api';
 import Patient from '@/@types/Patient';
 import SEO from '@/components/atom/SEO';
+import { useBag } from '@/hooks/bag';
 
 export default function Patients(): ReactElement {
   const [patients, setPatients] = useState<Patient[]>([]);
@@ -20,13 +21,16 @@ export default function Patients(): ReactElement {
   const router = useRouter();
 
   const { user, token } = useAuth();
+  const { initiateCheckout } = useBag();
 
   useEffect(() => {
     user && mixpanel.identify(user.id);
     mixpanel.track('Page View', {
       'Page Title': 'Patient Selection',
     });
-  }, [user]);
+
+    initiateCheckout();
+  }, [user, initiateCheckout]);
 
   useEffect(() => {
     token &&
