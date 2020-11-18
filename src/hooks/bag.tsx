@@ -125,7 +125,11 @@ const BagProvider = ({ children }): ReactElement => {
         .then(results => {
           const apiPrices = results.data;
 
-          const apiLabs = apiPrices.map(apiPrice => apiPrice.lab);
+          const duplicatedApiLabs = apiPrices.map(apiPrice => apiPrice.lab);
+
+          const apiLabs = [
+            ...new Map(duplicatedApiLabs.map(lab => [lab.id, lab])).values(),
+          ];
 
           const itemsToAddInBag: PricesInBag[] = apiLabs.map(apiLab => {
             const labPrices = apiPrices.filter(
