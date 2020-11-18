@@ -65,7 +65,7 @@ const seoLocations = require('../contents/seoLocations');
     .map(originalExam => {
       return `
       <url>
-        <loc>https://heali.me/${encodeURIComponent(originalExam.lab.slug)}/?slg[]=${encodeURIComponent(originalExam.exam.slug)}</loc>
+        <loc>https://heali.me/${encodeURIComponent(originalExam.lab.slug)}/detalhe?slg[]=${encodeURIComponent(originalExam.exam.slug)}</loc>
         <lastmod>${format(parseISO(originalExam.updated_date), 'yyyy-MM-dd')}</lastmod>
         <changefreq>daily</changefreq>
       </url>
