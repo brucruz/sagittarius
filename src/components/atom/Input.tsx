@@ -65,6 +65,7 @@ const Input = ({
   getInputValue,
   value,
   isSubmit,
+  ...rest
 }: InputProps): ReactElement => {
   const inputRef = useRef<HTMLInputElement>(null);
   const [isFocused, setIsFocused] = useState(false);
@@ -122,6 +123,7 @@ const Input = ({
         isFocused={isFocused}
         onFocus={handleInputFocus}
         hasSuggestions={hasSuggestions}
+        {...rest}
       >
         <InputIcon>{Icon && <Icon />}</InputIcon>
 
