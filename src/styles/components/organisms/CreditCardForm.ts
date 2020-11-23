@@ -1,76 +1,41 @@
 import styled from 'styled-components';
-import arrowIcon from '@/assets/components/organisms/CreditCardForm/arrow.svg';
 
 export const Container = styled.div`
-  div {
+  padding: 0 8px;
+
+  .input-credit {
+    padding-left: 24px;
+  }
+
+  .card-expiration-div {
+    margin-top: 24px;
     display: flex;
-    flex-direction: column;
-    margin-bottom: 8px;
+    justify-content: space-between;
 
-    label {
-      font-size: 12px;
-      color: #3c4759;
-      margin-bottom: 12px;
+    & > div {
+      width: 100% !important;
     }
 
-    input {
-      background: #fff;
-      font-weight: 700;
-      border: 1px solid #bcc3d4;
-      box-sizing: border-box;
-      border-radius: 6px;
-      padding: 12px 16px;
-    }
-
-    div {
-      display: flex;
-      flex-direction: row;
-      justify-content: space-between;
-
-      div:last-child {
-        margin-left: 16px !important;
-      }
+    & > div:nth-child(2) {
+      margin-left: 16px;
     }
   }
 
-  .cvv-div div {
+  .cvv-div {
+    margin-top: 24px;
     display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
+    align-items: center;
 
-    input {
-      width: 49%;
-      margin-right: 16px;
+    header {
+      margin: 0 !important;
     }
-  }
-`;
 
-export const Dropdown = styled.div`
-  background: #fff;
-  font-weight: 700;
-  border: 1px solid #bcc3d4;
-  box-sizing: border-box;
-  border-radius: 6px;
-  padding: 12px 16px;
-  width: 100%;
-  margin: 0 !important;
+    & > div {
+      width: 100%;
+    }
 
-  &:after {
-    content: url(${arrowIcon});
-  }
-
-  select {
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    border: none;
-    width: 100%;
-    -ms-word-break: normal;
-    word-break: normal;
-    display: block;
-  }
-
-  select::-ms-expand {
-    display: none;
+    & > div:nth-child(2) {
+      margin-left: 16px;
+    }
   }
 `;

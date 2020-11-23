@@ -1,11 +1,9 @@
 import { ReactElement } from 'react';
-import {
-  Container,
-  Dropdown,
-} from '@/styles/components/organisms/CreditCardForm';
-import InputMask from 'react-input-mask';
+import { Container } from '@/styles/components/organisms/CreditCardForm';
+import Input from '@/components/atom/Input';
 import cvvIcon from '@/assets/components/organisms/CreditCardForm/cvv.svg';
-import Checkbox from '../atom/Checkbox';
+import Dropdown from '@/components/atom/Dropdown';
+import mastercard from '@/assets/components/atoms/Input/mastercard.svg';
 import Button from '../atom/Button';
 
 interface IDateDropdown {
@@ -38,71 +36,53 @@ const years = Array.from(Array(50), (_, index) => ({
 const CreditCardForm = (): ReactElement => {
   return (
     <Container className="credit-card-form">
-      <div>
-        <label htmlFor="">Número do cartão</label>
-        <InputMask
-          type="text"
-          name=""
-          id=""
-          mask="9999 9999 9999 9999"
-          placeholder="0000 0000 0000 0000"
-        />
-      </div>
-      <div>
-        <label htmlFor="">Nome impresso no cartão</label>
-        <input type="text" name="" id="" placeholder="Meu nome" />
-      </div>
-      <div>
-        <label htmlFor="">Validade</label>
+      <Input
+        className="input-credit"
+        type="text"
+        label="Número do cartão"
+        name="ccnum"
+        mask="9999 9999 9999 9999"
+        x-autocompletetype="cc-number"
+        iconAfter={mastercard}
+      />
+      <Input
+        className="input-credit"
+        type="text"
+        name="ccname"
+        label="Nome impresso no cartão"
+      />
+      <div className="card-expiration-div">
         <div>
-          <Dropdown>
-            <select name="" id="" defaultValue="">
-              <option value="" disabled>
-                Mês
-              </option>
-              {months.map((month: IDateDropdown) => (
-                <option key={month.id} value={month.value}>
-                  {month.label}
-                </option>
-              ))}
-            </select>
-          </Dropdown>
-          <Dropdown>
-            <select name="" id="" defaultValue="">
-              <option value="" disabled>
-                Ano
-              </option>
-              {years.map((year: IDateDropdown) => (
-                <option key={year.id} value={year.value}>
-                  {year.label}
-                </option>
-              ))}
-            </select>
-          </Dropdown>
+          <Dropdown defaultValue="Mês" options={months} />
+        </div>
+        <div>
+          <Dropdown defaultValue="Ano" options={years} />
         </div>
       </div>
       <div className="cvv-div">
-        <label>CVV</label>
         <div>
-          <InputMask mask="999" type="text" name="" id="" placeholder="123" />
+          <Input
+            className="input-credit"
+            type="text"
+            name="cvv"
+            label="CVV"
+            mask="999"
+          />
+        </div>
+        <div>
           <img src={cvvIcon} alt="ícone de cvv" />
         </div>
       </div>
       <div>
         <label htmlFor="">Parcelar em: </label>
-        <Dropdown>
+        {/* <Dropdown>
           <select name="" id="" value="">
             <option value="" disabled>
               1x de R$1000,00
             </option>
           </select>
-        </Dropdown>
+        </Dropdown> */}
       </div>
-      <Checkbox
-        style={{ marginTop: 24 }}
-        label="Guardar dados para futuras compras"
-        id="keep-card-checkbox"
-      />
       <Button>Pagar com Cartão de Crédito</Button>
     </Container>
   );

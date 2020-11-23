@@ -12,6 +12,7 @@ export const InputContainer = styled.section`
 `;
 
 export const UserInput = styled.header<UserInputProps>`
+  background: #fff;
   width: 100%;
   height: 48px;
 
@@ -122,6 +123,10 @@ export const UserInput = styled.header<UserInputProps>`
       border-radius: 6px 6px 0 0;
       border-bottom: 2px solid #ba3737;
     `}
+
+  .icon-after-input {
+    margin-right: 24px;
+  }
 `;
 
 export const InputIcon = styled.div`

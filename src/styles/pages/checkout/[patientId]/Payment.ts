@@ -66,12 +66,6 @@ export const PaymentMethodSelector = styled.div`
       margin-left: 28px;
     }
 
-    .credit-card-form {
-      border-top: 1px solid #BCC3D4;
-      padding: 16px 8px 0 8px;
-      margin-top: 16px;
-    }
-
     span.text {
       font-weight: 700;
       color: #2F2C77;
