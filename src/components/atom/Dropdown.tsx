@@ -1,4 +1,4 @@
-import { useState, ReactElement, useCallback } from 'react';
+import { useState, ReactElement, useCallback, HTMLAttributes } from 'react';
 import { MdKeyboardArrowUp, MdKeyboardArrowDown } from 'react-icons/md';
 import {
   Base,
@@ -9,16 +9,22 @@ import {
 
 interface option {
   id: string | number;
-  value: string;
+  value: string | number;
   label: string;
 }
 
-interface DropdownProps {
+interface DropdownProps extends HTMLAttributes<HTMLDivElement> {
   options: option[];
   defaultValue?: string;
+  type?: 'small' | 'medium' | 'large', 
 }
 
-const Dropdown = ({ options, defaultValue }: DropdownProps): ReactElement => {
+const Dropdown = ({
+  options,
+  defaultValue,
+  type = 'large',
+  ...rest
+}: DropdownProps): ReactElement => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [value, setValue] = useState('');
 
@@ -31,7 +37,7 @@ const Dropdown = ({ options, defaultValue }: DropdownProps): ReactElement => {
   );
 
   return (
-    <Base onBlur={() => setIsDropdownOpen(false)}>
+    <Base {...rest}>
       <Select>
         <span>{value || defaultValue}</span>
         <button
@@ -42,7 +48,7 @@ const Dropdown = ({ options, defaultValue }: DropdownProps): ReactElement => {
         </button>
       </Select>
       {isDropdownOpen && (
-        <Options>
+        <Options type={type}>
           {options.map((currentOption: option) => (
             <Option
               key={currentOption.id}

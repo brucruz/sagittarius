@@ -1,16 +1,26 @@
-import { ReactElement } from 'react';
+import { ReactElement, useState } from 'react';
 import { Container } from '@/styles/components/organisms/CreditCardForm';
 import Input from '@/components/atom/Input';
 import cvvIcon from '@/assets/components/organisms/CreditCardForm/cvv.svg';
 import Dropdown from '@/components/atom/Dropdown';
+import diners from '@/assets/components/atoms/Input/diners-club.svg';
+import amex from '@/assets/components/atoms/Input/american-express.svg';
+import visa from '@/assets/components/atoms/Input/visa.svg';
+import discover from '@/assets/components/atoms/Input/discover.svg';
+import generic from '@/assets/components/atoms/Input/generic.svg';
 import mastercard from '@/assets/components/atoms/Input/mastercard.svg';
+import BinSearch from '@/@types/BinSearch';
+import axios, { AxiosResponse } from 'axios';
 import Button from '../atom/Button';
 
-interface IDateDropdown {
-  id: number;
-  label: string;
-  value: string;
-}
+const creditCardBrands = {
+  amex,
+  visa,
+  discover,
+  generic,
+  mastercard,
+  diners,
+};
 
 const months = [
   { id: 1, label: '01', value: '1' },
@@ -29,11 +39,13 @@ const months = [
 
 const years = Array.from(Array(50), (_, index) => ({
   id: index,
-  value: `20${index >= 10 ? index : `0${index}`}`,
-  label: `20${index >= 10 ? index : `0${index}`}`,
+  value: `20${index + 20}`,
+  label: `20${index + 20}`,
 }));
 
 const CreditCardForm = (): ReactElement => {
+  const [creditCardBrand, setCreditCardBrand] = useState('generic');
+
   return (
     <Container className="credit-card-form">
       <Input
@@ -42,8 +54,27 @@ const CreditCardForm = (): ReactElement => {
         label="Número do cartão"
         name="ccnum"
         mask="9999 9999 9999 9999"
+        onChange={event => {
+          const creditCardNumber = event.target.value.replace(
+            /[\s*\/_*/]/gm,
+            '',
+          );
+
+          if (creditCardNumber.length % 4 === 0 && creditCardNumber !== '') {
+            axios
+              .get(`https://lookup.binlist.net/${creditCardNumber}`, {
+                headers: {
+                  'Accept-Version': '3',
+                },
+              })
+              .then((res: AxiosResponse<BinSearch>) =>
+                setCreditCardBrand(res.data.scheme),
+              )
+              .catch(err => setCreditCardBrand('generic'));
+          }
+        }}
         x-autocompletetype="cc-number"
-        iconAfter={mastercard}
+        iconAfter={creditCardBrands[creditCardBrand]}
       />
       <Input
         className="input-credit"
@@ -53,10 +84,20 @@ const CreditCardForm = (): ReactElement => {
       />
       <div className="card-expiration-div">
         <div>
-          <Dropdown defaultValue="Mês" options={months} />
+          <Dropdown
+            defaultValue="Mês"
+            type="small"
+            options={months}
+            className="small first-dropdown"
+          />
         </div>
         <div>
-          <Dropdown defaultValue="Ano" options={years} />
+          <Dropdown
+            defaultValue="Ano"
+            type="small"
+            options={years}
+            className="small first-dropdown"
+          />
         </div>
       </div>
       <div className="cvv-div">
@@ -73,17 +114,13 @@ const CreditCardForm = (): ReactElement => {
           <img src={cvvIcon} alt="ícone de cvv" />
         </div>
       </div>
-      <div>
-        <label htmlFor="">Parcelar em: </label>
-        {/* <Dropdown>
-          <select name="" id="" value="">
-            <option value="" disabled>
-              1x de R$1000,00
-            </option>
-          </select>
-        </Dropdown> */}
+      <div className="installments-container">
+        <Dropdown
+          defaultValue="Parcelar em"
+          options={[{ id: 1, label: 'R$ 1000,00', value: 1000 }]}
+        />
       </div>
-      <Button>Pagar com Cartão de Crédito</Button>
+      <Button disabled>Pagar com Cartão de Crédito</Button>
     </Container>
   );
 };

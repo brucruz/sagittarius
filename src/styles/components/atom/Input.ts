@@ -125,7 +125,16 @@ export const UserInput = styled.header<UserInputProps>`
     `}
 
   .icon-after-input {
+    height: 30px;
+    max-width: 56px;
+    margin-top: auto;
+    margin-bottom: auto;
     margin-right: 24px;
+
+    svg {
+      width: fit-content;
+      height: fit-content;
+    }
   }
 `;
 

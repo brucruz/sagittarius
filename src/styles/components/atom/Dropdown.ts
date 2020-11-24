@@ -1,10 +1,22 @@
 import styled from 'styled-components';
 import device from '@/utils/devices';
 
+interface OptionsProps {
+  type: 'small' | 'medium' | 'large';
+}
+
 export const Base = styled.div`
   width: 100% !important;
   display: flex;
   flex-direction: column;
+
+  @media ${device.tablet} {
+    &.small {
+      & > div:last-child {
+        width: 156px;
+      }
+    }
+  }
 `;
 
 export const Select = styled.div`
@@ -19,7 +31,7 @@ export const Select = styled.div`
   z-index: 3;
 
   span {
-    margin-left: 16px;
+    margin-left: 24px;
     color: #3c4759;
     font-size: 16px;
   }
@@ -49,15 +61,26 @@ export const Select = styled.div`
   }
 `;
 
-export const Options = styled.div`
+export const Options = styled.div<OptionsProps>`
   position: absolute;
   z-index: 2;
   background: #ffffff;
   margin-top: 48px;
-  width: calc(50% - 42px);
+
+  @media ${device.mobileS} {
+    width: calc(${props => (props.type === 'small' ? '50%' : '91.5%')} - 42px);
+  }
+
+  @media ${device.mobileM} {
+    width: calc(${props => (props.type === 'small' ? '50%' : '93%')} - 42px);
+  }
+
+  @media ${device.mobileL} {
+    width: calc(${props => (props.type === 'small' ? '50%' : '95%')} - 42px);
+  }
 
   @media ${device.tablet} {
-    width: 156px;
+    width: 330px;
   }
 
   border-left: 1px solid #bcc3d4;

@@ -26,6 +26,19 @@ export const Container = styled.div`
     display: flex;
     align-items: center;
 
+    section {
+      width: 100%;
+      max-width: 100%;
+    }
+
+    div {
+      width: fit-content;
+    }
+
+    input {
+      width: 100%;
+    }
+
     header {
       margin: 0 !important;
     }
@@ -37,5 +50,17 @@ export const Container = styled.div`
     & > div:nth-child(2) {
       margin-left: 16px;
     }
+  }
+
+  .first-dropdown {
+    z-index: 5 !important;
+
+    div {
+      z-index: 4 !important;
+    }
+  }
+
+  .installments-container {
+    margin: 24px 0;
   }
 `;
