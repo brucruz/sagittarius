@@ -12,13 +12,13 @@ import {
   memo,
 } from 'react';
 import mixpanel from 'mixpanel-browser';
+import InputMask from 'react-input-mask';
 
 import { MdRemoveRedEye } from 'react-icons/md';
 import { Suggestion } from 'use-places-autocomplete';
 import { EXAMS as EXAMS_CONSTANT } from '@/constants/examsSearch';
 
 import Exam from '@/@types/Exam';
-import { useSearchExam } from '@/hooks/searchExam';
 import {
   InputContainer,
   UserInput,
@@ -26,7 +26,6 @@ import {
   InputTextArea,
   ErrorMessage,
 } from '@/styles/components/atom/Input';
-import useClickOutsideRef from '@/hooks/clickOutside';
 import { useAuth } from '@/hooks/auth';
 
 import { useField } from '@unform/core';
@@ -53,6 +52,8 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   suggestions?: SuggestionProps;
   getInputValue?(value: string): void;
   isSubmit?: boolean;
+  mask?: string;
+  iconAfter?: string;
 }
 
 const Input = ({
@@ -65,6 +66,9 @@ const Input = ({
   getInputValue,
   value,
   isSubmit,
+  mask,
+  iconAfter,
+  ...rest
 }: InputProps): ReactElement => {
   const inputRef = useRef<HTMLInputElement>(null);
   const [isFocused, setIsFocused] = useState(false);
@@ -122,21 +126,27 @@ const Input = ({
         isFocused={isFocused}
         onFocus={handleInputFocus}
         hasSuggestions={hasSuggestions}
+        {...rest}
       >
         <InputIcon>{Icon && <Icon />}</InputIcon>
 
         <InputTextArea>
           <label htmlFor={name}>{label}</label>
 
-          <input
+          <InputMask
             type={type ? inputType : 'text'}
             id={name}
             name={name}
             onChange={handleInputChange}
             ref={inputRef}
             value={value}
+            mask={mask}
           />
         </InputTextArea>
+
+        {iconAfter && (
+          <img className="icon-after-input" src={iconAfter} alt="Ícone" />
+        )}
 
         {type === 'password' && (
           <MdRemoveRedEye

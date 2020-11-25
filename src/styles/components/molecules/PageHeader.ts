@@ -8,3 +8,11 @@ export const PageHeaderContainer = styled.header`
   padding-top: 6px;
   padding-bottom: 6px;
 `;
+
+export const StepperContainer = styled.div`
+  display: flex;
+
+  img:nth-child(2) {
+    margin: 0 6px;
+  }
+`;

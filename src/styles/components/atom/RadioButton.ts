@@ -21,7 +21,6 @@ export const Base = styled.label`
   }
 
   span.text {
-    margin-left: 6px;
     color: #3c4759;
   }
 
@@ -46,5 +45,14 @@ export const Base = styled.label`
 
   input:checked ~ .checkmark span {
     background: #4d49c4;
+  }
+`;
+
+export const TextContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-left: 6px;
+  span:nth-child(2) {
+    font-size: 12px;
   }
 `;
