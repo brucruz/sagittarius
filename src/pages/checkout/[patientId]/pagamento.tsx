@@ -12,13 +12,8 @@ import {
 } from '@/styles/pages/checkout/[patientId]/Payment';
 import { CREDIT_CARD, BILL_OF_EXCHANGE } from '@/constants/payment';
 import { usePayment } from '@/hooks/payment';
-import { CPF, RNE, RG } from '@/constants/document';
 import { useAuth } from '@/hooks/auth';
 import mixpanel from 'mixpanel-browser';
-
-interface IFormPayment {
-  payment_method?: 'credit_card' | 'boleto';
-}
 
 interface IPageTemplateState extends PageHeaderProps {
   titleMain: {
