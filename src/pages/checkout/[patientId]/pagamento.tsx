@@ -68,7 +68,7 @@ export default function Payment(): ReactElement {
   useEffect(() => {
     user && mixpanel.identify(user.id);
     mixpanel.track('Page View', {
-      'Page Title': 'Pagamento',
+      'Page Title': 'Payment Page',
     });
   }, [user]);
 
