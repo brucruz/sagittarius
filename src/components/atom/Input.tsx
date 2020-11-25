@@ -19,7 +19,6 @@ import { Suggestion } from 'use-places-autocomplete';
 import { EXAMS as EXAMS_CONSTANT } from '@/constants/examsSearch';
 
 import Exam from '@/@types/Exam';
-import { useSearchExam } from '@/hooks/searchExam';
 import {
   InputContainer,
   UserInput,
@@ -27,7 +26,6 @@ import {
   InputTextArea,
   ErrorMessage,
 } from '@/styles/components/atom/Input';
-import useClickOutsideRef from '@/hooks/clickOutside';
 import { useAuth } from '@/hooks/auth';
 
 import { useField } from '@unform/core';

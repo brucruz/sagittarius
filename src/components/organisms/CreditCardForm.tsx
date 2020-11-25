@@ -37,10 +37,12 @@ const months = [
   { id: 12, label: '12', value: '12' },
 ];
 
+const currentYear = new Date().getFullYear() - 2000;
+
 const years = Array.from(Array(50), (_, index) => ({
   id: index,
-  value: `20${index + 20}`,
-  label: `20${index + 20}`,
+  value: `20${index + currentYear}`,
+  label: `20${index + currentYear}`,
 }));
 
 const CreditCardForm = (): ReactElement => {
@@ -56,11 +58,11 @@ const CreditCardForm = (): ReactElement => {
         mask="9999 9999 9999 9999"
         onChange={event => {
           const creditCardNumber = event.target.value.replace(
-            /[\s*\/_*/]/gm,
+            /[\s*/_*/]/gm,
             '',
           );
 
-          if (creditCardNumber.length % 4 === 0 && creditCardNumber !== '') {
+          if (creditCardNumber.length === 6 && creditCardNumber !== '') {
             axios
               .get(`https://lookup.binlist.net/${creditCardNumber}`, {
                 headers: {
@@ -71,6 +73,8 @@ const CreditCardForm = (): ReactElement => {
                 setCreditCardBrand(res.data.scheme),
               )
               .catch(err => setCreditCardBrand('generic'));
+          } else if (creditCardNumber.length < 6) {
+            setCreditCardBrand('generic');
           }
         }}
         x-autocompletetype="cc-number"

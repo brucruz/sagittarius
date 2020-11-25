@@ -16,7 +16,7 @@ interface option {
 interface DropdownProps extends HTMLAttributes<HTMLDivElement> {
   options: option[];
   defaultValue?: string;
-  type?: 'small' | 'medium' | 'large', 
+  type?: 'small' | 'medium' | 'large';
 }
 
 const Dropdown = ({

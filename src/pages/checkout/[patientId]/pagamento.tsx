@@ -1,5 +1,5 @@
 import PageTemplate from '@/components/templates/PageTemplate';
-import { ReactElement, useCallback, useState } from 'react';
+import { ReactElement, useCallback, useState, useEffect } from 'react';
 import { PageHeaderProps } from '@/components/molecule/PageHeader';
 import Checkbox from '@/components/atom/Checkbox';
 import Input from '@/components/atom/Input';
@@ -11,6 +11,8 @@ import {
   Container,
 } from '@/styles/pages/checkout/[patientId]/Payment';
 import { CREDIT_CARD, BILL_OF_EXCHANGE } from '@/constants/payment';
+import { useAuth } from '@/hooks/auth';
+import mixpanel from 'mixpanel-browser';
 
 interface IFormPayment {
   payment_method?: 'credit_card' | 'boleto';
@@ -61,6 +63,14 @@ const pageTemplateState: IPageTemplateState[] = [
 export default function Payment(): ReactElement {
   const [currentStep, setCurrentStep] = useState(0);
   const [form, setForm] = useState<IFormPayment>({});
+  const { user } = useAuth();
+
+  useEffect(() => {
+    user && mixpanel.identify(user.id);
+    mixpanel.track('Page View', {
+      'Page Title': 'Pagamento',
+    });
+  }, [user]);
 
   function handleCurrentStep(): void {
     switch (currentStep) {
