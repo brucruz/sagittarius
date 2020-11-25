@@ -17,29 +17,34 @@ interface DropdownProps extends HTMLAttributes<HTMLDivElement> {
   options: option[];
   defaultValue?: string;
   type?: 'small' | 'medium' | 'large';
+  value?: string | number;
+  setValue?: (args: any) => void;
 }
 
 const Dropdown = ({
   options,
   defaultValue,
   type = 'large',
+  value = '',
+  setValue,
   ...rest
 }: DropdownProps): ReactElement => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [value, setValue] = useState('');
+  const [currentValue, setCurrentValue] = useState(value);
 
   const handleChangeValue = useCallback(
     optionValue => {
-      setValue(optionValue);
+      setCurrentValue(optionValue);
       setIsDropdownOpen(false);
+      setValue && setValue(optionValue);
     },
-    [setValue, setIsDropdownOpen],
+    [setCurrentValue, setIsDropdownOpen, setValue],
   );
 
   return (
     <Base {...rest}>
       <Select>
-        <span>{value || defaultValue}</span>
+        <span>{currentValue || defaultValue}</span>
         <button
           type="button"
           onClick={() => setIsDropdownOpen(!isDropdownOpen)}
