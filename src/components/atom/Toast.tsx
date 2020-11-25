@@ -40,6 +40,7 @@ const Toast = ({ message, style }: ToastProps): ReactElement => {
 
   return (
     <Container
+      data-testid="toast-atom"
       type={message.type}
       hasDescription={!!message.description}
       style={style}
@@ -50,6 +51,7 @@ const Toast = ({ message, style }: ToastProps): ReactElement => {
         {message.description && <p>{message.description}</p>}
       </div>
       <button
+        data-testid="button-close-toast"
         onClick={() => {
           removeToast(message.id);
         }}
