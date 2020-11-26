@@ -9,6 +9,7 @@ import CreditCardForm from '@/components/organisms/CreditCardForm';
 import {
   PaymentMethodSelector,
   Container,
+  BillOfExchangeContainer,
 } from '@/styles/pages/checkout/[patientId]/Payment';
 import { CREDIT_CARD, BILL_OF_EXCHANGE } from '@/constants/payment';
 import { usePayment } from '@/hooks/payment';
@@ -412,7 +413,7 @@ export default function Payment(): ReactElement {
             <PaymentMethodSelector
               className={
                 paymentData.payment_method === BILL_OF_EXCHANGE
-                  ? 'bill-selected'
+                  ? 'selected'
                   : 'notChecked'
               }
             >
@@ -428,6 +429,11 @@ export default function Payment(): ReactElement {
                   })
                 }
               />
+              {paymentData.payment_method === BILL_OF_EXCHANGE && (
+                <BillOfExchangeContainer>
+                  <Button>Pagar com Boleto Bancário</Button>
+                </BillOfExchangeContainer>
+              )}
             </PaymentMethodSelector>
             <PaymentMethodSelector className="disabled">
               <RadioButton name="payment-method" label="PicPay" disabled />
