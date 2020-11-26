@@ -54,7 +54,6 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   isSubmit?: boolean;
   mask?: string;
   iconAfter?: string;
-  filled?: boolean;
   disabled?: boolean;
 }
 
@@ -70,7 +69,6 @@ const Input = ({
   isSubmit,
   mask,
   iconAfter,
-  filled,
   disabled,
   ...rest
 }: InputProps): ReactElement => {
@@ -88,8 +86,8 @@ const Input = ({
   }, [suggestions, inputRef, type]);
 
   useEffect(() => {
-    setIsFilled(filled);
-  }, [filled]);
+    setIsFilled(!!value);
+  }, [value]);
 
   const { error } = isSubmit ? useField(name) : { error: errorProps };
 

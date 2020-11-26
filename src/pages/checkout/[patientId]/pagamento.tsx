@@ -292,7 +292,6 @@ export default function Payment(): ReactElement {
             <Input
               className="input-payment"
               name="input-street"
-              filled={!!paymentData.address?.street}
               disabled={disabledInputs.street}
               label="Rua"
               value={paymentData.address?.street}
@@ -343,7 +342,6 @@ export default function Payment(): ReactElement {
               name="input-neighborhood"
               label="Bairro"
               disabled={disabledInputs.neighborhood}
-              filled={!!paymentData.address?.neighborhood}
               value={paymentData.address?.neighborhood}
               onChange={event =>
                 setPaymentData({
@@ -360,7 +358,6 @@ export default function Payment(): ReactElement {
               name="input-city"
               disabled={disabledInputs.city}
               label="Cidade"
-              filled={!!paymentData.address?.city}
               value={paymentData.address?.city}
               onChange={event =>
                 setPaymentData({
@@ -377,7 +374,6 @@ export default function Payment(): ReactElement {
               name="input-state"
               label="UF"
               disabled={disabledInputs.state}
-              filled={!!paymentData.address?.state}
               value={paymentData.address?.state}
               onChange={event =>
                 setPaymentData({
