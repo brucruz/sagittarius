@@ -56,13 +56,8 @@ const CreditCardForm = (): ReactElement => {
   const [creditCardBrand, setCreditCardBrand] = useState('generic');
   const [isPaymentButtonDisabled, setIsPaymentButtonDisabled] = useState(true);
   const { paymentData, setPaymentData } = usePayment();
-  const { bagTotalPriceFormatted, bagItems } = useBag();
+  const { bagTotalPrice, bagItems } = useBag();
   const { user } = useAuth();
-
-  const amountFormatted = Number.parseInt(
-    bagTotalPriceFormatted.replace(/[\s*/R$]/gm, '').replace(/,/, '.'),
-    10,
-  );
 
   const router = useRouter();
 
@@ -79,26 +74,19 @@ const CreditCardForm = (): ReactElement => {
     } else {
       setIsPaymentButtonDisabled(false);
     }
-  }, [paymentData, setPaymentData]);
+  }, [paymentData.installments, paymentData.card, setPaymentData]);
 
   if (!paymentData.amount) {
     setPaymentData({
       ...paymentData,
-      amount: Number.parseInt(
-        bagTotalPriceFormatted.replace(/[\s*/,/R$]/gm, ''),
-        10,
-      ),
+      amount: bagTotalPrice,
     });
   }
 
   const installments = Array.from(Array(12), (_, index) => ({
     id: index,
-    value: `${index + 1}x de R$${formatValueWo$(
-      amountFormatted / (index + 1),
-    )}`,
-    label: `${index + 1}x de R$${formatValueWo$(
-      amountFormatted / (index + 1),
-    )}`,
+    value: `${index + 1}x de R$${formatValueWo$(bagTotalPrice / (index + 1))}`,
+    label: `${index + 1}x de R$${formatValueWo$(bagTotalPrice / (index + 1))}`,
   }));
 
   function handleCreditCardNumberOnChange(value): void {
@@ -144,7 +132,7 @@ const CreditCardForm = (): ReactElement => {
       .connect({ api_key: process.env.NEXT_PUBLIC_PAGARME_API_KEY })
       .then(client =>
         client.transactions.create({
-          amount: paymentData.amount,
+          amount: paymentData.amount * 100,
           card_number: paymentData.card.card_number,
           card_cvv: paymentData.card.card_cvv,
           card_expiration_date: `${paymentData.card.card_expiration_month}${paymentData.card.card_expiration_year[2]}${paymentData.card.card_expiration_year[3]}`,

@@ -99,7 +99,14 @@ export default function Payment(): ReactElement {
         setIsContinueButtonDisabled(false);
       }
     }
-  }, [currentStep, paymentData]);
+  }, [
+    currentStep,
+    paymentData.address,
+    paymentData.full_name,
+    paymentData.document,
+    paymentData.tel,
+    paymentData.email,
+  ]);
 
   function handleCurrentStep(): void {
     switch (currentStep) {
