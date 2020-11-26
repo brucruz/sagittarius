@@ -4,6 +4,7 @@ interface UserInputProps {
   isErrored?: boolean;
   isFilled: boolean;
   isFocused: boolean;
+  isDisabled: boolean;
   hasSuggestions: boolean;
 }
 
@@ -69,6 +70,22 @@ export const UserInput = styled.header<UserInputProps>`
     opacity: 0.4;
     cursor: pointer;
   }
+
+  ${props =>
+    props.isDisabled &&
+    css`
+      background: #f2f2f2;
+      border: 1px solid #bcc3d4;
+
+      label,
+      input {
+        color: #3c4759;
+      }
+
+      input {
+        background: #f2f2f2;
+      }
+    `}
 
   ${props =>
     props.isFocused &&
