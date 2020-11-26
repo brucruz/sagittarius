@@ -107,7 +107,7 @@ const CreditCardForm = (): ReactElement => {
         .then((res: AxiosResponse<BinSearch>) =>
           setCreditCardBrand(res.data.scheme),
         )
-        .catch(err => setCreditCardBrand('generic'));
+        .catch(() => setCreditCardBrand('generic'));
     } else if (creditCardNumber.length < 6) {
       setCreditCardBrand('generic');
     }

@@ -48,11 +48,6 @@ export const PaymentMethodSelector = styled.div`
   padding: 0 20px;
   display: flex;
 
-  &.bill-selected {
-    background: #F0F6F9;
-    border: 2px solid #4D49C4;
-  }
-
   &.selected {
     flex-direction: column;
     background: #F0F6F9;
@@ -98,4 +93,12 @@ export const PaymentMethodSelector = styled.div`
   }
 
   .
+`;
+
+export const BillOfExchangeContainer = styled.div`
+  padding: 0 8px;
+
+  button {
+    margin-top: 24px;
+  }
 `;

@@ -54,6 +54,7 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   isSubmit?: boolean;
   mask?: string;
   iconAfter?: string;
+  disabled?: boolean;
 }
 
 const Input = ({
@@ -68,6 +69,7 @@ const Input = ({
   isSubmit,
   mask,
   iconAfter,
+  disabled,
   ...rest
 }: InputProps): ReactElement => {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -82,6 +84,10 @@ const Input = ({
     inputRef.current.value && setIsFilled(true);
     setInputType(type);
   }, [suggestions, inputRef, type]);
+
+  useEffect(() => {
+    setIsFilled(!!value);
+  }, [value]);
 
   const { error } = isSubmit ? useField(name) : { error: errorProps };
 
@@ -124,6 +130,7 @@ const Input = ({
         isErrored={!!error}
         isFilled={isFilled}
         isFocused={isFocused}
+        isDisabled={disabled}
         onFocus={handleInputFocus}
         hasSuggestions={hasSuggestions}
         {...rest}
@@ -137,6 +144,7 @@ const Input = ({
             type={type ? inputType : 'text'}
             id={name}
             name={name}
+            disabled={disabled}
             onChange={handleInputChange}
             ref={inputRef}
             value={value}

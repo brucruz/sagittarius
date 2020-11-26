@@ -9,10 +9,12 @@ import CreditCardForm from '@/components/organisms/CreditCardForm';
 import {
   PaymentMethodSelector,
   Container,
+  BillOfExchangeContainer,
 } from '@/styles/pages/checkout/[patientId]/Payment';
 import { CREDIT_CARD, BILL_OF_EXCHANGE } from '@/constants/payment';
 import { usePayment } from '@/hooks/payment';
 import { useAuth } from '@/hooks/auth';
+import axios, { AxiosResponse } from 'axios';
 import mixpanel from 'mixpanel-browser';
 
 interface IPageTemplateState extends PageHeaderProps {
@@ -20,6 +22,21 @@ interface IPageTemplateState extends PageHeaderProps {
     title: string;
     subTitle: string;
   };
+}
+
+interface DisabledInputs {
+  neighborhood?: boolean;
+  street?: boolean;
+  city?: boolean;
+  state?: boolean;
+}
+
+interface CepResponse {
+  neighborhood?: string;
+  street?: string;
+  city?: string;
+  state?: string;
+  zipcode?: string;
 }
 
 const pageTemplateState: IPageTemplateState[] = [
@@ -61,6 +78,9 @@ export default function Payment(): ReactElement {
   const [currentStep, setCurrentStep] = useState(0);
   const [isContinueButtonDisabled, setIsContinueButtonDisabled] = useState(
     false,
+  );
+  const [disabledInputs, setDisabledInputs] = useState<DisabledInputs>(
+    {} as DisabledInputs,
   );
 
   const { paymentData, setPaymentData } = usePayment();
@@ -208,20 +228,79 @@ export default function Payment(): ReactElement {
               className="input-payment"
               name="input-cep"
               label="CEP"
+              mask="99999999"
+              onBlur={() => {
+                const cep = paymentData.address?.cep;
+                if (cep.length === 8) {
+                  axios
+                    .get(
+                      `https://api.pagar.me/1/zipcodes/${cep}?api-key=${process.env.NEXT_PUBLIC_PAGARME_API_KEY}`,
+                    )
+                    .then((res: AxiosResponse<CepResponse>) => {
+                      const { data } = res;
+                      setPaymentData({
+                        ...paymentData,
+                        address: {
+                          ...paymentData.address,
+                          street: data.street
+                            ? data.street
+                            : paymentData.address?.street,
+                          neighborhood: data.neighborhood
+                            ? data.neighborhood
+                            : paymentData.address?.neighborhood,
+                          city: data.city
+                            ? data.city
+                            : paymentData.address?.city,
+                          state: data.state
+                            ? data.state
+                            : paymentData.address?.state,
+                        },
+                      });
+
+                      setDisabledInputs({
+                        street: !!data.street,
+                        neighborhood: !!data.neighborhood,
+                        city: !!data.city,
+                        state: !!data.state,
+                      });
+                    });
+                } else {
+                  setPaymentData({
+                    ...paymentData,
+                    address: {
+                      ...paymentData.address,
+                      street: '',
+                      neighborhood: '',
+                      city: '',
+                      state: '',
+                    },
+                  });
+
+                  setDisabledInputs({
+                    street: false,
+                    neighborhood: false,
+                    city: false,
+                    state: false,
+                  });
+                }
+              }}
               value={paymentData.address?.cep}
-              onChange={event =>
+              onChange={event => {
+                const cep = event.target.value.replace(/_*/gm, '');
+
                 setPaymentData({
                   ...paymentData,
                   address: {
                     ...paymentData.address,
-                    cep: event.target.value,
+                    cep,
                   },
-                })
-              }
+                });
+              }}
             />
             <Input
               className="input-payment"
               name="input-street"
+              disabled={disabledInputs.street}
               label="Rua"
               value={paymentData.address?.street}
               onChange={event =>
@@ -270,6 +349,7 @@ export default function Payment(): ReactElement {
               className="input-payment"
               name="input-neighborhood"
               label="Bairro"
+              disabled={disabledInputs.neighborhood}
               value={paymentData.address?.neighborhood}
               onChange={event =>
                 setPaymentData({
@@ -284,6 +364,7 @@ export default function Payment(): ReactElement {
             <Input
               className="input-payment"
               name="input-city"
+              disabled={disabledInputs.city}
               label="Cidade"
               value={paymentData.address?.city}
               onChange={event =>
@@ -300,6 +381,7 @@ export default function Payment(): ReactElement {
               className="input-payment last-element"
               name="input-state"
               label="UF"
+              disabled={disabledInputs.state}
               value={paymentData.address?.state}
               onChange={event =>
                 setPaymentData({
@@ -338,7 +420,7 @@ export default function Payment(): ReactElement {
             <PaymentMethodSelector
               className={
                 paymentData.payment_method === BILL_OF_EXCHANGE
-                  ? 'bill-selected'
+                  ? 'selected'
                   : 'notChecked'
               }
             >
@@ -354,6 +436,11 @@ export default function Payment(): ReactElement {
                   })
                 }
               />
+              {paymentData.payment_method === BILL_OF_EXCHANGE && (
+                <BillOfExchangeContainer>
+                  <Button>Pagar com Boleto Bancário</Button>
+                </BillOfExchangeContainer>
+              )}
             </PaymentMethodSelector>
             <PaymentMethodSelector className="disabled">
               <RadioButton name="payment-method" label="PicPay" disabled />
