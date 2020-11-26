@@ -28,6 +28,7 @@
     "mixpanel-browser": "^2.39.0",
     "next": "9.5.5",
     "next-images": "^1.6.0",
+    "pagarme": "^4.13.0",
     "polished": "^4.0.3",
     "qs": "^6.9.4",
     "query-string": "^6.13.6",
