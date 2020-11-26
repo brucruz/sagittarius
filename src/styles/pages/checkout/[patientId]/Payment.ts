@@ -99,6 +99,6 @@ export const BillOfExchangeContainer = styled.div`
   padding: 0 8px;
 
   button {
-    margin-top: 16px;
+    margin-top: 24px;
   }
 `;
