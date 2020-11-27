@@ -12,7 +12,7 @@ import {
   memo,
 } from 'react';
 import mixpanel from 'mixpanel-browser';
-import InputMask from 'react-input-mask';
+import InputMask, { ReactInputMask } from 'react-input-mask';
 import { IoIosCopy } from 'react-icons/io';
 import { MdRemoveRedEye } from 'react-icons/md';
 import { Suggestion } from 'use-places-autocomplete';
@@ -74,7 +74,7 @@ const Input = ({
   hasCopyButton,
   ...rest
 }: InputProps): ReactElement => {
-  const inputRef = useRef<HTMLInputElement>(null);
+  const inputRef = useRef(null);
   const [isFocused, setIsFocused] = useState(false);
   const [isFilled, setIsFilled] = useState(false);
   const [hasSuggestions, setHasSuggestions] = useState(false);
@@ -83,7 +83,7 @@ const Input = ({
   const { user } = useAuth();
 
   useEffect(() => {
-    inputRef.current.value && setIsFilled(true);
+    inputRef.current?.value && setIsFilled(true);
     setInputType(type);
   }, [suggestions, inputRef, type]);
 

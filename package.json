@@ -39,7 +39,7 @@
     "react-facebook-login": "^4.1.1",
     "react-google-login": "^5.1.22",
     "react-icons": "^3.11.0",
-    "react-input-mask": "^3.0.0-alpha.2",
+    "react-input-mask": "^2.0.4",
     "react-mixpanel": "^1.0.5",
     "react-modal": "^3.11.2",
     "react-responsive": "^8.1.0",
