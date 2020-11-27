@@ -29,9 +29,6 @@ interface DisabledInputs {
   street?: boolean;
   city?: boolean;
   state?: boolean;
-  full_name?: boolean;
-  tel?: boolean;
-  email?: boolean;
 }
 
 interface CepResponse {
@@ -105,13 +102,6 @@ export default function Payment(): ReactElement {
         email: user.email,
         tel: user.phone_whatsapp && user.phone_whatsapp,
       });
-
-      setDisabledInputs({
-        ...disabledInputs,
-        full_name: true,
-        email: true,
-        tel: !!user.phone_whatsapp,
-      });
     } else {
       setPaymentData({
         ...paymentData,
@@ -119,14 +109,8 @@ export default function Payment(): ReactElement {
         email: '',
         tel: '',
       });
-
-      setDisabledInputs({
-        ...disabledInputs,
-        full_name: false,
-        email: false,
-        tel: false,
-      });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [useUserData]);
 
   useEffect(() => {
@@ -213,7 +197,6 @@ export default function Payment(): ReactElement {
               className="input-payment"
               name="input-user-name"
               value={paymentData.full_name}
-              disabled={disabledInputs.full_name}
               onChange={event =>
                 setPaymentData({
                   ...paymentData,
@@ -241,7 +224,6 @@ export default function Payment(): ReactElement {
               className="input-payment"
               name="input-user-email"
               label="E-mail"
-              disabled={disabledInputs.email}
               value={paymentData.email}
               onChange={event =>
                 setPaymentData({
@@ -254,7 +236,6 @@ export default function Payment(): ReactElement {
               className="input-payment last-element"
               name="input-user-telefone"
               label="Telefone"
-              disabled={disabledInputs.tel}
               value={paymentData.tel}
               onChange={event =>
                 setPaymentData({
