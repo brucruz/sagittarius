@@ -29,6 +29,9 @@ interface DisabledInputs {
   street?: boolean;
   city?: boolean;
   state?: boolean;
+  full_name?: boolean;
+  tel?: boolean;
+  email?: boolean;
 }
 
 interface CepResponse {
@@ -82,6 +85,7 @@ export default function Payment(): ReactElement {
   const [disabledInputs, setDisabledInputs] = useState<DisabledInputs>(
     {} as DisabledInputs,
   );
+  const [useUserData, setUseUserData] = useState(false);
 
   const { paymentData, setPaymentData } = usePayment();
   const { user } = useAuth();
@@ -92,6 +96,38 @@ export default function Payment(): ReactElement {
       'Page Title': 'Payment Page',
     });
   }, [user]);
+
+  useEffect(() => {
+    if (useUserData) {
+      setPaymentData({
+        ...paymentData,
+        full_name: `${user.first_name} ${user.last_name}`,
+        email: user.email,
+        tel: user.phone_whatsapp && user.phone_whatsapp,
+      });
+
+      setDisabledInputs({
+        ...disabledInputs,
+        full_name: true,
+        email: true,
+        tel: !!user.phone_whatsapp,
+      });
+    } else {
+      setPaymentData({
+        ...paymentData,
+        full_name: '',
+        email: '',
+        tel: '',
+      });
+
+      setDisabledInputs({
+        ...disabledInputs,
+        full_name: false,
+        email: false,
+        tel: false,
+      });
+    }
+  }, [useUserData]);
 
   useEffect(() => {
     if (currentStep === 0) {
@@ -152,6 +188,8 @@ export default function Payment(): ReactElement {
     [setCurrentStep],
   );
 
+  console.log(user);
+
   return (
     <PageTemplate
       buttonType={{
@@ -168,11 +206,14 @@ export default function Payment(): ReactElement {
             <Checkbox
               label="Utilizar meus dados de usuário para o pagamento"
               id="checkbox-payment"
+              onChange={() => setUseUserData(!useUserData)}
+              isChecked={useUserData}
             />
             <Input
               className="input-payment"
               name="input-user-name"
               value={paymentData.full_name}
+              disabled={disabledInputs.full_name}
               onChange={event =>
                 setPaymentData({
                   ...paymentData,
@@ -200,6 +241,7 @@ export default function Payment(): ReactElement {
               className="input-payment"
               name="input-user-email"
               label="E-mail"
+              disabled={disabledInputs.email}
               value={paymentData.email}
               onChange={event =>
                 setPaymentData({
@@ -212,6 +254,7 @@ export default function Payment(): ReactElement {
               className="input-payment last-element"
               name="input-user-telefone"
               label="Telefone"
+              disabled={disabledInputs.tel}
               value={paymentData.tel}
               onChange={event =>
                 setPaymentData({
@@ -258,6 +301,7 @@ export default function Payment(): ReactElement {
                       });
 
                       setDisabledInputs({
+                        ...disabledInputs,
                         street: !!data.street,
                         neighborhood: !!data.neighborhood,
                         city: !!data.city,
@@ -277,6 +321,7 @@ export default function Payment(): ReactElement {
                   });
 
                   setDisabledInputs({
+                    ...disabledInputs,
                     street: false,
                     neighborhood: false,
                     city: false,
