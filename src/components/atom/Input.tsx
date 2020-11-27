@@ -13,7 +13,7 @@ import {
 } from 'react';
 import mixpanel from 'mixpanel-browser';
 import InputMask from 'react-input-mask';
-
+import { IoIosCopy } from 'react-icons/io';
 import { MdRemoveRedEye } from 'react-icons/md';
 import { Suggestion } from 'use-places-autocomplete';
 import { EXAMS as EXAMS_CONSTANT } from '@/constants/examsSearch';
@@ -54,6 +54,7 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   isSubmit?: boolean;
   mask?: string;
   iconAfter?: string;
+  hasCopyButton?: boolean;
   disabled?: boolean;
 }
 
@@ -70,6 +71,7 @@ const Input = ({
   mask,
   iconAfter,
   disabled,
+  hasCopyButton,
   ...rest
 }: InputProps): ReactElement => {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -155,6 +157,8 @@ const Input = ({
         {iconAfter && (
           <img className="icon-after-input" src={iconAfter} alt="Ícone" />
         )}
+
+        {hasCopyButton && <IoIosCopy />}
 
         {type === 'password' && (
           <MdRemoveRedEye
