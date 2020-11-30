@@ -17,6 +17,7 @@ interface DropdownProps extends HTMLAttributes<HTMLDivElement> {
   options: option[];
   defaultValue?: string;
   type?: 'small' | 'medium' | 'large';
+  onModal?: boolean;
   value?: string | number;
   setValue?: (args: any) => void;
 }
@@ -25,6 +26,7 @@ const Dropdown = ({
   options,
   defaultValue,
   type = 'large',
+  onModal = false,
   value = '',
   setValue,
   ...rest
@@ -53,7 +55,7 @@ const Dropdown = ({
         </button>
       </Select>
       {isDropdownOpen && (
-        <Options type={type}>
+        <Options type={type} onModal={onModal}>
           {options.map((currentOption: option) => (
             <Option
               key={currentOption.id}
