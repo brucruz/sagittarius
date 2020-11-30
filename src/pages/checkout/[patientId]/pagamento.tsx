@@ -94,29 +94,11 @@ export default function Payment(): ReactElement {
     });
   }, [user]);
 
-  const handleUserAutocomplete = (): void => {
-    if (useUserData) {
-      setPaymentData({
-        ...paymentData,
-        full_name: `${user.first_name} ${user.last_name}`,
-        email: user.email,
-        tel: user.phone_whatsapp && user.phone_whatsapp,
-      });
-    } else {
-      setPaymentData({
-        ...paymentData,
-        full_name: '',
-        email: '',
-        tel: '',
-      });
-    }
-  };
-
   useEffect(() => {
     if (currentStep === 0) {
       if (
         !paymentData.full_name ||
-        !paymentData.document ||
+        !paymentData.document.document_number ||
         !paymentData.tel ||
         !paymentData.email
       ) {
@@ -188,8 +170,23 @@ export default function Payment(): ReactElement {
               label="Utilizar meus dados de usuário para o pagamento"
               id="checkbox-payment"
               onChange={() => {
+                if (!useUserData) {
+                  setPaymentData({
+                    ...paymentData,
+                    full_name: `${user.first_name} ${user.last_name}`,
+                    email: user.email,
+                    tel: user.phone_whatsapp && user.phone_whatsapp,
+                  });
+                } else {
+                  setPaymentData({
+                    ...paymentData,
+                    full_name: '',
+                    email: '',
+                    tel: '',
+                  });
+                }
+
                 setUseUserData(!useUserData);
-                handleUserAutocomplete();
               }}
               isChecked={useUserData}
             />

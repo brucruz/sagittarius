@@ -99,12 +99,6 @@ const Input = ({
         name: fieldName,
         ref: inputRef.current,
         path: 'value',
-        setValue(ref: any, _value: string) {
-          ref.setInputValue(_value);
-        },
-        clearValue(ref: any) {
-          ref.setInputValue('');
-        },
       });
     }, [fieldName, registerField]);
   }
@@ -130,8 +124,6 @@ const Input = ({
     '#Whatsapp_Exam_Not_Found',
     'Exam Not Found - Whatsapp Click',
   );
-
-  console.log(inputRef.current?.value);
 
   return (
     <InputContainer>
