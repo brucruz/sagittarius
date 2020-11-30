@@ -72,7 +72,8 @@ const Input = ({
   disabled,
   ...rest
 }: InputProps): ReactElement => {
-  const inputRef = useRef<HTMLInputElement>(null);
+  const inputRef = useRef(null);
+  const userInputRef = useRef(null);
   const [isFocused, setIsFocused] = useState(false);
   const [isFilled, setIsFilled] = useState(false);
   const [hasSuggestions, setHasSuggestions] = useState(false);
@@ -81,7 +82,7 @@ const Input = ({
   const { user } = useAuth();
 
   useEffect(() => {
-    inputRef.current.value && setIsFilled(true);
+    inputRef.current?.value && setIsFilled(true);
     setInputType(type);
   }, [suggestions, inputRef, type]);
 
@@ -98,12 +99,18 @@ const Input = ({
         name: fieldName,
         ref: inputRef.current,
         path: 'value',
+        setValue(ref: any, _value: string) {
+          ref.setInputValue(_value);
+        },
+        clearValue(ref: any) {
+          ref.setInputValue('');
+        },
       });
     }, [fieldName, registerField]);
   }
 
   const handleInputFocus = useCallback(() => {
-    inputRef.current?.focus();
+    userInputRef.current.querySelector('input').focus();
 
     setIsFocused(true);
 
@@ -124,9 +131,12 @@ const Input = ({
     'Exam Not Found - Whatsapp Click',
   );
 
+  console.log(inputRef.current?.value);
+
   return (
     <InputContainer>
       <UserInput
+        ref={userInputRef}
         isErrored={!!error}
         isFilled={isFilled}
         isFocused={isFocused}

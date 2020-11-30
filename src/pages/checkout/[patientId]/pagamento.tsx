@@ -94,7 +94,7 @@ export default function Payment(): ReactElement {
     });
   }, [user]);
 
-  useEffect(() => {
+  const handleUserAutocomplete = (): void => {
     if (useUserData) {
       setPaymentData({
         ...paymentData,
@@ -110,8 +110,7 @@ export default function Payment(): ReactElement {
         tel: '',
       });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [useUserData]);
+  };
 
   useEffect(() => {
     if (currentStep === 0) {
@@ -172,8 +171,6 @@ export default function Payment(): ReactElement {
     [setCurrentStep],
   );
 
-  console.log(user);
-
   return (
     <PageTemplate
       buttonType={{
@@ -190,7 +187,10 @@ export default function Payment(): ReactElement {
             <Checkbox
               label="Utilizar meus dados de usuário para o pagamento"
               id="checkbox-payment"
-              onChange={() => setUseUserData(!useUserData)}
+              onChange={() => {
+                setUseUserData(!useUserData);
+                handleUserAutocomplete();
+              }}
               isChecked={useUserData}
             />
             <Input
