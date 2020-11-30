@@ -98,7 +98,7 @@ export default function Payment(): ReactElement {
     if (currentStep === 0) {
       if (
         !paymentData.full_name ||
-        !paymentData.document.document_number ||
+        !paymentData.document?.document_number ||
         !paymentData.tel ||
         !paymentData.email
       ) {
