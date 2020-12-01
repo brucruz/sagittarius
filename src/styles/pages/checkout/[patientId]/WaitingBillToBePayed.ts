@@ -1,43 +1,58 @@
 import styled from 'styled-components';
+import device from '@/utils/devices';
 
 export const Content = styled.div`
-  margin: 64px 0;
+  & > a button:nth-child(1) {
+    margin-top: 32px;
+    margin-bottom: 16px;
+  }
+`;
+
+export const ExperienceButton = styled.button`
+  background: none;
+  color: #4d49c4;
+  width: 100%;
+  text-align: center;
+`;
+
+export const CopyContent = styled.div`
+  cursor: pointer;
+  background: #fff;
+  margin-top: 24px;
   display: flex;
-  flex-direction: column;
+  padding: 8px 16px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
   align-items: center;
 
-  button {
-    width: 75%;
-    margin-bottom: 16px;
-    text-transform: uppercase;
+  div.text {
+    display: flex;
+    flex-direction: column;
+    margin-right: 16px;
+    width: 85%;
+    @media ${device.mobileL} {
+      width: 90%;
+    }
   }
 
-  a {
-    text-decoration: none;
-    color: #4d49c4;
+  svg {
+    margin-left: auto;
+    fill: #4d49c4;
   }
-`;
 
-export const Smile = styled.h3`
-  margin-bottom: 40px;
-  font-size: 72px;
-  text-align: center;
-  color: #4d49c4;
-`;
+  label {
+    font-size: 12px;
+    color: #3c4759;
+    opacity: 0.6;
+    padding: 0 !important;
+    text-align: center;
+  }
 
-export const Title = styled.h1`
-  font-size: 24px;
-  text-align: center;
-  color: #2f2c77;
-`;
-
-export const Subtitle = styled.h3`
-  margin-top: 16px;
-  font-size: 16px;
-  line-height: 24px;
-  font-weight: 400;
-  text-align: center;
-  letter-spacing: 0.192941px;
-  color: #3c4759;
-  margin-bottom: 32px;
+  span {
+    text-align: center;
+    margin-top: 8px;
+    color: #3c4759;
+    display: inline-block;
+    width: 100%;
+  }
 `;
