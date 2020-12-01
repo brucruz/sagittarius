@@ -72,6 +72,7 @@ const Input = ({
   ...rest
 }: InputProps): ReactElement => {
   const inputRef = useRef(null);
+  const userInputRef = useRef(null);
   const [isFocused, setIsFocused] = useState(false);
   const [isFilled, setIsFilled] = useState(false);
   const [hasSuggestions, setHasSuggestions] = useState(false);
@@ -102,7 +103,7 @@ const Input = ({
   }
 
   const handleInputFocus = useCallback(() => {
-    inputRef.current?.focus();
+    userInputRef.current.querySelector('input').focus();
 
     setIsFocused(true);
 
@@ -126,6 +127,7 @@ const Input = ({
   return (
     <InputContainer>
       <UserInput
+        ref={userInputRef}
         isErrored={!!error}
         isFilled={isFilled}
         isFocused={isFocused}
