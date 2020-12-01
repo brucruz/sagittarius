@@ -184,6 +184,9 @@ export default function Login(): ReactElement {
           name="email"
           label="E-mail"
           type="email"
+          onChange={event =>
+            formRef.current.setFieldValue('email', event.target.value)
+          }
           icon={MdEmail}
           isSubmit
         />
@@ -191,6 +194,9 @@ export default function Login(): ReactElement {
           name="password"
           label="Senha"
           type="password"
+          onChange={event =>
+            formRef.current.setFieldValue('password', event.target.value)
+          }
           icon={MdLock}
           isSubmit
         />

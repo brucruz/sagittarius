@@ -76,6 +76,7 @@ export default function Payment(): ReactElement {
   const [disabledInputs, setDisabledInputs] = useState<DisabledInputs>(
     {} as DisabledInputs,
   );
+  const [useUserData, setUseUserData] = useState(false);
 
   const { paymentData, setPaymentData } = usePayment();
   const { user } = useAuth();
@@ -91,7 +92,7 @@ export default function Payment(): ReactElement {
     if (currentStep === 0) {
       if (
         !paymentData.full_name ||
-        !paymentData.document ||
+        !paymentData.document?.document_number ||
         !paymentData.tel ||
         !paymentData.email
       ) {
@@ -162,6 +163,26 @@ export default function Payment(): ReactElement {
             <Checkbox
               label="Utilizar meus dados de usuário para o pagamento"
               id="checkbox-payment"
+              onChange={() => {
+                if (!useUserData) {
+                  setPaymentData({
+                    ...paymentData,
+                    full_name: `${user.first_name} ${user.last_name}`,
+                    email: user.email,
+                    tel: user.phone_whatsapp && user.phone_whatsapp,
+                  });
+                } else {
+                  setPaymentData({
+                    ...paymentData,
+                    full_name: '',
+                    email: '',
+                    tel: '',
+                  });
+                }
+
+                setUseUserData(!useUserData);
+              }}
+              isChecked={useUserData}
             />
             <Input
               className="input-payment"
@@ -252,6 +273,7 @@ export default function Payment(): ReactElement {
                       });
 
                       setDisabledInputs({
+                        ...disabledInputs,
                         street: !!data.street,
                         neighborhood: !!data.neighborhood,
                         city: !!data.city,
@@ -271,6 +293,7 @@ export default function Payment(): ReactElement {
                   });
 
                   setDisabledInputs({
+                    ...disabledInputs,
                     street: false,
                     neighborhood: false,
                     city: false,
