@@ -8,9 +8,15 @@ import {
   BillOfExchangeContainer,
 } from '@/styles/components/organisms/PaymentSelector';
 import CreditCardForm from '@/components/organisms/CreditCardForm';
+import { useAuth } from '@/hooks/auth';
+import { useBag } from '@/hooks/bag';
+import { useDates } from '@/hooks/dates';
 
 const PaymentSelector = (): ReactElement => {
-  const { paymentData, setPaymentData } = usePayment();
+  const { paymentData, setPaymentData, handleBillOfExchange } = usePayment();
+  const { user } = useAuth();
+  const { bagItems } = useBag();
+  const { preferredDateTo } = useDates();
 
   return (
     <>
@@ -53,7 +59,13 @@ const PaymentSelector = (): ReactElement => {
         />
         {paymentData.payment_method === BILL_OF_EXCHANGE && (
           <BillOfExchangeContainer>
-            <Button>Pagar com Boleto Bancário</Button>
+            <Button
+              onClick={() =>
+                handleBillOfExchange(preferredDateTo, bagItems, user)
+              }
+            >
+              Pagar com Boleto Bancário
+            </Button>
           </BillOfExchangeContainer>
         )}
       </PaymentMethodSelector>

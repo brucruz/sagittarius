@@ -44,7 +44,7 @@ import User from '@/@types/User';
 
 import formatValueWo$ from '@/utils/formatValueWo$';
 import { FaWhatsapp } from 'react-icons/fa';
-import Checkbox from '@/components/atom/Checkbox';
+import { AxiosResponse } from 'axios';
 import { MdClose } from 'react-icons/md';
 import getValidationErrors from '@/utils/getValidationErrors';
 import SEO from '@/components/atom/SEO';
@@ -58,6 +58,10 @@ interface Quote {
     to: string;
   };
   hours: string[];
+}
+
+interface QuoteResponse extends Quote {
+  id: string;
 }
 
 interface ModalData {
@@ -310,7 +314,7 @@ const OrderReview = (): ReactElement => {
       .post<Quote>(`quotes`, quote, {
         headers: { Authorization: `Bearer: ${token}` },
       })
-      .then(() => {
+      .then((res: AxiosResponse<QuoteResponse>) => {
         addToast({
           type: 'success',
           title: 'Solicitação recebida',
@@ -325,7 +329,10 @@ const OrderReview = (): ReactElement => {
           return;
         }
 
-        router.push(`/checkout/${patient?.id}/obrigado`);
+        sessionStorage.setItem('@Heali:quote', JSON.stringify(res.data));
+
+        const url = window.location.pathname.split('confirmar')[0];
+        router.replace(`${url}pagamento`);
       })
       .catch(err => {
         console.log(err);
