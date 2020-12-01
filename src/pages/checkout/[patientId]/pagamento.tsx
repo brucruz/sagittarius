@@ -3,17 +3,11 @@ import { ReactElement, useCallback, useState, useEffect } from 'react';
 import { PageHeaderProps } from '@/components/molecule/PageHeader';
 import Checkbox from '@/components/atom/Checkbox';
 import Input from '@/components/atom/Input';
-import RadioButton from '@/components/atom/RadioButton';
 import Button from '@/components/atom/Button';
-import CreditCardForm from '@/components/organisms/CreditCardForm';
-import {
-  PaymentMethodSelector,
-  Container,
-  BillOfExchangeContainer,
-} from '@/styles/pages/checkout/[patientId]/Payment';
-import { CREDIT_CARD, BILL_OF_EXCHANGE } from '@/constants/payment';
+import { Container } from '@/styles/pages/checkout/[patientId]/Payment';
 import { usePayment } from '@/hooks/payment';
 import { useAuth } from '@/hooks/auth';
+import PaymentSelector from '@/components/organisms/PaymentSelector';
 import axios, { AxiosResponse } from 'axios';
 import mixpanel from 'mixpanel-browser';
 
@@ -418,63 +412,7 @@ export default function Payment(): ReactElement {
             />
           </>
         )}
-        {currentStep === 2 && (
-          <>
-            <PaymentMethodSelector
-              className={
-                paymentData.payment_method === CREDIT_CARD
-                  ? 'selected'
-                  : 'notChecked'
-              }
-            >
-              <RadioButton
-                name="payment-method"
-                label="Cartão de Crédito"
-                isChecked={paymentData.payment_method === CREDIT_CARD}
-                onChange={() =>
-                  setPaymentData({
-                    ...paymentData,
-                    payment_method: CREDIT_CARD,
-                  })
-                }
-              />
-              {paymentData.payment_method === CREDIT_CARD && <CreditCardForm />}
-            </PaymentMethodSelector>
-            <PaymentMethodSelector
-              className={
-                paymentData.payment_method === BILL_OF_EXCHANGE
-                  ? 'selected'
-                  : 'notChecked'
-              }
-            >
-              <RadioButton
-                name="payment-method"
-                label="Boleto"
-                isChecked={paymentData.payment_method === BILL_OF_EXCHANGE}
-                description="A comprovação pode demorar até 3 dias."
-                onChange={() =>
-                  setPaymentData({
-                    ...paymentData,
-                    payment_method: BILL_OF_EXCHANGE,
-                  })
-                }
-              />
-              {paymentData.payment_method === BILL_OF_EXCHANGE && (
-                <BillOfExchangeContainer>
-                  <Button>Pagar com Boleto Bancário</Button>
-                </BillOfExchangeContainer>
-              )}
-            </PaymentMethodSelector>
-            <PaymentMethodSelector className="disabled">
-              <RadioButton name="payment-method" label="PicPay" disabled />
-              <span>Em Breve</span>
-            </PaymentMethodSelector>
-            <PaymentMethodSelector className="disabled">
-              <RadioButton name="payment-method" label="Pix" disabled />
-              <span>Em Breve</span>
-            </PaymentMethodSelector>
-          </>
-        )}
+        {currentStep === 2 && <PaymentSelector />}
       </Container>
       {currentStep !== 2 && (
         <Button disabled={isContinueButtonDisabled} onClick={handleCurrentStep}>

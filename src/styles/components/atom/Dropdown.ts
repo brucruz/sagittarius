@@ -1,8 +1,9 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import device from '@/utils/devices';
 
 interface OptionsProps {
   type: 'small' | 'medium' | 'large';
+  onModal?: boolean;
 }
 
 export const Base = styled.div`
@@ -66,6 +67,24 @@ export const Options = styled.div<OptionsProps>`
   z-index: 2;
   background: #ffffff;
   margin-top: 48px;
+
+  ${props =>
+    props.onModal &&
+    css`
+      @media ${device.mobileS} {
+        max-width: 36%;
+      }
+
+      @media ${device.mobileM} {
+        width: 100%;
+        max-width: 38%;
+      }
+
+      @media ${device.mobileL} {
+        width: 100%;
+        max-width: 146px;
+      }
+    `}
 
   @media ${device.mobileS} {
     width: calc(${props => (props.type === 'small' ? '50%' : '91.5%')} - 42px);
