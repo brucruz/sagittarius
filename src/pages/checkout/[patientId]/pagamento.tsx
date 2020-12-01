@@ -47,9 +47,8 @@ const pageTemplateState: IPageTemplateState[] = [
       stepper: '1/3',
     },
     titleMain: {
-      title: 'Quais são os dados do pagador?',
-      subTitle:
-        'Estes dados são necessários para obtermos aprovação do pagamento',
+      title: 'Como prefere Pagar?',
+      subTitle: 'Selecione a forma de pagamento',
     },
   },
   {
@@ -58,7 +57,7 @@ const pageTemplateState: IPageTemplateState[] = [
       stepper: '2/3',
     },
     titleMain: {
-      title: 'Qual o endereço de cobrança?',
+      title: 'Quais são os dados do pagador?',
       subTitle:
         'Estes dados são necessários para obtermos aprovação do pagamento',
     },
@@ -69,8 +68,9 @@ const pageTemplateState: IPageTemplateState[] = [
       stepper: '3/3',
     },
     titleMain: {
-      title: 'Como prefere pagar?',
-      subTitle: 'Selecione a forma de pagamento',
+      title: 'Qual o endereço de cobrança?',
+      subTitle:
+        'Estes dados são necessários para obtermos aprovação do pagamento',
     },
   },
 ];
