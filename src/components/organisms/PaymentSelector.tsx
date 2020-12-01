@@ -9,7 +9,13 @@ import {
 } from '@/styles/components/organisms/PaymentSelector';
 import CreditCardForm from '@/components/organisms/CreditCardForm';
 
-const PaymentSelector = (): ReactElement => {
+interface PaymentSelectorProps {
+  handleCurrentStep?: () => void;
+}
+
+const PaymentSelector = ({
+  handleCurrentStep,
+}: PaymentSelectorProps): ReactElement => {
   const { paymentData, setPaymentData } = usePayment();
 
   return (
@@ -30,7 +36,9 @@ const PaymentSelector = (): ReactElement => {
             })
           }
         />
-        {paymentData.payment_method === CREDIT_CARD && <CreditCardForm />}
+        {paymentData.payment_method === CREDIT_CARD && (
+          <CreditCardForm handleCurrentStep={handleCurrentStep} />
+        )}
       </PaymentMethodSelector>
       <PaymentMethodSelector
         className={

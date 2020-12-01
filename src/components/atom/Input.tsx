@@ -13,7 +13,6 @@ import {
 } from 'react';
 import mixpanel from 'mixpanel-browser';
 import InputMask from 'react-input-mask';
-
 import { MdRemoveRedEye } from 'react-icons/md';
 import { Suggestion } from 'use-places-autocomplete';
 import { EXAMS as EXAMS_CONSTANT } from '@/constants/examsSearch';
