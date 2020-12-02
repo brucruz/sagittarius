@@ -235,6 +235,16 @@ const PaymentProvider = ({ children }): ReactElement => {
         const bagId = sessionStorage.getItem('@Heali:bagId');
         const quoteObject = JSON.parse(sessionStorage.getItem('@Heali:quote'));
 
+        user && mixpanel.identify(user.id);
+        mixpanel.track('Payment Trial', {
+          Value: paymentData.amount,
+          'Exams Count': items.length,
+          'Payment Method': 'credit card',
+          Installments: paymentData.installments && paymentData.installments,
+          'Payment Response Status': transaction.status,
+          // 'Payer': string, // self ou other
+        });
+
         Api.post(
           '/payments',
           {

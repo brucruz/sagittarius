@@ -1,5 +1,3 @@
-import { boolean } from "yup"
-
 export default interface Card {
   id: string;
   user_id: string;
