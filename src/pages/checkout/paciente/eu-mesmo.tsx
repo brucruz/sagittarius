@@ -197,6 +197,9 @@ const SignUpPage = (): ReactElement => {
       <Form ref={formRef} onSubmit={handleSubmit}>
         <DateSelector
           name="birth_date"
+          onChange={event =>
+            formRef.current.setFieldValue('birth_date', event.target.value)
+          }
           startDate={new Date()}
           calendar={false}
           getTypedDate={handleGetBirthDate}
@@ -238,6 +241,9 @@ const SignUpPage = (): ReactElement => {
 
         <Input
           name="document_id"
+          onChange={event =>
+            formRef.current.setFieldValue('document_id', event.target.value)
+          }
           label="Número de Documento *"
           icon={MdVerifiedUser}
           isSubmit

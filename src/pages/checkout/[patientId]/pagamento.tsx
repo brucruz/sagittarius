@@ -85,7 +85,16 @@ export default function Payment(): ReactElement {
     setPaymentData,
     handlePaymentWithCreditCard,
   } = usePayment();
+
+  const { bagTotalPrice } = useBag();
   const { user } = useAuth();
+
+  if (!paymentData.amount) {
+    setPaymentData({
+      ...paymentData,
+      amount: bagTotalPrice,
+    });
+  }
 
   useEffect(() => {
     user && mixpanel.identify(user.id);

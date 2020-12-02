@@ -50,13 +50,6 @@ const CreditCardForm = ({
     }
   }, [paymentData.installments, paymentData.card, setPaymentData]);
 
-  if (!paymentData.amount) {
-    setPaymentData({
-      ...paymentData,
-      amount: bagTotalPrice,
-    });
-  }
-
   const installments = Array.from(Array(12), (_, index) => ({
     id: index,
     value: `${index + 1}x de R$${formatValueWo$(bagTotalPrice / (index + 1))}`,
