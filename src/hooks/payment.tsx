@@ -49,8 +49,8 @@ const PaymentProvider = ({ children }): ReactElement => {
         'Favor não aceitar após a data de vencimento deste boleto',
     } as BillOfExchangeRules;
 
-    const currentDate = new Date();
-    const userFinalDate = parse(preferredDateTo, 'MM-dd-yyyy', new Date());
+    const currentDate = new Date(); // MM-dd-yyyy
+    const userFinalDate = parse(preferredDateTo, 'dd/MM/yyyy', new Date());
 
     const dateDiffInDays = differenceInBusinessDays(userFinalDate, currentDate);
 
