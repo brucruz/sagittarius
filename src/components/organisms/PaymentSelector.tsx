@@ -1,4 +1,4 @@
-import { ReactElement } from 'react';
+import { ReactElement, useState, useEffect } from 'react';
 import RadioButton from '@/components/atom/RadioButton';
 import { usePayment } from '@/hooks/payment';
 import Button from '@/components/atom/Button';
@@ -11,12 +11,17 @@ import CreditCardForm from '@/components/organisms/CreditCardForm';
 import { useAuth } from '@/hooks/auth';
 import { useBag } from '@/hooks/bag';
 import { useDates } from '@/hooks/dates';
+import { QuoteResponse } from '@/pages/checkout/[patientId]/confirmar';
 
 const PaymentSelector = (): ReactElement => {
+  const [quote, setQuote] = useState<QuoteResponse>({} as QuoteResponse);
   const { paymentData, setPaymentData, handleBillOfExchange } = usePayment();
   const { user } = useAuth();
   const { bagItems } = useBag();
-  const { preferredDateTo } = useDates();
+
+  useEffect(() => {
+    setQuote(JSON.parse(sessionStorage.getItem('@Heali:quote')));
+  }, []);
 
   return (
     <>
@@ -61,7 +66,7 @@ const PaymentSelector = (): ReactElement => {
           <BillOfExchangeContainer>
             <Button
               onClick={() =>
-                handleBillOfExchange(preferredDateTo, bagItems, user)
+                handleBillOfExchange(quote.dates.to, bagItems, user)
               }
             >
               Pagar com Boleto Bancário

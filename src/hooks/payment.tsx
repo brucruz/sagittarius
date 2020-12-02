@@ -2,6 +2,7 @@ import { createContext, ReactElement, useContext, useState } from 'react';
 import { IFormPayment } from '@/@types/Payment';
 import { useRouter } from 'next/router';
 import moment from 'moment';
+import { differenceInBusinessDays, format, getDate, add } from 'date-fns';
 import pagarme from 'pagarme';
 import Api from '@/services/api';
 import PricesInBag from '@/@types/PricesInBag';
@@ -18,7 +19,7 @@ interface PaymentContextData {
   paymentData: IFormPayment;
   setPaymentData: (value: IFormPayment) => void;
   handleBillOfExchange: (
-    preferredDateTo: Date,
+    preferredDateTo: string,
     bagItems: PricesInBag[],
     user: User,
   ) => void;
@@ -33,7 +34,7 @@ const PaymentProvider = ({ children }): ReactElement => {
   const router = useRouter();
 
   function handleBillOfExchange(
-    preferredDateTo: Date,
+    preferredDateTo: string,
     bagItems: PricesInBag[],
     user: User,
   ): void {
@@ -43,26 +44,32 @@ const PaymentProvider = ({ children }): ReactElement => {
         'Favor não aceitar após a data de vencimento deste boleto',
     } as BillOfExchangeRules;
 
-    const currentDate = moment().hour(12).minute(0).second(0);
-    const userFinalDate = moment(preferredDateTo);
+    const dateSplited = preferredDateTo.split('/');
+    const currentDate = new Date();
+    const userFinalDate = new Date(
+      `${dateSplited[1]}/${dateSplited[0]}/${dateSplited[2]}`,
+    );
 
-    const dateDiffInDays = userFinalDate.diff(currentDate, 'days');
+    const dateDiffInDays = differenceInBusinessDays(userFinalDate, currentDate);
 
     if (dateDiffInDays <= 4) {
-      billOfExchangeRules.boleto_expiration_date = currentDate.format(
-        'YYYY-MM-DD',
+      billOfExchangeRules.boleto_expiration_date = format(
+        currentDate,
+        'yyyy-MM-dd',
       );
     } else if (dateDiffInDays < 10) {
-      const currentDay = currentDate.get('date');
+      const currentDay = getDate(currentDate);
       const daysToAdd = currentDay + dateDiffInDays - 3 - currentDay;
 
-      billOfExchangeRules.boleto_expiration_date = currentDate
-        .add(daysToAdd, 'day')
-        .format('YYYY-MM-DD');
+      billOfExchangeRules.boleto_expiration_date = format(
+        add(currentDate, { days: daysToAdd }),
+        'yyyy-MM-dd',
+      );
     } else {
-      billOfExchangeRules.boleto_expiration_date = currentDate
-        .add(7, 'day')
-        .format('YYYY-MM-DD');
+      billOfExchangeRules.boleto_expiration_date = format(
+        add(currentDate, { days: 7 }),
+        'yyyy-MM-dd',
+      );
     }
 
     const items = [];
@@ -77,15 +84,6 @@ const PaymentProvider = ({ children }): ReactElement => {
           tangible: false,
         });
       });
-    });
-
-    user && mixpanel.identify(user.id);
-    mixpanel.track('Payment Trial', {
-      Value: paymentData.amount, // total
-      'Exams Count': items.length, // contagem
-      'Payment Method': 'bill of exchange', // boleto, cartão de crédito etc
-      Installments: paymentData.installments && paymentData.installments, // número de parcelas, se existir
-      // 'Payer': string, // self ou other
     });
 
     pagarme.client
@@ -124,6 +122,16 @@ const PaymentProvider = ({ children }): ReactElement => {
         }),
       )
       .then(transaction => {
+        user && mixpanel.identify(user.id);
+        mixpanel.track('Payment Trial', {
+          Value: paymentData.amount,
+          'Exams Count': items.length,
+          'Payment Method': 'bill of exchange',
+          Installments: paymentData.installments && paymentData.installments,
+          'Payment Response Status': transaction.status,
+          // 'Payer': string, // self ou other
+        });
+
         const url = window.location.pathname.split('pagamento')[0];
         const token = localStorage.getItem('@Heali:token');
 

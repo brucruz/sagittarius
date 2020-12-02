@@ -60,7 +60,7 @@ interface Quote {
   hours: string[];
 }
 
-interface QuoteResponse extends Quote {
+export interface QuoteResponse extends Quote {
   id: string;
 }
 
