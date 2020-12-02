@@ -194,6 +194,12 @@ const AskingRemainingInfo = ({
 
           <Input
             name="phone_whatsapp"
+            onChange={event =>
+              formRef.current.setFieldValue(
+                'phone_whatsapp',
+                event.target.value,
+              )
+            }
             label="Whatsapp"
             icon={FaWhatsapp}
             isSubmit
@@ -344,7 +350,7 @@ const OrderReview = (): ReactElement => {
             'Ocorreu um erro ao tentar receber a solicitação de agendamento, tente novamente',
         });
       });
-  }, [token, quote, addToast, patient, router, user, prices]);
+  }, [token, quote, addToast, router, user, prices]);
 
   return (
     <PageTemplate

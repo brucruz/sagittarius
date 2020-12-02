@@ -179,14 +179,41 @@ const SignUpPage = (): ReactElement => {
       <Form ref={formRef} onSubmit={handleSubmit}>
         <InputGroupTitle>Dados Pessoais</InputGroupTitle>
 
-        <Input name="first_name" label="Nome *" icon={MdPerson} isSubmit />
-        <Input name="last_name" label="Sobrenome *" icon={MdPerson} isSubmit />
+        <Input
+          name="first_name"
+          onChange={event =>
+            formRef.current.setFieldValue('first_name', event.target.value)
+          }
+          label="Nome *"
+          icon={MdPerson}
+          isSubmit
+        />
+        <Input
+          name="last_name"
+          onChange={event =>
+            formRef.current.setFieldValue('last_name', event.target.value)
+          }
+          label="Sobrenome *"
+          icon={MdPerson}
+          isSubmit
+        />
 
         <InputGroupTitle>Contato</InputGroupTitle>
 
-        <Input name="email" label="E-mail *" icon={MdMail} isSubmit />
+        <Input
+          name="email"
+          onChange={event =>
+            formRef.current.setFieldValue('email', event.target.value)
+          }
+          label="E-mail *"
+          icon={MdMail}
+          isSubmit
+        />
         <Input
           name="phone_whatsapp"
+          onChange={event =>
+            formRef.current.setFieldValue('phone_whatsapp', event.target.value)
+          }
           label="WhatsApp *"
           icon={FaWhatsapp}
           isSubmit
@@ -196,6 +223,9 @@ const SignUpPage = (): ReactElement => {
 
         <Input
           name="password"
+          onChange={event =>
+            formRef.current.setFieldValue('password', event.target.value)
+          }
           type="password"
           label="Senha *"
           icon={MdLock}
@@ -203,6 +233,12 @@ const SignUpPage = (): ReactElement => {
         />
         <Input
           name="password_confirmation"
+          onChange={event =>
+            formRef.current.setFieldValue(
+              'password_confirmation',
+              event.target.value,
+            )
+          }
           type="password"
           label="Confirmação de Senha *"
           icon={MdLock}

@@ -6,6 +6,7 @@ import pagarme from 'pagarme';
 import Api from '@/services/api';
 import PricesInBag from '@/@types/PricesInBag';
 import User from '@/@types/User';
+import mixpanel from 'mixpanel-browser';
 
 interface BillOfExchangeRules {
   boleto_expiration_date: string;
@@ -76,6 +77,15 @@ const PaymentProvider = ({ children }): ReactElement => {
           tangible: false,
         });
       });
+    });
+
+    user && mixpanel.identify(user.id);
+    mixpanel.track('Payment Trial', {
+      Value: paymentData.amount, // total
+      'Exams Count': items.length, // contagem
+      'Payment Method': 'bill of exchange', // boleto, cartão de crédito etc
+      Installments: paymentData.installments && paymentData.installments, // número de parcelas, se existir
+      // 'Payer': string, // self ou other
     });
 
     pagarme.client
