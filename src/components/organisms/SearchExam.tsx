@@ -1,8 +1,6 @@
 /* eslint-disable no-shadow */
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useMemo, useState, ReactElement } from 'react';
-
-import { MdSearch, MdPlace } from 'react-icons/md';
 import mixpanel from 'mixpanel-browser';
 import {
   AddressState,
@@ -15,15 +13,12 @@ import usePlacesAutocomplete from 'use-places-autocomplete';
 import { useSearchExam } from '@/hooks/searchExam';
 import { useAuth } from '@/hooks/auth';
 import { useToast } from '@/hooks/toast';
-import ExamSearchResult from '@/@types/ExamSearchResult';
-import examIndex from '@/services/search';
 import { buildSearchQuery, executeSearchQuery } from '@/helpers/searchExams';
 import {
   EXAMS as EXAMS_CONSTANT,
   EXAM as EXAM_CONSTANT,
 } from '@/constants/examsSearch';
 import InputWithSuggestions from '@/components/molecule/InputWithSuggestions';
-import Input from '../atom/Input';
 import PageHeader from '../molecule/PageHeader';
 import TitleMain from '../molecule/TitleMain';
 import ButtonNext from '../atom/ButtonNext';

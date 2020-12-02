@@ -7,10 +7,10 @@ import Button from '@/components/atom/Button';
 import { Container } from '@/styles/pages/checkout/[patientId]/Payment';
 import { usePayment } from '@/hooks/payment';
 import { useAuth } from '@/hooks/auth';
+import PaymentSelector from '@/components/organisms/PaymentSelector';
 import axios, { AxiosResponse } from 'axios';
 import mixpanel from 'mixpanel-browser';
 import { useBag } from '@/hooks/bag';
-import PaymentSelector from '@/components/organisms/PaymentSelector';
 
 interface IPageTemplateState extends PageHeaderProps {
   titleMain: {

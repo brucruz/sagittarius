@@ -87,13 +87,32 @@ export const ModalContainer = styled.div`
 
 export const CardContainer = styled.div`
   margin: 16px 0;
+  max-height: 220px;
+  overflow-y: scroll;
+
+  &::-webkit-scrollbar {
+    display: block !important;
+  }
+
+  & > div {
+    margin-top: 16px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #4d49c4;
+  }
+
+  &::-webkit-scrollbar {
+    width: 5px;
+  }
 
   & > div {
     margin-top: 16px;
   }
 `;
 
-export const Card = styled.div`
+export const CardContent = styled.div`
+  cursor: pointer;
   display: flex;
   align-items: center;
   padding: 6px 16px;

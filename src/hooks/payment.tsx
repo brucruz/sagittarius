@@ -183,10 +183,13 @@ const PaymentProvider = ({ children }): ReactElement => {
       .then(client =>
         client.transactions.create({
           amount: paymentData.amount * 100,
-          card_number: paymentData.card.card_number,
-          card_cvv: paymentData.card.card_cvv,
-          card_expiration_date: `${paymentData.card.card_expiration_month}${paymentData.card.card_expiration_year[2]}${paymentData.card.card_expiration_year[3]}`,
-          card_holder_name: paymentData.card.card_holder_name,
+          card_id: paymentData.card?.card_id,
+          card_number: paymentData.card?.card_number,
+          card_cvv: paymentData.card?.card_cvv,
+          card_expiration_date:
+            !paymentData.card.card_id &&
+            `${paymentData.card?.card_expiration_month}${paymentData.card?.card_expiration_year[2]}${paymentData.card?.card_expiration_year[3]}`,
+          card_holder_name: paymentData.card?.card_holder_name,
           payment_method: paymentData.payment_method,
           customer: {
             external_id: user.id,
@@ -200,7 +203,13 @@ const PaymentProvider = ({ children }): ReactElement => {
                 number: paymentData.document.document_number,
               },
             ],
-            phone_numbers: [`+55${paymentData.tel}`],
+            phone_numbers: [
+              `${
+                paymentData.tel.includes('+55')
+                  ? paymentData.tel
+                  : `+55${paymentData.tel}`
+              }`,
+            ],
           },
           billing: {
             name: paymentData.full_name,
@@ -225,6 +234,16 @@ const PaymentProvider = ({ children }): ReactElement => {
 
         const bagId = sessionStorage.getItem('@Heali:bagId');
         const quoteObject = JSON.parse(sessionStorage.getItem('@Heali:quote'));
+
+        user && mixpanel.identify(user.id);
+        mixpanel.track('Payment Trial', {
+          Value: paymentData.amount,
+          'Exams Count': items.length,
+          'Payment Method': 'credit card',
+          Installments: paymentData.installments && paymentData.installments,
+          'Payment Response Status': transaction.status,
+          // 'Payer': string, // self ou other
+        });
 
         Api.post(
           '/payments',
