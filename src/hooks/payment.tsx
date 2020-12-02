@@ -60,8 +60,7 @@ const PaymentProvider = ({ children }): ReactElement => {
         'yyyy-MM-dd',
       );
     } else if (dateDiffInDays < 10) {
-      const currentDay = getDate(currentDate);
-      const daysToAdd = currentDay + dateDiffInDays - 3 - currentDay;
+      const daysToAdd = dateDiffInDays - 3;
 
       billOfExchangeRules.boleto_expiration_date = format(
         add(currentDate, { days: daysToAdd }),
