@@ -7,10 +7,10 @@ import Button from '@/components/atom/Button';
 import { Container } from '@/styles/pages/checkout/[patientId]/Payment';
 import { usePayment } from '@/hooks/payment';
 import { useAuth } from '@/hooks/auth';
-import { useBag } from '@/hooks/bag';
-import PaymentSelector from '@/components/organisms/PaymentSelector';
 import axios, { AxiosResponse } from 'axios';
 import mixpanel from 'mixpanel-browser';
+import { useBag } from '@/hooks/bag';
+import PaymentSelector from '@/components/organisms/PaymentSelector';
 
 interface IPageTemplateState extends PageHeaderProps {
   titleMain: {
@@ -41,9 +41,8 @@ const pageTemplateState: IPageTemplateState[] = [
       stepper: '1/3',
     },
     titleMain: {
-      title: 'Quais são os dados do pagador?',
-      subTitle:
-        'Estes dados são necessários para obtermos aprovação do pagamento',
+      title: 'Como prefere Pagar?',
+      subTitle: 'Selecione a forma de pagamento',
     },
   },
   {
@@ -52,7 +51,7 @@ const pageTemplateState: IPageTemplateState[] = [
       stepper: '2/3',
     },
     titleMain: {
-      title: 'Qual o endereço de cobrança?',
+      title: 'Quais são os dados do pagador?',
       subTitle:
         'Estes dados são necessários para obtermos aprovação do pagamento',
     },
@@ -63,8 +62,9 @@ const pageTemplateState: IPageTemplateState[] = [
       stepper: '3/3',
     },
     titleMain: {
-      title: 'Como prefere pagar?',
-      subTitle: 'Selecione a forma de pagamento',
+      title: 'Qual o endereço de cobrança?',
+      subTitle:
+        'Estes dados são necessários para obtermos aprovação do pagamento',
     },
   },
 ];
@@ -78,8 +78,14 @@ export default function Payment(): ReactElement {
     {} as DisabledInputs,
   );
   const [useUserData, setUseUserData] = useState(false);
+  const { bagItems } = useBag();
 
-  const { paymentData, setPaymentData } = usePayment();
+  const {
+    paymentData,
+    setPaymentData,
+    handlePaymentWithCreditCard,
+  } = usePayment();
+
   const { bagTotalPrice } = useBag();
   const { user } = useAuth();
 
@@ -98,7 +104,7 @@ export default function Payment(): ReactElement {
   }, [user]);
 
   useEffect(() => {
-    if (currentStep === 0) {
+    if (currentStep === 1) {
       if (
         !paymentData.full_name ||
         !paymentData.document?.document_number ||
@@ -109,7 +115,7 @@ export default function Payment(): ReactElement {
       } else {
         setIsContinueButtonDisabled(false);
       }
-    } else if (currentStep === 1) {
+    } else if (currentStep === 2) {
       if (
         !paymentData.address?.cep ||
         !paymentData.address?.city ||
@@ -168,6 +174,9 @@ export default function Payment(): ReactElement {
     >
       <Container>
         {currentStep === 0 && (
+          <PaymentSelector handleCurrentStep={handleCurrentStep} />
+        )}
+        {currentStep === 1 && (
           <>
             <Checkbox
               label="Utilizar meus dados de usuário para o pagamento"
@@ -246,7 +255,7 @@ export default function Payment(): ReactElement {
             />
           </>
         )}
-        {currentStep === 1 && (
+        {currentStep === 2 && (
           <>
             <Input
               className="input-payment"
@@ -421,11 +430,17 @@ export default function Payment(): ReactElement {
             />
           </>
         )}
-        {currentStep === 2 && <PaymentSelector />}
       </Container>
-      {currentStep !== 2 && (
-        <Button disabled={isContinueButtonDisabled} onClick={handleCurrentStep}>
-          Continuar
+      {currentStep !== 0 && (
+        <Button
+          disabled={isContinueButtonDisabled}
+          onClick={() =>
+            currentStep === 1
+              ? handleCurrentStep()
+              : handlePaymentWithCreditCard(bagItems, user)
+          }
+        >
+          {currentStep === 1 ? 'Continuar' : 'Finalizar pagamento'}
         </Button>
       )}
     </PageTemplate>

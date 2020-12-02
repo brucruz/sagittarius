@@ -13,28 +13,27 @@ import discover from '@/assets/components/atoms/Input/discover.svg';
 import mastercard from '@/assets/components/atoms/Input/mastercard.svg';
 import { usePayment } from '@/hooks/payment';
 import { useBag } from '@/hooks/bag';
-import formatValueWo$ from '@/utils/formatValueWo$';
-import pagarme from 'pagarme';
-import Api from '@/services/api';
-import { useAuth } from '@/hooks/auth';
-import { useRouter } from 'next/router';
 import Modal from '@/components/organisms/Modal';
 import { FiCheck } from 'react-icons/fi';
-import CreditCardFields from '@/components/molecule/CreditCardFields';
 import { MdClose } from 'react-icons/md';
+import CreditCardFields from '@/components/molecule/CreditCardFields';
+import formatValueWo$ from '@/utils/formatValueWo$';
 import Button from '../atom/Button';
 
-const CreditCardForm = (): ReactElement => {
+interface CreditCardFormProps {
+  handleCurrentStep?: () => void;
+}
+
+const CreditCardForm = ({
+  handleCurrentStep,
+}: CreditCardFormProps): ReactElement => {
   const [isPaymentButtonDisabled, setIsPaymentButtonDisabled] = useState(true);
   const [displayChangeCreditCard, setDisplayChangeCreditCard] = useState(false);
   const [displayAddNewCard, setDisplayAddNewCard] = useState(false);
   const { paymentData, setPaymentData } = usePayment();
-  const { bagTotalPrice, bagItems } = useBag();
-  const { user } = useAuth();
+  const { bagTotalPrice } = useBag();
 
-  const router = useRouter();
-
-  const alreadyHasCreditCard = true;
+  const alreadyHasCreditCard = false;
 
   useEffect(() => {
     if (
@@ -58,84 +57,7 @@ const CreditCardForm = (): ReactElement => {
   }));
 
   function handlePaymentClick(): void {
-    const items = [];
-
-    bagItems.forEach(item => {
-      item.price.forEach(price => {
-        items.push({
-          id: price.exam_id,
-          title: price.exam.title,
-          unit_price: price.price,
-          quantity: 1,
-          tangible: false,
-        });
-      });
-    });
-
-    pagarme.client
-      .connect({ api_key: process.env.NEXT_PUBLIC_PAGARME_API_KEY })
-      .then(client =>
-        client.transactions.create({
-          amount: paymentData.amount * 100,
-          card_number: paymentData.card.card_number,
-          card_cvv: paymentData.card.card_cvv,
-          card_expiration_date: `${paymentData.card.card_expiration_month}${paymentData.card.card_expiration_year[2]}${paymentData.card.card_expiration_year[3]}`,
-          card_holder_name: paymentData.card.card_holder_name,
-          payment_method: paymentData.payment_method,
-          customer: {
-            external_id: user.id,
-            name: paymentData.full_name,
-            email: paymentData.email,
-            country: 'br',
-            type: 'individual',
-            documents: [
-              {
-                type: 'cpf',
-                number: paymentData.document.document_number,
-              },
-            ],
-            phone_numbers: [`+55${paymentData.tel}`],
-          },
-          billing: {
-            name: paymentData.full_name,
-            address: {
-              street: paymentData.address.street,
-              street_number: paymentData.address.street_number,
-              zipcode: paymentData.address.cep,
-              country: 'br',
-              state: paymentData.address.state,
-              city: paymentData.address.city,
-            },
-          },
-          installments: paymentData.installments
-            ? paymentData.installments.split('x')[0]
-            : 1,
-          items,
-        }),
-      )
-      .then(transaction => {
-        const url = window.location.pathname.split('pagamento')[0];
-        const token = localStorage.getItem('@Heali:token');
-
-        Api.post('/payments', transaction, {
-          headers: {
-            Authorization: `Bearer: ${token}`,
-          },
-        }).then(() => {
-          if (['paid', 'authorized'].includes(transaction.status)) {
-            router.replace(`${url}obrigado`);
-          } else if (transaction.status === 'processing') {
-            router.replace(`${url}aguardando-aprovacao`);
-          } else if (transaction.status === 'refused') {
-            router.replace({
-              pathname: `${url}erro-no-pagamento`,
-              query: {
-                status_erro: transaction.acquirer_response_code,
-              },
-            });
-          }
-        });
-      });
+    handleCurrentStep();
   }
 
   return (

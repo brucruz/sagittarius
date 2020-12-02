@@ -12,7 +12,13 @@ import { useAuth } from '@/hooks/auth';
 import { useBag } from '@/hooks/bag';
 import { QuoteResponse } from '@/pages/checkout/[patientId]/confirmar';
 
-const PaymentSelector = (): ReactElement => {
+interface PaymentSelectorProps {
+  handleCurrentStep?: () => void;
+}
+
+const PaymentSelector = ({
+  handleCurrentStep,
+}: PaymentSelectorProps): ReactElement => {
   const [quote, setQuote] = useState<QuoteResponse>({} as QuoteResponse);
   const { paymentData, setPaymentData, handleBillOfExchange } = usePayment();
   const { user } = useAuth();
@@ -40,7 +46,9 @@ const PaymentSelector = (): ReactElement => {
             })
           }
         />
-        {paymentData.payment_method === CREDIT_CARD && <CreditCardForm />}
+        {paymentData.payment_method === CREDIT_CARD && (
+          <CreditCardForm handleCurrentStep={handleCurrentStep} />
+        )}
       </PaymentMethodSelector>
       <PaymentMethodSelector
         className={
