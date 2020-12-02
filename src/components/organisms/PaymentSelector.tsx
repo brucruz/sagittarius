@@ -10,7 +10,6 @@ import {
 import CreditCardForm from '@/components/organisms/CreditCardForm';
 import { useAuth } from '@/hooks/auth';
 import { useBag } from '@/hooks/bag';
-import { useDates } from '@/hooks/dates';
 import { QuoteResponse } from '@/pages/checkout/[patientId]/confirmar';
 
 const PaymentSelector = (): ReactElement => {

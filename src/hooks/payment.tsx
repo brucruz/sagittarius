@@ -1,7 +1,6 @@
 import { createContext, ReactElement, useContext, useState } from 'react';
 import { IFormPayment } from '@/@types/Payment';
 import { useRouter } from 'next/router';
-import moment from 'moment';
 import { differenceInBusinessDays, format, getDate, add } from 'date-fns';
 import pagarme from 'pagarme';
 import Api from '@/services/api';

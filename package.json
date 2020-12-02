@@ -26,7 +26,6 @@
     "graphql": "^15.4.0",
     "html-react-parser": "^0.14.0",
     "mixpanel-browser": "^2.39.0",
-    "moment": "^2.29.1",
     "next": "9.5.5",
     "next-images": "^1.6.0",
     "pagarme": "^4.13.0",
