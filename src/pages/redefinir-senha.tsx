@@ -111,12 +111,21 @@ export default function ResetPassword(): ReactElement {
           isSubmit
           type="password"
           name="password"
+          onChange={event =>
+            formRef.current.setFieldValue('password', event.target.value)
+          }
           label="Nova senha"
         />
         <Input
           icon={MdEmail}
           isSubmit
           type="password"
+          onChange={event =>
+            formRef.current.setFieldValue(
+              'password_confirmation',
+              event.target.value,
+            )
+          }
           name="password_confirmation"
           label="Confirmar nova senha"
         />

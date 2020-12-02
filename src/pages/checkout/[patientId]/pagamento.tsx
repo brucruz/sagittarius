@@ -7,6 +7,7 @@ import Button from '@/components/atom/Button';
 import { Container } from '@/styles/pages/checkout/[patientId]/Payment';
 import { usePayment } from '@/hooks/payment';
 import { useAuth } from '@/hooks/auth';
+import { useBag } from '@/hooks/bag';
 import PaymentSelector from '@/components/organisms/PaymentSelector';
 import axios, { AxiosResponse } from 'axios';
 import mixpanel from 'mixpanel-browser';
@@ -79,7 +80,15 @@ export default function Payment(): ReactElement {
   const [useUserData, setUseUserData] = useState(false);
 
   const { paymentData, setPaymentData } = usePayment();
+  const { bagTotalPrice } = useBag();
   const { user } = useAuth();
+
+  if (!paymentData.amount) {
+    setPaymentData({
+      ...paymentData,
+      amount: bagTotalPrice,
+    });
+  }
 
   useEffect(() => {
     user && mixpanel.identify(user.id);
