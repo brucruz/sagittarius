@@ -100,6 +100,9 @@ export default function ForgotPassword(): ReactElement {
           type="email"
           name="email"
           label="E-mail"
+          onChange={event =>
+            formRef.current.setFieldValue('email', event.target.value)
+          }
         />
         <Button type="submit" className="margin-top">
           Recuperar senha

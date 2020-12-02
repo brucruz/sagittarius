@@ -8,22 +8,22 @@ import {
   CloseDiv,
 } from '@/styles/components/organisms/CreditCardForm';
 import Dropdown from '@/components/atom/Dropdown';
-import { usePayment } from '@/hooks/payment';
-import { useBag } from '@/hooks/bag';
-import formatValueWo$ from '@/utils/formatValueWo$';
 import Api from '@/services/api';
-import Modal from '@/components/organisms/Modal';
-import { FiCheck } from 'react-icons/fi';
-import CreditCardFields from '@/components/molecule/CreditCardFields';
-import { MdClose } from 'react-icons/md';
 import { AxiosResponse } from 'axios';
 import diners from '@/assets/components/atoms/Input/diners-club.svg';
 import amex from '@/assets/components/atoms/Input/american-express.svg';
 import visa from '@/assets/components/atoms/Input/visa.svg';
-import discover from '@/assets/components/atoms/Input/discover.svg';
 import generic from '@/assets/components/atoms/Input/generic.svg';
+import discover from '@/assets/components/atoms/Input/discover.svg';
 import mastercard from '@/assets/components/atoms/Input/mastercard.svg';
 import { useAuth } from '@/hooks/auth';
+import { usePayment } from '@/hooks/payment';
+import { useBag } from '@/hooks/bag';
+import Modal from '@/components/organisms/Modal';
+import { FiCheck } from 'react-icons/fi';
+import { MdClose } from 'react-icons/md';
+import CreditCardFields from '@/components/molecule/CreditCardFields';
+import formatValueWo$ from '@/utils/formatValueWo$';
 import Button from '../atom/Button';
 
 interface CreditCardFormProps {
@@ -176,13 +176,6 @@ const CreditCardForm = ({
       setIsPaymentButtonDisabled(true);
     }
   }, [paymentData.installments, paymentData.card, setPaymentData]);
-
-  if (!paymentData.amount) {
-    setPaymentData({
-      ...paymentData,
-      amount: bagTotalPrice,
-    });
-  }
 
   const installments = Array.from(Array(12), (_, index) => ({
     id: index,

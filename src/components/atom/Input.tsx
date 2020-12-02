@@ -13,7 +13,6 @@ import {
 } from 'react';
 import mixpanel from 'mixpanel-browser';
 import InputMask from 'react-input-mask';
-
 import { MdRemoveRedEye } from 'react-icons/md';
 import { Suggestion } from 'use-places-autocomplete';
 import { EXAMS as EXAMS_CONSTANT } from '@/constants/examsSearch';
@@ -50,7 +49,6 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   icon?: any;
   type?: string;
   suggestions?: SuggestionProps;
-  getInputValue?(value: string): void;
   isSubmit?: boolean;
   mask?: string;
   iconAfter?: string;
@@ -64,7 +62,6 @@ const Input = ({
   errorProps = '',
   suggestions,
   type,
-  getInputValue,
   value,
   isSubmit,
   mask,
@@ -113,11 +110,7 @@ const Input = ({
 
   const handleInputChange = useCallback(() => {
     setIsFilled(!!inputRef.current?.value);
-
-    suggestions && getInputValue(inputRef.current?.value);
-
-    suggestions && setHasSuggestions(true);
-  }, [suggestions, getInputValue]);
+  }, []);
 
   user && mixpanel.identify(user.id);
   mixpanel.track_links(

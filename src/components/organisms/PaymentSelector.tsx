@@ -1,4 +1,4 @@
-import { ReactElement } from 'react';
+import { ReactElement, useState, useEffect } from 'react';
 import RadioButton from '@/components/atom/RadioButton';
 import { usePayment } from '@/hooks/payment';
 import Button from '@/components/atom/Button';
@@ -8,6 +8,9 @@ import {
   BillOfExchangeContainer,
 } from '@/styles/components/organisms/PaymentSelector';
 import CreditCardForm from '@/components/organisms/CreditCardForm';
+import { useAuth } from '@/hooks/auth';
+import { useBag } from '@/hooks/bag';
+import { QuoteResponse } from '@/pages/checkout/[patientId]/confirmar';
 
 interface PaymentSelectorProps {
   handleCurrentStep?: () => void;
@@ -16,7 +19,14 @@ interface PaymentSelectorProps {
 const PaymentSelector = ({
   handleCurrentStep,
 }: PaymentSelectorProps): ReactElement => {
-  const { paymentData, setPaymentData } = usePayment();
+  const [quote, setQuote] = useState<QuoteResponse>({} as QuoteResponse);
+  const { paymentData, setPaymentData, handleBillOfExchange } = usePayment();
+  const { user } = useAuth();
+  const { bagItems } = useBag();
+
+  useEffect(() => {
+    setQuote(JSON.parse(sessionStorage.getItem('@Heali:quote')));
+  }, []);
 
   return (
     <>
@@ -61,7 +71,13 @@ const PaymentSelector = ({
         />
         {paymentData.payment_method === BILL_OF_EXCHANGE && (
           <BillOfExchangeContainer>
-            <Button>Pagar com Boleto Bancário</Button>
+            <Button
+              onClick={() =>
+                handleBillOfExchange(quote.dates.to, bagItems, user)
+              }
+            >
+              Pagar com Boleto Bancário
+            </Button>
           </BillOfExchangeContainer>
         )}
       </PaymentMethodSelector>

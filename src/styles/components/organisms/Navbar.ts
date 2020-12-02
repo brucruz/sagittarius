@@ -25,7 +25,7 @@ export const SidebarAndLogo = styled.section`
   display: flex;
 `;
 
-export const Logo = styled.h1`
+export const Logo = styled.h2`
   font-style: normal;
   font-weight: 900;
   color: #4d49c4;

@@ -94,6 +94,10 @@ export const CardContainer = styled.div`
     display: block !important;
   }
 
+  & > div {
+    margin-top: 16px;
+  }
+
   &::-webkit-scrollbar-thumb {
     background-color: #4d49c4;
   }
