@@ -1,7 +1,13 @@
 import { createContext, ReactElement, useContext, useState } from 'react';
 import { IFormPayment } from '@/@types/Payment';
 import { useRouter } from 'next/router';
-import { differenceInBusinessDays, format, getDate, add } from 'date-fns';
+import {
+  differenceInBusinessDays,
+  format,
+  getDate,
+  add,
+  parse,
+} from 'date-fns';
 import pagarme from 'pagarme';
 import Api from '@/services/api';
 import PricesInBag from '@/@types/PricesInBag';
@@ -43,11 +49,8 @@ const PaymentProvider = ({ children }): ReactElement => {
         'Favor não aceitar após a data de vencimento deste boleto',
     } as BillOfExchangeRules;
 
-    const dateSplited = preferredDateTo.split('/');
     const currentDate = new Date();
-    const userFinalDate = new Date(
-      `${dateSplited[1]}/${dateSplited[0]}/${dateSplited[2]}`,
-    );
+    const userFinalDate = parse(preferredDateTo, 'MM-dd-yyyy', new Date());
 
     const dateDiffInDays = differenceInBusinessDays(userFinalDate, currentDate);
 
