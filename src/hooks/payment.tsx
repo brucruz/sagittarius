@@ -82,6 +82,9 @@ const PaymentProvider = ({ children }): ReactElement => {
       });
     });
 
+    const quoteObject = JSON.parse(sessionStorage.getItem('@Heali:quote'));
+    const bagId = sessionStorage.getItem('@Heali:bagId');
+
     pagarme.client
       .connect({ api_key: process.env.NEXT_PUBLIC_PAGARME_API_KEY })
       .then(client =>
@@ -115,6 +118,10 @@ const PaymentProvider = ({ children }): ReactElement => {
             },
           },
           items,
+          metadata: {
+            bagId,
+            quoteId: quoteObject.id,
+          },
         }),
       )
       .then(transaction => {
@@ -131,8 +138,6 @@ const PaymentProvider = ({ children }): ReactElement => {
         const url = window.location.pathname.split('pagamento')[0];
         const token = localStorage.getItem('@Heali:token');
 
-        const quoteObject = JSON.parse(sessionStorage.getItem('@Heali:quote'));
-        const bagId = sessionStorage.getItem('@Heali:bagId');
         Api.post(
           '/payments',
           {
@@ -177,6 +182,9 @@ const PaymentProvider = ({ children }): ReactElement => {
         });
       });
     });
+
+    const bagId = sessionStorage.getItem('@Heali:bagId');
+    const quoteObject = JSON.parse(sessionStorage.getItem('@Heali:quote'));
 
     pagarme.client
       .connect({ api_key: process.env.NEXT_PUBLIC_PAGARME_API_KEY })
@@ -226,14 +234,15 @@ const PaymentProvider = ({ children }): ReactElement => {
             ? paymentData.installments.split('x')[0]
             : 1,
           items,
+          metadata: {
+            bagId,
+            quoteId: quoteObject.id,
+          },
         }),
       )
       .then(transaction => {
         const url = window.location.pathname.split('pagamento')[0];
         const token = localStorage.getItem('@Heali:token');
-
-        const bagId = sessionStorage.getItem('@Heali:bagId');
-        const quoteObject = JSON.parse(sessionStorage.getItem('@Heali:quote'));
 
         user && mixpanel.identify(user.id);
         mixpanel.track('Payment Trial', {
