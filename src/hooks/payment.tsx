@@ -15,8 +15,8 @@ interface BillOfExchangeRules {
 }
 
 interface BillOfExchangeInfo {
-  boleto_url: string;
-  boleto_barcode: string;
+  boleto_url?: string;
+  boleto_barcode?: string;
 }
 
 interface PaymentContextData {
@@ -42,7 +42,7 @@ const PaymentProvider = ({ children }): ReactElement => {
   const [
     billOfExchangeInfo,
     setBillOfExchangeInfo,
-  ] = useState<BillOfExchangeInfo>({} as BillOfExchangeInfo);
+  ] = useState<BillOfExchangeInfo>({});
 
   function handleBillOfExchange(
     preferredDateTo: string,
@@ -299,10 +299,10 @@ const PaymentProvider = ({ children }): ReactElement => {
     <PaymentContext.Provider
       value={{
         paymentData,
+        billOfExchangeInfo,
         setPaymentData,
         handlePaymentWithCreditCard,
         handleBillOfExchange,
-        billOfExchangeInfo,
         setBillOfExchangeInfo,
       }}
     >

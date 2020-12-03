@@ -34,17 +34,17 @@ export default function WaitingPayment(): ReactElement {
       />
 
       <Content>
-        <CopyToClipboard text={billOfExchangeInfo.boleto_barcode}>
+        <CopyToClipboard text={billOfExchangeInfo.boleto_barcode || ''}>
           <CopyContent>
             <div className="text">
               <label>Seu código de barras</label>
-              <span>{billOfExchangeInfo.boleto_barcode}</span>
+              <span>{billOfExchangeInfo.boleto_barcode || ''}</span>
             </div>
             <IoIosCopy />
           </CopyContent>
         </CopyToClipboard>
 
-        <Link href={billOfExchangeInfo.boleto_url} passHref>
+        <Link href={billOfExchangeInfo.boleto_url || ''} passHref>
           <a target="_blank">
             <Button>Visualizar Boleto</Button>
           </a>
