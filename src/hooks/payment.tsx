@@ -14,6 +14,11 @@ interface BillOfExchangeRules {
   boleto_rules: string[];
 }
 
+interface BillOfExchangeInfo {
+  boleto_url?: string;
+  boleto_barcode?: string;
+}
+
 interface PaymentContextData {
   paymentData: IFormPayment;
   setPaymentData: (value: IFormPayment) => void;
@@ -23,6 +28,8 @@ interface PaymentContextData {
     bagItems: PricesInBag[],
     user: User,
   ) => void;
+  billOfExchangeInfo: BillOfExchangeInfo;
+  setBillOfExchangeInfo: (value: BillOfExchangeInfo) => void;
 }
 
 const PaymentContext = createContext<PaymentContextData>(
@@ -32,6 +39,10 @@ const PaymentContext = createContext<PaymentContextData>(
 const PaymentProvider = ({ children }): ReactElement => {
   const router = useRouter();
   const [paymentData, setPaymentData] = useState<IFormPayment>({});
+  const [
+    billOfExchangeInfo,
+    setBillOfExchangeInfo,
+  ] = useState<BillOfExchangeInfo>({});
 
   function handleBillOfExchange(
     preferredDateTo: string,
@@ -104,7 +115,13 @@ const PaymentProvider = ({ children }): ReactElement => {
                 number: paymentData.document.document_number,
               },
             ],
-            phone_numbers: [`+55${paymentData.tel}`],
+            phone_numbers: [
+              `${
+                paymentData.tel.includes('+55')
+                  ? paymentData.tel
+                  : `+55${paymentData.tel}`
+              }`,
+            ],
           },
           billing: {
             name: paymentData.full_name,
@@ -152,6 +169,10 @@ const PaymentProvider = ({ children }): ReactElement => {
           },
         ).then(() => {
           if (transaction.status === 'waiting_payment') {
+            setBillOfExchangeInfo({
+              boleto_url: transaction.boleto_url,
+              boleto_barcode: transaction.boleto_barcode,
+            });
             router.replace(`${url}aguardando-pagamento-boleto`);
           } else if (transaction.status === 'refused') {
             router.replace({
@@ -287,9 +308,11 @@ const PaymentProvider = ({ children }): ReactElement => {
     <PaymentContext.Provider
       value={{
         paymentData,
+        billOfExchangeInfo,
         setPaymentData,
         handlePaymentWithCreditCard,
         handleBillOfExchange,
+        setBillOfExchangeInfo,
       }}
     >
       {children}

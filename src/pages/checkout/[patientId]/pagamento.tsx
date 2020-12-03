@@ -11,6 +11,7 @@ import PaymentSelector from '@/components/organisms/PaymentSelector';
 import axios, { AxiosResponse } from 'axios';
 import mixpanel from 'mixpanel-browser';
 import { useBag } from '@/hooks/bag';
+import { QuoteResponse } from '@/pages/checkout/[patientId]/confirmar';
 
 interface IPageTemplateState extends PageHeaderProps {
   titleMain: {
@@ -70,6 +71,8 @@ const pageTemplateState: IPageTemplateState[] = [
 ];
 
 export default function Payment(): ReactElement {
+  const [quote, setQuote] = useState<QuoteResponse>({} as QuoteResponse);
+
   const [currentStep, setCurrentStep] = useState(0);
   const [isContinueButtonDisabled, setIsContinueButtonDisabled] = useState(
     false,
@@ -84,15 +87,20 @@ export default function Payment(): ReactElement {
     paymentData,
     setPaymentData,
     handlePaymentWithCreditCard,
+    handleBillOfExchange,
   } = usePayment();
 
   const { bagTotalPrice } = useBag();
   const { user } = useAuth();
 
+  useEffect(() => {
+    setQuote(JSON.parse(sessionStorage.getItem('@Heali:quote')));
+  }, []);
+
   if (!paymentData.amount) {
     setPaymentData({
       ...paymentData,
-      amount: bagTotalPrice,
+      amount: bagTotalPrice * 100,
     });
   }
 
@@ -102,6 +110,19 @@ export default function Payment(): ReactElement {
       'Page Title': 'Payment Page',
     });
   }, [user]);
+
+  const handleFinishPayment = useCallback(() => {
+    paymentData.payment_method === 'credit_card'
+      ? handlePaymentWithCreditCard(bagItems, user)
+      : handleBillOfExchange(quote.dates.to, bagItems, user);
+  }, [
+    bagItems,
+    handleBillOfExchange,
+    handlePaymentWithCreditCard,
+    paymentData.payment_method,
+    quote.dates?.to,
+    user,
+  ]);
 
   useEffect(() => {
     if (currentStep === 1) {
@@ -435,9 +456,7 @@ export default function Payment(): ReactElement {
         <Button
           disabled={isContinueButtonDisabled}
           onClick={() =>
-            currentStep === 1
-              ? handleCurrentStep()
-              : handlePaymentWithCreditCard(bagItems, user)
+            currentStep === 1 ? handleCurrentStep() : handleFinishPayment()
           }
         >
           {currentStep === 1 ? 'Continuar' : 'Finalizar pagamento'}
