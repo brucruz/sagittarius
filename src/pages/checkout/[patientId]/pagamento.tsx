@@ -100,7 +100,7 @@ export default function Payment(): ReactElement {
   if (!paymentData.amount) {
     setPaymentData({
       ...paymentData,
-      amount: bagTotalPrice,
+      amount: bagTotalPrice * 100,
     });
   }
 
@@ -111,11 +111,18 @@ export default function Payment(): ReactElement {
     });
   }, [user]);
 
-  function handleFinishPayment(): void {
+  const handleFinishPayment = useCallback(() => {
     paymentData.payment_method === 'credit_card'
       ? handlePaymentWithCreditCard(bagItems, user)
       : handleBillOfExchange(quote.dates.to, bagItems, user);
-  }
+  }, [
+    bagItems,
+    handleBillOfExchange,
+    handlePaymentWithCreditCard,
+    paymentData.payment_method,
+    quote.dates?.to,
+    user,
+  ]);
 
   useEffect(() => {
     if (currentStep === 1) {
