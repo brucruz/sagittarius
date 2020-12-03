@@ -11,9 +11,11 @@ import {
 } from '@/styles/pages/checkout/[patientId]/WaitingBillToBePayed';
 import RateModal from '@/components/organisms/RateModal';
 import { IoIosCopy } from 'react-icons/io';
+import { usePayment } from '@/hooks/payment';
 
 export default function WaitingPayment(): ReactElement {
   const [displayRateModal, setDisplayRateModal] = useState(false);
+  const { billOfExchangeInfo } = usePayment();
 
   return (
     <PageTemplate
@@ -32,19 +34,17 @@ export default function WaitingPayment(): ReactElement {
       />
 
       <Content>
-        <CopyToClipboard text="34191.09016 54318.440671 03922.160001 9 84620000280951">
+        <CopyToClipboard text={billOfExchangeInfo.boleto_barcode}>
           <CopyContent>
             <div className="text">
               <label>Seu código de barras</label>
-              <span>
-                34191.09016 54318.440671 03922.160001 9 84620000280951
-              </span>
+              <span>{billOfExchangeInfo.boleto_barcode}</span>
             </div>
             <IoIosCopy />
           </CopyContent>
         </CopyToClipboard>
 
-        <Link href="https://www.google.com" passHref>
+        <Link href={billOfExchangeInfo.boleto_url} passHref>
           <a target="_blank">
             <Button>Visualizar Boleto</Button>
           </a>
