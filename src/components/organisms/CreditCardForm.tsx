@@ -156,8 +156,13 @@ const CreditCardForm = ({
       });
     };
 
-    if (userCards.length === 0) {
+    if (userCards.length === 0 && !paymentData.verifyCard) {
       fetchCards();
+    }
+
+    if (paymentData.verifyCard) {
+      setUserCards([]);
+      setSelectedCard({} as CardApiResponse);
     }
   }, [paymentData, setPaymentData, userCards.length]);
 

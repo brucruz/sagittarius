@@ -27,4 +27,5 @@ export interface IFormPayment {
   },
   amount?: number;
   installments?: string;
+  verifyCard?: boolean; 
 }
