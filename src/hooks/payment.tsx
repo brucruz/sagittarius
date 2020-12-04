@@ -7,6 +7,7 @@ import { differenceInBusinessDays, format, add, parse } from 'date-fns';
 import pagarme from 'pagarme';
 import Api from '@/services/api';
 import mixpanel from 'mixpanel-browser';
+import CardApiResponse from '@/@types/CardFromApi';
 
 interface BillOfExchangeRules {
   boleto_expiration_date: string;
@@ -14,7 +15,16 @@ interface BillOfExchangeRules {
   boleto_rules: string[];
 }
 
+interface BillOfExchangeInfo {
+  boleto_url?: string;
+  boleto_barcode?: string;
+}
+
 interface PaymentContextData {
+  userCards: CardApiResponse[];
+  setUserCards: (value: CardApiResponse[]) => void;
+  selectedCard: CardApiResponse;
+  setSelectedCard: (value: CardApiResponse) => void;
   paymentData: IFormPayment;
   setPaymentData: (value: IFormPayment) => void;
   handlePaymentWithCreditCard: (bagItems: PricesInBag[], user: User) => void;
@@ -23,6 +33,8 @@ interface PaymentContextData {
     bagItems: PricesInBag[],
     user: User,
   ) => void;
+  billOfExchangeInfo: BillOfExchangeInfo;
+  setBillOfExchangeInfo: (value: BillOfExchangeInfo) => void;
 }
 
 const PaymentContext = createContext<PaymentContextData>(
@@ -32,6 +44,16 @@ const PaymentContext = createContext<PaymentContextData>(
 const PaymentProvider = ({ children }): ReactElement => {
   const router = useRouter();
   const [paymentData, setPaymentData] = useState<IFormPayment>({});
+  const [
+    billOfExchangeInfo,
+    setBillOfExchangeInfo,
+  ] = useState<BillOfExchangeInfo>({});
+  const [userCards, setUserCards] = useState<CardApiResponse[]>(
+    [] as CardApiResponse[],
+  );
+  const [selectedCard, setSelectedCard] = useState<CardApiResponse>(
+    {} as CardApiResponse,
+  );
 
   function handleBillOfExchange(
     preferredDateTo: string,
@@ -91,7 +113,9 @@ const PaymentProvider = ({ children }): ReactElement => {
         client.transactions.create({
           ...billOfExchangeRules,
           amount: paymentData.amount,
+          async: false,
           payment_method: paymentData.payment_method,
+          postback_url: `${process.env.NEXT_PUBLIC_API_URL}/payments/postback`,
           customer: {
             external_id: user.id,
             name: paymentData.full_name,
@@ -104,7 +128,13 @@ const PaymentProvider = ({ children }): ReactElement => {
                 number: paymentData.document.document_number,
               },
             ],
-            phone_numbers: [`+55${paymentData.tel}`],
+            phone_numbers: [
+              `${
+                paymentData.tel.includes('+55')
+                  ? paymentData.tel
+                  : `+55${paymentData.tel}`
+              }`,
+            ],
           },
           billing: {
             name: paymentData.full_name,
@@ -151,7 +181,14 @@ const PaymentProvider = ({ children }): ReactElement => {
             },
           },
         ).then(() => {
-          if (transaction.status === 'waiting_payment') {
+          if (
+            transaction.status === 'waiting_payment' ||
+            transaction.status === 'processing'
+          ) {
+            setBillOfExchangeInfo({
+              boleto_url: transaction.boleto_url,
+              boleto_barcode: transaction.boleto_barcode,
+            });
             router.replace(`${url}aguardando-pagamento-boleto`);
           } else if (transaction.status === 'refused') {
             router.replace({
@@ -199,6 +236,8 @@ const PaymentProvider = ({ children }): ReactElement => {
             `${paymentData.card?.card_expiration_month}${paymentData.card?.card_expiration_year[2]}${paymentData.card?.card_expiration_year[3]}`,
           card_holder_name: paymentData.card?.card_holder_name,
           payment_method: paymentData.payment_method,
+          async: false,
+          postback_url: `${process.env.NEXT_PUBLIC_API_URL}/payments/postback`,
           customer: {
             external_id: user.id,
             name: paymentData.full_name,
@@ -286,10 +325,16 @@ const PaymentProvider = ({ children }): ReactElement => {
   return (
     <PaymentContext.Provider
       value={{
+        selectedCard,
+        userCards,
         paymentData,
+        billOfExchangeInfo,
         setPaymentData,
+        setSelectedCard,
+        setUserCards,
         handlePaymentWithCreditCard,
         handleBillOfExchange,
+        setBillOfExchangeInfo,
       }}
     >
       {children}

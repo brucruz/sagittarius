@@ -11,6 +11,8 @@ import PaymentSelector from '@/components/organisms/PaymentSelector';
 import axios, { AxiosResponse } from 'axios';
 import mixpanel from 'mixpanel-browser';
 import { useBag } from '@/hooks/bag';
+import { QuoteResponse } from '@/pages/checkout/[patientId]/confirmar';
+import { cpf } from 'cpf-cnpj-validator';
 
 interface IPageTemplateState extends PageHeaderProps {
   titleMain: {
@@ -70,6 +72,9 @@ const pageTemplateState: IPageTemplateState[] = [
 ];
 
 export default function Payment(): ReactElement {
+  const [quote, setQuote] = useState<QuoteResponse>({} as QuoteResponse);
+  const [isCpfValid, setIsCpfValid] = useState(null);
+
   const [currentStep, setCurrentStep] = useState(0);
   const [isContinueButtonDisabled, setIsContinueButtonDisabled] = useState(
     false,
@@ -84,15 +89,20 @@ export default function Payment(): ReactElement {
     paymentData,
     setPaymentData,
     handlePaymentWithCreditCard,
+    handleBillOfExchange,
   } = usePayment();
 
   const { bagTotalPrice } = useBag();
   const { user } = useAuth();
 
+  useEffect(() => {
+    setQuote(JSON.parse(sessionStorage.getItem('@Heali:quote')));
+  }, []);
+
   if (!paymentData.amount) {
     setPaymentData({
       ...paymentData,
-      amount: bagTotalPrice,
+      amount: bagTotalPrice * 100,
     });
   }
 
@@ -103,11 +113,26 @@ export default function Payment(): ReactElement {
     });
   }, [user]);
 
+  const handleFinishPayment = useCallback(() => {
+    paymentData.payment_method === 'credit_card'
+      ? handlePaymentWithCreditCard(bagItems, user)
+      : handleBillOfExchange(quote.dates.to, bagItems, user);
+  }, [
+    bagItems,
+    handleBillOfExchange,
+    handlePaymentWithCreditCard,
+    paymentData.payment_method,
+    quote.dates?.to,
+    user,
+  ]);
+
+  console.log(isCpfValid);
+
   useEffect(() => {
     if (currentStep === 1) {
       if (
         !paymentData.full_name ||
-        !paymentData.document?.document_number ||
+        !isCpfValid ||
         !paymentData.tel ||
         !paymentData.email
       ) {
@@ -136,6 +161,7 @@ export default function Payment(): ReactElement {
     paymentData.document,
     paymentData.tel,
     paymentData.email,
+    isCpfValid,
   ]);
 
   function handleCurrentStep(): void {
@@ -218,6 +244,15 @@ export default function Payment(): ReactElement {
               className="input-payment"
               name="input-user-document"
               label="CPF"
+              errorProps={
+                isCpfValid === false && 'O CPF digitado não é válido.'
+              }
+              onBlur={() =>
+                cpf.isValid(paymentData.document?.document_number)
+                  ? setIsCpfValid(true)
+                  : setIsCpfValid(false)
+              }
+              mask="99999999999"
               value={paymentData.document?.document_number}
               onChange={event =>
                 setPaymentData({
@@ -435,9 +470,7 @@ export default function Payment(): ReactElement {
         <Button
           disabled={isContinueButtonDisabled}
           onClick={() =>
-            currentStep === 1
-              ? handleCurrentStep()
-              : handlePaymentWithCreditCard(bagItems, user)
+            currentStep === 1 ? handleCurrentStep() : handleFinishPayment()
           }
         >
           {currentStep === 1 ? 'Continuar' : 'Finalizar pagamento'}

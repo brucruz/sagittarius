@@ -24,69 +24,13 @@ import { FiCheck } from 'react-icons/fi';
 import { MdClose } from 'react-icons/md';
 import CreditCardFields from '@/components/molecule/CreditCardFields';
 import formatValueWo$ from '@/utils/formatValueWo$';
+import { CREDIT_CARD } from '@/constants/payment';
 import Button from '../atom/Button';
 
 interface CreditCardFormProps {
   handleCurrentStep?: () => void;
-}
-
-interface CardApiResponse {
-  id: string;
-  user_id: string;
-  payment_method: string;
-  object: string;
-  foreign_id: string;
-  isMain: boolean;
-  foreign_date_created: string;
-  foreign_date_updated: string;
-  brand: string;
-  holder_name: string;
-  first_digits: string;
-  last_digits: string;
-  country: string;
-  fingerprint: string;
-  valid: boolean;
-  billing_address: {
-    object: string;
-    id: number;
-    name: string;
-    address: {
-      object: string;
-      street: string;
-      complementary: string;
-      street_number: string;
-      neighborhood: string;
-      city: string;
-      state: string;
-      zipcode: string;
-      country: string;
-    };
-  };
-  paying_customer: {
-    object: string;
-    id: number;
-    external_id: string;
-    type: string;
-    country: string;
-    document_number: string;
-    document_type: string;
-    name: string;
-    email: string;
-    phone_numbers: string[];
-    born_at: string;
-    birthday: string;
-    gender: string;
-    date_created: string;
-    documents: [
-      {
-        object: string;
-        id: string;
-        type: 'cpf';
-        number: string;
-      },
-    ];
-  };
-  expiration_date: string;
+  selectedCardOnModal?: string;
+  setSelectedCardOnModal?: (value: string) => void;
 }
 
 const creditCardBrands = {
@@ -100,71 +44,22 @@ const creditCardBrands = {
 
 const CreditCardForm = ({
   handleCurrentStep,
+  selectedCardOnModal,
+  setSelectedCardOnModal,
 }: CreditCardFormProps): ReactElement => {
-  const [userCards, setUserCards] = useState<CardApiResponse[]>(
-    [] as CardApiResponse[],
-  );
-  const [selectedCard, setSelectedCard] = useState<CardApiResponse>(
-    {} as CardApiResponse,
-  );
   const [isPaymentButtonDisabled, setIsPaymentButtonDisabled] = useState(true);
   const [displayChangeCreditCard, setDisplayChangeCreditCard] = useState(false);
   const [displayAddNewCard, setDisplayAddNewCard] = useState(false);
-  const [selectedCardOnModal, setSelectedCardOnModal] = useState('');
   const {
     paymentData,
     setPaymentData,
     handlePaymentWithCreditCard,
+    userCards,
+    selectedCard,
+    setSelectedCard,
   } = usePayment();
   const { bagTotalPrice, bagItems } = useBag();
   const { user } = useAuth();
-
-  useEffect(() => {
-    const fetchCards = async (): Promise<void> => {
-      const token = localStorage.getItem('@Heali:token') || '';
-
-      const cards: AxiosResponse<CardApiResponse[]> = await Api.get('/cards', {
-        headers: {
-          Authorization: `Bearer: ${token}`,
-        },
-      });
-
-      if (cards.data.length === 0) return;
-
-      const mainCard = cards.data.filter(card => card.isMain && card)[0];
-
-      setUserCards(cards.data);
-      setSelectedCard(mainCard);
-      setSelectedCardOnModal(mainCard.id);
-
-      setPaymentData({
-        ...paymentData,
-        full_name: mainCard.paying_customer.name,
-        document: {
-          type: mainCard.paying_customer.documents[0].type,
-          document_number: mainCard.paying_customer.documents[0].number,
-        },
-        email: mainCard.paying_customer.email,
-        tel: mainCard.paying_customer.phone_numbers[0],
-        address: {
-          ...mainCard.billing_address.address,
-          cep: mainCard.billing_address.address.zipcode,
-        },
-        card: {
-          card_id: mainCard.foreign_id,
-        },
-      });
-    };
-
-    if (userCards.length === 0 && !paymentData.verifyCard) {
-      fetchCards();
-    }
-
-    if (paymentData.verifyCard) {
-      setUserCards([]);
-      setSelectedCard({} as CardApiResponse);
-    }
-  }, [paymentData, setPaymentData, userCards.length]);
 
   useEffect(() => {
     if (
@@ -245,6 +140,7 @@ const CreditCardForm = ({
                       onClick={() => {
                         setPaymentData({
                           amount: paymentData.amount,
+                          payment_method: CREDIT_CARD,
                           card: {
                             card_number: paymentData.card.card_number,
                             card_holder_name: paymentData.card.card_holder_name,
@@ -267,32 +163,35 @@ const CreditCardForm = ({
                 <>
                   <h3>Com qual cartão você prefere pagar?</h3>
                   <CardContainer>
-                    {userCards.map(card => (
-                      <CardContent
-                        key={card.id}
-                        onClick={() => setSelectedCardOnModal(card.id)}
-                      >
-                        <img
-                          src={creditCardBrands[card.brand]}
-                          alt="Ícone da marca do cartão de crédito"
-                        />
-                        <div>
-                          <span>
-                            {`${card.first_digits?.substring(
-                              0,
-                              4,
-                            )} ${card.first_digits?.substring(
-                              4,
-                              card.first_digits?.length,
-                            )}`}
-                            XX XXXX {card.last_digits}
-                          </span>
-                        </div>
-                        {card.id === selectedCardOnModal && (
-                          <FiCheck className="check-icon" />
-                        )}
-                      </CardContent>
-                    ))}
+                    {userCards.map(
+                      card =>
+                        card.payment_method === CREDIT_CARD && (
+                          <CardContent
+                            key={card.id}
+                            onClick={() => setSelectedCardOnModal(card.id)}
+                          >
+                            <img
+                              src={creditCardBrands[card.brand]}
+                              alt="Ícone da marca do cartão de crédito"
+                            />
+                            <div>
+                              <span>
+                                {`${card.first_digits?.substring(
+                                  0,
+                                  4,
+                                )} ${card.first_digits?.substring(
+                                  4,
+                                  card.first_digits?.length,
+                                )}`}
+                                XX XXXX {card.last_digits}
+                              </span>
+                            </div>
+                            {card.id === selectedCardOnModal && (
+                              <FiCheck className="check-icon" />
+                            )}
+                          </CardContent>
+                        ),
+                    )}
                   </CardContainer>
                   <button
                     type="button"
