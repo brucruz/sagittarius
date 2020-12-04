@@ -88,7 +88,7 @@ const PaymentSelector = ({
 
             setSelectedCard(creditCardMain);
             setSelectedCardOnModal(creditCardMain.id);
-            if (creditCardMain) {
+            if (creditCardMain.id) {
               setPaymentData({
                 ...paymentData,
                 payment_method: CREDIT_CARD,
@@ -144,7 +144,7 @@ const PaymentSelector = ({
 
             setSelectedCard(billData);
 
-            if (billData) {
+            if (billData.id) {
               setPaymentData({
                 ...paymentData,
                 payment_method: BILL_OF_EXCHANGE,

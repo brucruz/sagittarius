@@ -247,7 +247,10 @@ const PaymentProvider = ({ children }): ReactElement => {
             documents: [
               {
                 type: 'cpf',
-                number: paymentData.document.document_number,
+                number: paymentData.document.document_number.replace(
+                  /[.*/-]/gm,
+                  '',
+                ),
               },
             ],
             phone_numbers: [

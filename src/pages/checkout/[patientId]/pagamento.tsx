@@ -250,7 +250,7 @@ export default function Payment(): ReactElement {
                   ? setIsCpfValid(true)
                   : setIsCpfValid(false)
               }
-              mask="99999999999"
+              mask="999.999.999-99"
               value={paymentData.document?.document_number}
               onChange={event =>
                 setPaymentData({
