@@ -42,33 +42,31 @@ const PaymentSelector = ({
   }, []);
 
   useEffect(() => {
-    const fetchCards = async (): Promise<void> => {
+    if (userCards.length === 0 && !paymentData.verifyCard) {
       const token = localStorage.getItem('@Heali:token') || '';
 
-      const cards: AxiosResponse<CardApiResponse[]> = await Api.get('/cards', {
-        headers: {
-          Authorization: `Bearer: ${token}`,
-        },
+      Promise.resolve(
+        Api.get<CardApiResponse[]>('/cards', {
+          headers: {
+            Authorization: `Bearer: ${token}`,
+          },
+        }),
+      ).then(({ data }) => {
+        if (data.length === 0) return;
+
+        const mainCard = data.filter(card => card.isMain && card)[0];
+
+        setUserCards(data);
+        setSelectedCard(mainCard);
+        setSelectedCardOnModal(mainCard.id);
       });
-
-      if (cards.data.length === 0) return;
-
-      const mainCard = cards.data.filter(card => card.isMain && card)[0];
-
-      setUserCards(cards.data);
-      setSelectedCard(mainCard);
-      setSelectedCardOnModal(mainCard.id);
-    };
-
-    if (userCards.length === 0 && !paymentData.verifyCard) {
-      fetchCards();
     }
 
     if (paymentData.verifyCard) {
       setUserCards([]);
       setSelectedCard({} as CardApiResponse);
     }
-  }, [paymentData, setSelectedCard, setUserCards, userCards.length]);
+  }, [paymentData.verifyCard, setSelectedCard, setUserCards, userCards.length]);
 
   return (
     <>
@@ -175,6 +173,9 @@ const PaymentSelector = ({
                 if (selectedCard.foreign_id) {
                   handleBillOfExchange(quote.dates.to, bagItems, user);
                 } else {
+                  setPaymentData({
+                    payment_method: BILL_OF_EXCHANGE,
+                  });
                   handleCurrentStep();
                 }
               }}
