@@ -8,7 +8,6 @@ import {
   BillOfExchangeContainer,
 } from '@/styles/components/organisms/PaymentSelector';
 import CreditCardForm from '@/components/organisms/CreditCardForm';
-import { AxiosResponse } from 'axios';
 import Api from '@/services/api';
 import CardApiResponse from '@/@types/CardFromApi';
 import { useAuth } from '@/hooks/auth';
