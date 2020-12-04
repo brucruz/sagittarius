@@ -124,19 +124,21 @@ const Input = ({
         ref={userInputRef}
         isErrored={!!error}
         isFilled={isFilled}
+        data-testid="atom-user-input"
         isFocused={isFocused}
         isDisabled={disabled}
         onFocus={handleInputFocus}
         hasSuggestions={hasSuggestions}
         {...rest}
       >
-        <InputIcon>{Icon && <Icon />}</InputIcon>
+        <InputIcon>{Icon && <Icon data-testid="atom-icon-input" />}</InputIcon>
 
         <InputTextArea>
           <label htmlFor={name}>{label}</label>
 
           <InputMask
             type={type ? inputType : 'text'}
+            data-testid="atom-input"
             id={name}
             name={name}
             disabled={disabled}
@@ -148,11 +150,17 @@ const Input = ({
         </InputTextArea>
 
         {iconAfter && (
-          <img className="icon-after-input" src={iconAfter} alt="Ícone" />
+          <img
+            className="icon-after-input"
+            src={iconAfter}
+            alt="Ícone"
+            data-testid="atom-icon-after-input"
+          />
         )}
 
         {type === 'password' && (
           <MdRemoveRedEye
+            data-testid="atom-password-icon"
             className="password-eye-icon"
             onClick={() =>
               inputRef.current?.value &&

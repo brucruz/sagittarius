@@ -126,8 +126,6 @@ export default function Payment(): ReactElement {
     user,
   ]);
 
-  console.log(isCpfValid);
-
   useEffect(() => {
     if (currentStep === 1) {
       if (

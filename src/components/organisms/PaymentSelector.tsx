@@ -70,8 +70,6 @@ const PaymentSelector = ({
     }
   }, [paymentData, setSelectedCard, setUserCards, userCards.length]);
 
-  console.log(userCards);
-
   return (
     <>
       <PaymentMethodSelector
