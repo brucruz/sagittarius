@@ -27,6 +27,8 @@ export type GoBackProps =
     }
   | {
       type: 'go_back_button';
+      stepper?: '1/2' | '1/3';
+      backFunction?: () => void;
     };
 
 export interface PageHeaderProps {
@@ -57,7 +59,9 @@ const PageHeader = ({ buttonType }: PageHeaderProps): ReactElement => {
         buttonType.stepper === '1/2' && <img src={stepper1} alt="passo 1" />}
 
       {buttonType.type === 'go_back_button' && (
-        <ButtonBack onClick={handleGoBackButtonClick} />
+        <ButtonBack
+          onClick={buttonType.backFunction || handleGoBackButtonClick}
+        />
       )}
 
       {buttonType.type === 'change_state_button' &&
@@ -98,6 +102,13 @@ const PageHeader = ({ buttonType }: PageHeaderProps): ReactElement => {
             )}
           </StepperContainer>
         )}
+      {buttonType.type === 'go_back_button' && buttonType.stepper && (
+        <StepperContainer>
+          <img src={currentStep} alt="ícone de passo atual" />
+          <img src={notFilledStep} alt="ícone de passo ainda não preenchido" />
+          <img src={notFilledStep} alt="ícone de passo ainda não preenchido" />
+        </StepperContainer>
+      )}
     </PageHeaderContainer>
   );
 };

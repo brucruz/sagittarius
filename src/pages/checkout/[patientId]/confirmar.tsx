@@ -145,11 +145,6 @@ const AskingRemainingInfo = ({
         router.push({
           pathname: `/checkout/${patientId}/obrigado`,
         });
-
-        addToast({
-          type: 'success',
-          title: 'Solicitação recebida',
-        });
       } catch (err) {
         if (err instanceof Yup.ValidationError) {
           const errors = getValidationErrors(err);

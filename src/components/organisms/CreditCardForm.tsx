@@ -8,8 +8,6 @@ import {
   CloseDiv,
 } from '@/styles/components/organisms/CreditCardForm';
 import Dropdown from '@/components/atom/Dropdown';
-import Api from '@/services/api';
-import { AxiosResponse } from 'axios';
 import diners from '@/assets/components/atoms/Input/diners-club.svg';
 import amex from '@/assets/components/atoms/Input/american-express.svg';
 import visa from '@/assets/components/atoms/Input/visa.svg';
@@ -30,7 +28,7 @@ import Button from '../atom/Button';
 interface CreditCardFormProps {
   handleCurrentStep?: () => void;
   selectedCardOnModal?: string;
-  setSelectedCardOnModal?: (value: string) => void;
+  changeSelectedCardOnModal?: (value: string) => void;
 }
 
 const creditCardBrands = {
@@ -45,18 +43,18 @@ const creditCardBrands = {
 const CreditCardForm = ({
   handleCurrentStep,
   selectedCardOnModal,
-  setSelectedCardOnModal,
+  changeSelectedCardOnModal,
 }: CreditCardFormProps): ReactElement => {
   const [isPaymentButtonDisabled, setIsPaymentButtonDisabled] = useState(true);
   const [displayChangeCreditCard, setDisplayChangeCreditCard] = useState(false);
   const [displayAddNewCard, setDisplayAddNewCard] = useState(false);
   const {
     paymentData,
-    setPaymentData,
+    changePaymentData,
     handlePaymentWithCreditCard,
     userCards,
     selectedCard,
-    setSelectedCard,
+    changeSelectedCard,
   } = usePayment();
   const { bagTotalPrice, bagItems } = useBag();
   const { user } = useAuth();
@@ -75,7 +73,7 @@ const CreditCardForm = ({
     } else {
       setIsPaymentButtonDisabled(true);
     }
-  }, [paymentData.installments, paymentData.card, setPaymentData]);
+  }, [paymentData.installments, paymentData.card, changePaymentData]);
 
   const installments = Array.from(Array(12), (_, index) => ({
     id: index,
@@ -138,7 +136,7 @@ const CreditCardForm = ({
                     <CreditCardFields isModal />
                     <Button
                       onClick={() => {
-                        setPaymentData({
+                        changePaymentData({
                           amount: paymentData.amount,
                           payment_method: CREDIT_CARD,
                           card: {
@@ -168,7 +166,7 @@ const CreditCardForm = ({
                         card.payment_method === CREDIT_CARD && (
                           <CardContent
                             key={card.id}
-                            onClick={() => setSelectedCardOnModal(card.id)}
+                            onClick={() => changeSelectedCardOnModal(card.id)}
                           >
                             <img
                               src={creditCardBrands[card.brand]}
@@ -207,8 +205,8 @@ const CreditCardForm = ({
                         card => card.id === selectedCardOnModal && card,
                       )[0];
 
-                      setSelectedCard(cardSelectedByUser);
-                      setPaymentData({
+                      changeSelectedCard(cardSelectedByUser);
+                      changePaymentData({
                         ...paymentData,
                         card: {
                           ...paymentData.card,
@@ -234,7 +232,7 @@ const CreditCardForm = ({
           options={installments}
           value={paymentData.installments}
           setValue={value =>
-            setPaymentData({
+            changePaymentData({
               ...paymentData,
               installments: value,
             })

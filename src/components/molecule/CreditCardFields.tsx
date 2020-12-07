@@ -50,13 +50,13 @@ const years = Array.from(Array(50), (_, index) => ({
 }));
 
 const CreditCardFields = ({ isModal }: CreditCardFieldsProps): ReactElement => {
-  const { paymentData, setPaymentData } = usePayment();
+  const { paymentData, changePaymentData } = usePayment();
   const [creditCardBrand, setCreditCardBrand] = useState('generic');
 
   function handleCreditCardNumberOnChange(value): void {
     const creditCardNumber = value.replace(/[\s*/_*/]/gm, '');
 
-    setPaymentData({
+    changePaymentData({
       ...paymentData,
       card: { ...paymentData.card, card_number: creditCardNumber },
     });
@@ -96,7 +96,7 @@ const CreditCardFields = ({ isModal }: CreditCardFieldsProps): ReactElement => {
         name="ccname"
         value={paymentData.card?.card_holder_name}
         onChange={event =>
-          setPaymentData({
+          changePaymentData({
             ...paymentData,
             card: {
               ...paymentData.card,
@@ -114,7 +114,7 @@ const CreditCardFields = ({ isModal }: CreditCardFieldsProps): ReactElement => {
             type={isModal ? 'large' : 'small'}
             onModal={isModal}
             setValue={value =>
-              setPaymentData({
+              changePaymentData({
                 ...paymentData,
                 card: { ...paymentData.card, card_expiration_month: value },
               })
@@ -130,7 +130,7 @@ const CreditCardFields = ({ isModal }: CreditCardFieldsProps): ReactElement => {
             type={isModal ? 'large' : 'small'}
             onModal={isModal}
             setValue={value =>
-              setPaymentData({
+              changePaymentData({
                 ...paymentData,
                 card: { ...paymentData.card, card_expiration_year: value },
               })
@@ -149,7 +149,7 @@ const CreditCardFields = ({ isModal }: CreditCardFieldsProps): ReactElement => {
             value={paymentData.card?.card_cvv}
             onChange={event => {
               const cvv = event.target.value.replace(/[\s*/_*/]/gm, '');
-              setPaymentData({
+              changePaymentData({
                 ...paymentData,
                 card: { ...paymentData.card, card_cvv: cvv },
               });

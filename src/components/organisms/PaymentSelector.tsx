@@ -13,6 +13,7 @@ import CardApiResponse from '@/@types/CardFromApi';
 import { useAuth } from '@/hooks/auth';
 import { useBag } from '@/hooks/bag';
 import { QuoteResponse } from '@/pages/checkout/[patientId]/confirmar';
+import axios from 'axios';
 
 interface PaymentSelectorProps {
   handleCurrentStep?: () => void;
@@ -26,13 +27,13 @@ const PaymentSelector = ({
     userCards,
     paymentData,
     selectedCard,
-    setPaymentData,
-    setUserCards,
-    setSelectedCard,
+    changePaymentData,
+    changeUserCards,
+    changeSelectedCard,
     handleBillOfExchange,
   } = usePayment();
 
-  const [selectedCardOnModal, setSelectedCardOnModal] = useState('');
+  const [selectedCardOnModal, changeSelectedCardOnModal] = useState('');
   const { user } = useAuth();
   const { bagItems } = useBag();
 
@@ -41,31 +42,58 @@ const PaymentSelector = ({
   }, []);
 
   useEffect(() => {
-    if (userCards.length === 0 && !paymentData.verifyCard) {
-      const token = localStorage.getItem('@Heali:token') || '';
+    const { CancelToken } = axios;
+    const source = CancelToken.source();
 
-      Promise.resolve(
-        Api.get<CardApiResponse[]>('/cards', {
-          headers: {
-            Authorization: `Bearer: ${token}`,
-          },
-        }),
-      ).then(({ data }) => {
-        if (data.length === 0) return;
+    const fetchData = async (): Promise<void> => {
+      if (userCards.length === 0 && !paymentData.verifyCard) {
+        const token = localStorage.getItem('@Heali:token') || '';
 
-        const mainCard = data.filter(card => card.isMain && card)[0];
+        try {
+          Promise.resolve(
+            Api.get<CardApiResponse[]>('/cards', {
+              cancelToken: source.token,
+              headers: {
+                Authorization: `Bearer: ${token}`,
+              },
+            }),
+          )
+            .then(({ data }) => {
+              if (data.length === 0) return;
 
-        setUserCards(data);
-        setSelectedCard(mainCard);
-        setSelectedCardOnModal(mainCard.id);
-      });
-    }
+              const mainCard = data.filter(card => card.isMain && card)[0];
+
+              changeUserCards(data);
+              changeSelectedCard(mainCard);
+              changeSelectedCardOnModal(mainCard.id);
+            })
+            .catch(err => console.log(err));
+        } catch (error) {
+          if (axios.isCancel(error)) {
+            console.log('cancelled');
+          } else {
+            throw error;
+          }
+        }
+      }
+    };
 
     if (paymentData.verifyCard) {
-      setUserCards([]);
-      setSelectedCard({} as CardApiResponse);
+      changeUserCards([]);
+      changeSelectedCard({} as CardApiResponse);
     }
-  }, [paymentData.verifyCard, setSelectedCard, setUserCards, userCards.length]);
+
+    fetchData();
+
+    return () => {
+      source.cancel();
+    };
+  }, [
+    paymentData.verifyCard,
+    changeSelectedCard,
+    changeUserCards,
+    userCards.length,
+  ]);
 
   return (
     <>
@@ -83,10 +111,10 @@ const PaymentSelector = ({
               userCards?.filter(card => card.isMain && card)[0] ||
               ({} as CardApiResponse);
 
-            setSelectedCard(creditCardMain);
-            setSelectedCardOnModal(creditCardMain.id);
+            changeSelectedCard(creditCardMain);
+            changeSelectedCardOnModal(creditCardMain.id);
             if (creditCardMain.id) {
-              setPaymentData({
+              changePaymentData({
                 ...paymentData,
                 payment_method: CREDIT_CARD,
                 full_name: creditCardMain.paying_customer.name,
@@ -106,7 +134,7 @@ const PaymentSelector = ({
                 },
               });
             } else {
-              setPaymentData({
+              changePaymentData({
                 ...paymentData,
                 payment_method: CREDIT_CARD,
               });
@@ -117,7 +145,7 @@ const PaymentSelector = ({
           <CreditCardForm
             handleCurrentStep={handleCurrentStep}
             selectedCardOnModal={selectedCardOnModal}
-            setSelectedCardOnModal={setSelectedCardOnModal}
+            changeSelectedCardOnModal={changeSelectedCardOnModal}
           />
         )}
       </PaymentMethodSelector>
@@ -139,10 +167,10 @@ const PaymentSelector = ({
                 card => card.payment_method === BILL_OF_EXCHANGE && card,
               )[0] || ({} as CardApiResponse);
 
-            setSelectedCard(billData);
+            changeSelectedCard(billData);
 
             if (billData.id) {
-              setPaymentData({
+              changePaymentData({
                 ...paymentData,
                 payment_method: BILL_OF_EXCHANGE,
                 full_name: billData.paying_customer.name,
@@ -158,7 +186,7 @@ const PaymentSelector = ({
                 },
               });
             } else {
-              setPaymentData({
+              changePaymentData({
                 ...paymentData,
                 payment_method: BILL_OF_EXCHANGE,
               });
@@ -172,7 +200,7 @@ const PaymentSelector = ({
                 if (selectedCard.foreign_id) {
                   handleBillOfExchange(quote.dates.to, bagItems, user);
                 } else {
-                  setPaymentData({
+                  changePaymentData({
                     payment_method: BILL_OF_EXCHANGE,
                   });
                   handleCurrentStep();

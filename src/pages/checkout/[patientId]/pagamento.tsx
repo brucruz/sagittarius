@@ -1,6 +1,5 @@
 import PageTemplate from '@/components/templates/PageTemplate';
 import { ReactElement, useCallback, useState, useEffect } from 'react';
-import { PageHeaderProps } from '@/components/molecule/PageHeader';
 import Checkbox from '@/components/atom/Checkbox';
 import Input from '@/components/atom/Input';
 import Button from '@/components/atom/Button';
@@ -13,8 +12,9 @@ import mixpanel from 'mixpanel-browser';
 import { useBag } from '@/hooks/bag';
 import { QuoteResponse } from '@/pages/checkout/[patientId]/confirmar';
 import { cpf } from 'cpf-cnpj-validator';
+import { useRouter } from 'next/router';
 
-interface IPageTemplateState extends PageHeaderProps {
+interface IPageTemplateState {
   titleMain: {
     title: string;
     subTitle: string;
@@ -38,20 +38,12 @@ interface CepResponse {
 
 const pageTemplateState: IPageTemplateState[] = [
   {
-    buttonType: {
-      type: 'change_state_button',
-      stepper: '1/3',
-    },
     titleMain: {
       title: 'Como prefere Pagar?',
       subTitle: 'Selecione a forma de pagamento',
     },
   },
   {
-    buttonType: {
-      type: 'change_state_button',
-      stepper: '2/3',
-    },
     titleMain: {
       title: 'Quais são os dados do pagador?',
       subTitle:
@@ -59,10 +51,6 @@ const pageTemplateState: IPageTemplateState[] = [
     },
   },
   {
-    buttonType: {
-      type: 'change_state_button',
-      stepper: '3/3',
-    },
     titleMain: {
       title: 'Qual o endereço de cobrança?',
       subTitle:
@@ -74,6 +62,8 @@ const pageTemplateState: IPageTemplateState[] = [
 export default function Payment(): ReactElement {
   const [quote, setQuote] = useState<QuoteResponse>({} as QuoteResponse);
   const [isCpfValid, setIsCpfValid] = useState(null);
+  const router = useRouter();
+  const { patientId } = router.query;
 
   const [currentStep, setCurrentStep] = useState(0);
   const [isContinueButtonDisabled, setIsContinueButtonDisabled] = useState(
@@ -83,28 +73,29 @@ export default function Payment(): ReactElement {
     {} as DisabledInputs,
   );
   const [useUserData, setUseUserData] = useState(false);
-  const { bagItems } = useBag();
+  const { bagItems, bagTotalPrice } = useBag();
 
   const {
     paymentData,
-    setPaymentData,
+    changePaymentData,
     handlePaymentWithCreditCard,
     handleBillOfExchange,
   } = usePayment();
 
-  const { bagTotalPrice } = useBag();
   const { user } = useAuth();
 
   useEffect(() => {
     setQuote(JSON.parse(sessionStorage.getItem('@Heali:quote')));
   }, []);
 
-  if (!paymentData.amount) {
-    setPaymentData({
-      ...paymentData,
-      amount: bagTotalPrice * 100,
-    });
-  }
+  useEffect(() => {
+    if (bagTotalPrice > 0 && !paymentData.amount) {
+      changePaymentData({
+        ...paymentData,
+        amount: bagTotalPrice * 100,
+      });
+    }
+  }, [bagTotalPrice, paymentData, changePaymentData]);
 
   useEffect(() => {
     user && mixpanel.identify(user.id);
@@ -188,12 +179,21 @@ export default function Payment(): ReactElement {
 
   return (
     <PageTemplate
-      buttonType={{
-        ...pageTemplateState[currentStep].buttonType,
-        type: 'change_state_button',
-        backButtonNewState: currentStep - 1,
-        backButtonStateCallback: handleBackButton,
-      }}
+      buttonType={
+        currentStep === 0
+          ? {
+              type: 'go_back_button',
+              stepper: '1/3',
+              backFunction: () =>
+                router.replace(`/checkout/${patientId}/confirmar`),
+            }
+          : {
+              type: 'change_state_button',
+              stepper: currentStep === 1 ? '2/3' : '3/3',
+              backButtonNewState: currentStep - 1,
+              backButtonStateCallback: handleBackButton,
+            }
+      }
       titleMain={pageTemplateState[currentStep].titleMain}
     >
       <Container>
@@ -207,14 +207,14 @@ export default function Payment(): ReactElement {
               id="checkbox-payment"
               onChange={() => {
                 if (!useUserData) {
-                  setPaymentData({
+                  changePaymentData({
                     ...paymentData,
                     full_name: `${user.first_name} ${user.last_name}`,
                     email: user.email,
                     tel: user.phone_whatsapp && user.phone_whatsapp,
                   });
                 } else {
-                  setPaymentData({
+                  changePaymentData({
                     ...paymentData,
                     full_name: '',
                     email: '',
@@ -231,7 +231,7 @@ export default function Payment(): ReactElement {
               name="input-user-name"
               value={paymentData.full_name}
               onChange={event =>
-                setPaymentData({
+                changePaymentData({
                   ...paymentData,
                   full_name: event.target.value,
                 })
@@ -253,7 +253,7 @@ export default function Payment(): ReactElement {
               mask="999.999.999-99"
               value={paymentData.document?.document_number}
               onChange={event =>
-                setPaymentData({
+                changePaymentData({
                   ...paymentData,
                   document: {
                     ...paymentData.document,
@@ -268,7 +268,7 @@ export default function Payment(): ReactElement {
               label="E-mail"
               value={paymentData.email}
               onChange={event =>
-                setPaymentData({
+                changePaymentData({
                   ...paymentData,
                   email: event.target.value,
                 })
@@ -280,7 +280,7 @@ export default function Payment(): ReactElement {
               label="Telefone"
               value={paymentData.tel}
               onChange={event =>
-                setPaymentData({
+                changePaymentData({
                   ...paymentData,
                   tel: event.target.value,
                 })
@@ -304,7 +304,7 @@ export default function Payment(): ReactElement {
                     )
                     .then((res: AxiosResponse<CepResponse>) => {
                       const { data } = res;
-                      setPaymentData({
+                      changePaymentData({
                         ...paymentData,
                         address: {
                           ...paymentData.address,
@@ -332,7 +332,7 @@ export default function Payment(): ReactElement {
                       });
                     });
                 } else {
-                  setPaymentData({
+                  changePaymentData({
                     ...paymentData,
                     address: {
                       ...paymentData.address,
@@ -356,7 +356,7 @@ export default function Payment(): ReactElement {
               onChange={event => {
                 const cep = event.target.value.replace(/_*/gm, '');
 
-                setPaymentData({
+                changePaymentData({
                   ...paymentData,
                   address: {
                     ...paymentData.address,
@@ -372,7 +372,7 @@ export default function Payment(): ReactElement {
               label="Rua"
               value={paymentData.address?.street}
               onChange={event =>
-                setPaymentData({
+                changePaymentData({
                   ...paymentData,
                   address: {
                     ...paymentData.address,
@@ -388,7 +388,7 @@ export default function Payment(): ReactElement {
                 label="Numero"
                 value={paymentData.address?.street_number}
                 onChange={event =>
-                  setPaymentData({
+                  changePaymentData({
                     ...paymentData,
                     address: {
                       ...paymentData.address,
@@ -403,7 +403,7 @@ export default function Payment(): ReactElement {
                 label="Complemento"
                 value={paymentData.address?.complement}
                 onChange={event =>
-                  setPaymentData({
+                  changePaymentData({
                     ...paymentData,
                     address: {
                       ...paymentData.address,
@@ -420,7 +420,7 @@ export default function Payment(): ReactElement {
               disabled={disabledInputs.neighborhood}
               value={paymentData.address?.neighborhood}
               onChange={event =>
-                setPaymentData({
+                changePaymentData({
                   ...paymentData,
                   address: {
                     ...paymentData.address,
@@ -436,7 +436,7 @@ export default function Payment(): ReactElement {
               label="Cidade"
               value={paymentData.address?.city}
               onChange={event =>
-                setPaymentData({
+                changePaymentData({
                   ...paymentData,
                   address: {
                     ...paymentData.address,
@@ -452,7 +452,7 @@ export default function Payment(): ReactElement {
               disabled={disabledInputs.state}
               value={paymentData.address?.state}
               onChange={event =>
-                setPaymentData({
+                changePaymentData({
                   ...paymentData,
                   address: {
                     ...paymentData.address,
