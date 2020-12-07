@@ -22,7 +22,7 @@ export default function PaymentErrorPage(): ReactElement {
   const [errorInfo, setErrorInfo] = useState<ErrorInfo>({} as ErrorInfo);
   const {
     paymentData,
-    setPaymentData,
+    changePaymentData,
     handlePaymentWithCreditCard,
   } = usePayment();
   const { bagItems } = useBag();
@@ -56,7 +56,7 @@ export default function PaymentErrorPage(): ReactElement {
         action: () => {
           delete paymentData.payment_method;
 
-          setPaymentData({
+          changePaymentData({
             ...paymentData,
             card: {},
           });
@@ -72,7 +72,7 @@ export default function PaymentErrorPage(): ReactElement {
     ) {
       return {
         action: () => {
-          setPaymentData({
+          changePaymentData({
             ...paymentData,
             payment_method: 'credit_card',
             verifyCard: true,

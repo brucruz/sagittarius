@@ -1,4 +1,10 @@
-import { createContext, ReactElement, useContext, useState } from 'react';
+import {
+  createContext,
+  ReactElement,
+  useCallback,
+  useContext,
+  useState,
+} from 'react';
 import { IFormPayment } from '@/@types/Payment';
 import PricesInBag from '@/@types/PricesInBag';
 import User from '@/@types/User';
@@ -22,11 +28,11 @@ interface BillOfExchangeInfo {
 
 interface PaymentContextData {
   userCards: CardApiResponse[];
-  setUserCards: (value: CardApiResponse[]) => void;
+  changeUserCards: (value: CardApiResponse[]) => void;
   selectedCard: CardApiResponse;
-  setSelectedCard: (value: CardApiResponse) => void;
+  changeSelectedCard: (value: CardApiResponse) => void;
   paymentData: IFormPayment;
-  setPaymentData: (value: IFormPayment) => void;
+  changePaymentData: (value: IFormPayment) => void;
   handlePaymentWithCreditCard: (bagItems: PricesInBag[], user: User) => void;
   handleBillOfExchange: (
     preferredDateTo: string,
@@ -54,6 +60,18 @@ const PaymentProvider = ({ children }): ReactElement => {
   const [selectedCard, setSelectedCard] = useState<CardApiResponse>(
     {} as CardApiResponse,
   );
+
+  const changePaymentData = useCallback((data: IFormPayment) => {
+    setPaymentData(data);
+  }, []);
+
+  const changeSelectedCard = useCallback((data: CardApiResponse) => {
+    setSelectedCard(data);
+  }, []);
+
+  const changeUserCards = useCallback((data: CardApiResponse[]) => {
+    setUserCards(data);
+  }, []);
 
   function handleBillOfExchange(
     preferredDateTo: string,
@@ -180,26 +198,29 @@ const PaymentProvider = ({ children }): ReactElement => {
               Authorization: `Bearer: ${token}`,
             },
           },
-        ).then(() => {
-          if (
-            transaction.status === 'waiting_payment' ||
-            transaction.status === 'processing'
-          ) {
-            setBillOfExchangeInfo({
-              boleto_url: transaction.boleto_url,
-              boleto_barcode: transaction.boleto_barcode,
-            });
-            router.replace(`${url}aguardando-pagamento-boleto`);
-          } else if (transaction.status === 'refused') {
-            router.replace({
-              pathname: `${url}erro-no-pagamento`,
-              query: {
-                status_erro: transaction.acquirer_response_code,
-              },
-            });
-          }
-        });
-      });
+        )
+          .then(() => {
+            if (
+              transaction.status === 'waiting_payment' ||
+              transaction.status === 'processing'
+            ) {
+              setBillOfExchangeInfo({
+                boleto_url: transaction.boleto_url,
+                boleto_barcode: transaction.boleto_barcode,
+              });
+              router.replace(`${url}aguardando-pagamento-boleto`);
+            } else if (transaction.status === 'refused') {
+              router.replace({
+                pathname: `${url}erro-no-pagamento`,
+                query: {
+                  status_erro: transaction.acquirer_response_code,
+                },
+              });
+            }
+          })
+          .catch(err => console.log(err));
+      })
+      .catch(err => console.log(err));
   }
 
   function handlePaymentWithCreditCard(
@@ -308,21 +329,24 @@ const PaymentProvider = ({ children }): ReactElement => {
               Authorization: `Bearer: ${token}`,
             },
           },
-        ).then(() => {
-          if (['paid', 'authorized'].includes(transaction.status)) {
-            router.replace(`${url}obrigado`);
-          } else if (transaction.status === 'processing') {
-            router.replace(`${url}aguardando-aprovacao`);
-          } else if (transaction.status === 'refused') {
-            router.replace({
-              pathname: `${url}erro-no-pagamento`,
-              query: {
-                status_erro: transaction.acquirer_response_code,
-              },
-            });
-          }
-        });
-      });
+        )
+          .then(() => {
+            if (['paid', 'authorized'].includes(transaction.status)) {
+              router.replace(`${url}obrigado`);
+            } else if (transaction.status === 'processing') {
+              router.replace(`${url}aguardando-aprovacao`);
+            } else if (transaction.status === 'refused') {
+              router.replace({
+                pathname: `${url}erro-no-pagamento`,
+                query: {
+                  status_erro: transaction.acquirer_response_code,
+                },
+              });
+            }
+          })
+          .catch(err => console.log(err));
+      })
+      .catch(err => console.log(err));
   }
 
   return (
@@ -332,9 +356,9 @@ const PaymentProvider = ({ children }): ReactElement => {
         userCards,
         paymentData,
         billOfExchangeInfo,
-        setPaymentData,
-        setSelectedCard,
-        setUserCards,
+        changePaymentData,
+        changeSelectedCard,
+        changeUserCards,
         handlePaymentWithCreditCard,
         handleBillOfExchange,
         setBillOfExchangeInfo,
