@@ -15,11 +15,7 @@ export default function WaitingApproval(): ReactElement {
   const [displayRateModal, setDisplayRateModal] = useState(false);
 
   return (
-    <PageTemplate
-      buttonType={{
-        type: 'go_back_button',
-      }}
-    >
+    <PageTemplate>
       <SEO
         title="Aguardando confirmação de pagamento"
         description="Obrigado! Recebemos seu pedido de agendamento de exames médicos e agora estamos aguardando a aprovação do seu pagamento. Você receberá um e-mail com informando sobre a aprovação."

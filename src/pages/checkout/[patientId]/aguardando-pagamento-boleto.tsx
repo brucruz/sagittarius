@@ -24,9 +24,6 @@ export default function WaitingPayment(): ReactElement {
         subTitle:
           'Após a compensação, entraremos em contato para confirmar o agendamento',
       }}
-      buttonType={{
-        type: 'go_back_button',
-      }}
     >
       <SEO
         title="Aguardando confirmação de pagamento"

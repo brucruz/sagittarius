@@ -14,6 +14,8 @@ import pagarme from 'pagarme';
 import Api from '@/services/api';
 import mixpanel from 'mixpanel-browser';
 import CardApiResponse from '@/@types/CardFromApi';
+import { useToast } from '@/hooks/toast';
+import errors from '@/contents/pages/PaymentError/errors';
 
 interface BillOfExchangeRules {
   boleto_expiration_date: string;
@@ -59,6 +61,39 @@ const PaymentProvider = ({ children }): ReactElement => {
   );
   const [selectedCard, setSelectedCard] = useState<CardApiResponse>(
     {} as CardApiResponse,
+  );
+
+  const { addToast } = useToast();
+
+  const handleToastMessage = useCallback(
+    (status: string, error = '0') => {
+      if (['paid', 'authorized'].includes(status)) {
+        addToast({
+          type: 'success',
+          title: 'Tudo certo com a sua solicitação de agendamento.',
+        });
+      } else if (status === 'processing') {
+        addToast({
+          type: 'info',
+          title: 'Estamos processando seu pagamento.',
+        });
+      } else if (status === 'waiting_payment') {
+        addToast({
+          type: 'info',
+          title: 'Estamos aguardando o pagamento do seu boleto.',
+        });
+      } else if (status === 'refused') {
+        const errorKeyFound = Object.keys(errors).filter(key =>
+          errors[key].codes.includes(error),
+        )[0];
+
+        addToast({
+          type: 'error',
+          title: errors[errorKeyFound]?.text,
+        });
+      }
+    },
+    [addToast],
   );
 
   const changePaymentData = useCallback((data: IFormPayment) => {
@@ -204,12 +239,14 @@ const PaymentProvider = ({ children }): ReactElement => {
               transaction.status === 'waiting_payment' ||
               transaction.status === 'processing'
             ) {
+              handleToastMessage(transaction.status);
               setBillOfExchangeInfo({
                 boleto_url: transaction.boleto_url,
                 boleto_barcode: transaction.boleto_barcode,
               });
               router.replace(`${url}aguardando-pagamento-boleto`);
             } else if (transaction.status === 'refused') {
+              handleToastMessage(transaction.acquirer_response_code);
               router.replace({
                 pathname: `${url}erro-no-pagamento`,
                 query: {
@@ -332,10 +369,16 @@ const PaymentProvider = ({ children }): ReactElement => {
         )
           .then(() => {
             if (['paid', 'authorized'].includes(transaction.status)) {
+              handleToastMessage(transaction.status);
               router.replace(`${url}obrigado`);
             } else if (transaction.status === 'processing') {
+              handleToastMessage(transaction.status);
               router.replace(`${url}aguardando-aprovacao`);
             } else if (transaction.status === 'refused') {
+              handleToastMessage(
+                transaction.status,
+                transaction.acquirer_response_code,
+              );
               router.replace({
                 pathname: `${url}erro-no-pagamento`,
                 query: {

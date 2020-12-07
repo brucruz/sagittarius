@@ -27,11 +27,7 @@ export default function ThankYou(): ReactElement {
   const [displayRateModal, setDisplayRateModal] = useState(false);
 
   return (
-    <PageTemplate
-      buttonType={{
-        type: 'go_back_button',
-      }}
-    >
+    <PageTemplate>
       <SEO
         title="Pedido de agendamento concluído"
         description="Obrigado! Recebemos seu pedido de agendamento de exames médicos e em breve um atendente entrará em contato contigo."
