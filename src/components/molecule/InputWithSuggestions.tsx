@@ -10,7 +10,7 @@ import {
 } from 'react';
 import { MdSearch, MdAdd } from 'react-icons/md';
 import Input, { SuggestionProps } from '@/components/atom/Input';
-import { getGeocode, getLatLng, Suggestion } from 'use-places-autocomplete';
+import { getGeocode, getLatLng } from 'use-places-autocomplete';
 import { SuggestionArea } from '@/styles/components/molecules/InputWithSuggestion';
 import {
   EXAMS as EXAMS_CONSTANT,
@@ -45,7 +45,6 @@ const InputWithSuggestions = ({
   const [hasSuggestions, setHasSuggestions] = useState(false);
 
   useEffect(() => {
-    console.log(value === address.address);
     if (
       suggestions.type === ADDRESS_CONSTANT &&
       (address.address === value || value === '')
@@ -113,7 +112,7 @@ const InputWithSuggestions = ({
         Exam: exam.title,
       });
     },
-    [suggestions, addExam, user],
+    [addExam, suggestions, getInputValue, user],
   );
 
   return (
@@ -125,7 +124,7 @@ const InputWithSuggestions = ({
         icon={MdSearch}
         value={value}
         suggestions={suggestions}
-        getInputValue={getInputValue}
+        onChange={event => getInputValue(event.target.value)}
       />
 
       {hasSuggestions && suggestions.type === EXAMS_CONSTANT && (

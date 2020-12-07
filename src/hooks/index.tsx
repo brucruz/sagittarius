@@ -6,6 +6,7 @@ import { SearchExamProvider } from './searchExam';
 import { LabResultsProvider } from './labResults';
 import { BagProvider } from './bag';
 import { DatesProvider } from './dates';
+import { PaymentProvider } from './payment';
 
 const AppProvider: React.FC = ({ children }) => (
   <ApolloProvider client={cartQl}>
@@ -14,7 +15,9 @@ const AppProvider: React.FC = ({ children }) => (
         <SearchExamProvider>
           <LabResultsProvider>
             <DatesProvider>
-              <BagProvider>{children}</BagProvider>
+              <BagProvider>
+                <PaymentProvider>{children}</PaymentProvider>
+              </BagProvider>
             </DatesProvider>
           </LabResultsProvider>
         </SearchExamProvider>

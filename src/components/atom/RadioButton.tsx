@@ -1,11 +1,12 @@
-import { ReactElement } from 'react';
-import { Base } from '@/styles/components/atom/RadioButton';
+import { InputHTMLAttributes, ReactElement } from 'react';
+import { Base, TextContainer } from '@/styles/components/atom/RadioButton';
 
-interface RadioButtonProps {
+interface RadioButtonProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   name: string;
   isChecked?: boolean;
   value?: string;
+  description?: string;
 }
 
 const RadioButton = ({
@@ -13,11 +14,22 @@ const RadioButton = ({
   value,
   isChecked,
   name,
+  description,
+  ...rest
 }: RadioButtonProps): ReactElement => {
   return (
     <Base data-testid="radio-button-atom">
-      <span className="text">{label}</span>
-      <input type="radio" checked={isChecked} value={value} name={name} />
+      <TextContainer>
+        <span className="text">{label}</span>
+        {description && <span>{description}</span>}
+      </TextContainer>
+      <input
+        {...rest}
+        type="radio"
+        checked={isChecked}
+        value={value}
+        name={name}
+      />
       <span className="checkmark">
         <span />
       </span>
