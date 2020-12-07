@@ -12,6 +12,7 @@ import axios, { AxiosResponse } from 'axios';
 import mixpanel from 'mixpanel-browser';
 import { useBag } from '@/hooks/bag';
 import { QuoteResponse } from '@/pages/checkout/[patientId]/confirmar';
+import { cpf } from 'cpf-cnpj-validator';
 
 interface IPageTemplateState extends PageHeaderProps {
   titleMain: {
@@ -72,6 +73,7 @@ const pageTemplateState: IPageTemplateState[] = [
 
 export default function Payment(): ReactElement {
   const [quote, setQuote] = useState<QuoteResponse>({} as QuoteResponse);
+  const [isCpfValid, setIsCpfValid] = useState(null);
 
   const [currentStep, setCurrentStep] = useState(0);
   const [isContinueButtonDisabled, setIsContinueButtonDisabled] = useState(
@@ -128,7 +130,7 @@ export default function Payment(): ReactElement {
     if (currentStep === 1) {
       if (
         !paymentData.full_name ||
-        !paymentData.document?.document_number ||
+        !isCpfValid ||
         !paymentData.tel ||
         !paymentData.email
       ) {
@@ -157,6 +159,7 @@ export default function Payment(): ReactElement {
     paymentData.document,
     paymentData.tel,
     paymentData.email,
+    isCpfValid,
   ]);
 
   function handleCurrentStep(): void {
@@ -239,6 +242,15 @@ export default function Payment(): ReactElement {
               className="input-payment"
               name="input-user-document"
               label="CPF"
+              errorProps={
+                isCpfValid === false && 'O CPF digitado não é válido.'
+              }
+              onBlur={() =>
+                cpf.isValid(paymentData.document?.document_number)
+                  ? setIsCpfValid(true)
+                  : setIsCpfValid(false)
+              }
+              mask="999.999.999-99"
               value={paymentData.document?.document_number}
               onChange={event =>
                 setPaymentData({
