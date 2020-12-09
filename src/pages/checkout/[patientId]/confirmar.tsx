@@ -143,7 +143,7 @@ const AskingRemainingInfo = ({
         mixpanel.track('Updated Whatsapp');
 
         router.push({
-          pathname: `/checkout/${patientId}/obrigado`,
+          pathname: `/checkout/${patientId}/pagamento`,
         });
       } catch (err) {
         if (err instanceof Yup.ValidationError) {
@@ -324,13 +324,13 @@ const OrderReview = (): ReactElement => {
         user && mixpanel.identify(user.id);
         mixpanel.track('Request Schedule');
 
+        sessionStorage.setItem('@Heali:quote', JSON.stringify(res.data));
+
         if (!user.phone_whatsapp) {
           setModalOpen(true);
 
           return;
         }
-
-        sessionStorage.setItem('@Heali:quote', JSON.stringify(res.data));
 
         const url = window.location.pathname.split('confirmar')[0];
         router.replace(`${url}pagamento`);
