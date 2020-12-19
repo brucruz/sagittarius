@@ -285,7 +285,7 @@ const PaymentProvider = ({ children }): ReactElement => {
       .connect({ api_key: process.env.NEXT_PUBLIC_PAGARME_API_KEY })
       .then(client =>
         client.transactions.create({
-          amount: paymentData.amount * 100,
+          amount: paymentData.amount,
           card_id: paymentData.card?.card_id,
           card_number: paymentData.card?.card_number,
           card_cvv: paymentData.card?.card_cvv,
